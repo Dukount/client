@@ -13,7 +13,7 @@ const foodReducer = (state=defaultState, action) => {
     data.map(price => {
       priceSum += price.restaurant.average_cost_for_two / 2
     })
-    result.push(priceSum / data.length-5)
+    result.push(priceSum / data.length-10)
   }
   if (action.type === 'BREAKFAST_PRICE') {
     return {...state, breakfastResult: result}
