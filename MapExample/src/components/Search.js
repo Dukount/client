@@ -108,7 +108,7 @@ class Search extends Component<{}> {
             longitudeDelta: 0.00421 * 1.5
           };
           this.props.changeMarkerPosition(region)
-          this.onRegionChange(region, region.latitude, region.longitude);
+          // this.onRegionChange(region, region.latitude, region.longitude);
           // console.log(this.state)
         }}
 

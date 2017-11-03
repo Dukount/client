@@ -39,7 +39,6 @@ class Drag extends Component<{}> {
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
-        address: null
       }
     };
   }
@@ -54,19 +53,11 @@ class Drag extends Component<{}> {
           longitudeDelta: LONGITUDE_DELTA,
         }
       });
-    } else {
-      this.setState({
-        region: {
-          latitude: LATITUDE,
-          longitude: LONGITUDE,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        }
-      });
     }
   }
 
   componentDidMount() {
+    this.latitudelongitudeNullChecker()
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
@@ -74,8 +65,7 @@ class Drag extends Component<{}> {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
             latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-            address: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`
+            longitudeDelta: LONGITUDE_DELTA
           }
         });
         let payload = {latitude: position.coords.latitude, longitude: position.coords.longitude}
@@ -89,11 +79,10 @@ class Drag extends Component<{}> {
       position => {
         this.setState({
           region: {
-            latitude: position.coords.latitude,
+            latitude:  position.coords.latitude,
             longitude: position.coords.longitude,
             latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA,
-            address: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`
+            longitudeDelta: LONGITUDE_DELTA
           }
         });
         let payload = {latitude: position.coords.latitude, longitude: position.coords.longitude}
@@ -116,10 +105,134 @@ class Drag extends Component<{}> {
 
   render() {
     console.log('ini region di drag ', this.state.region)
-    console.log('ini fungsi ', this.latitudelongitudeNullChecker())
+    // console.log('ini fungsi ', this.latitudelongitudeNullChecker())
     // console.log(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.region.latitude},${this.state.region.longitude}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)
     return (
       <View>
+        <View style={{position: 'absolute', top: 0, zIndex: 99, backgroundColor: 'rgba(255, 255, 255, 0.8)', marginTop: 0}}>
+        <GooglePlacesAutocomplete
+          placeholder={`${this.props.address}`}
+          minLength={2}
+          autoFocus={false}
+          returnKeyType={'search'}
+          listViewDisplayed='auto'
+          fetchDetails={true}
+          renderDescription={row => row.description}
+          onPress={(data, details = null) => {
+            // console.log(data, details)
+            const region = {
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA
+            };
+            this.setState({
+              region: {
+                latitude:  details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+              }
+            });
+            this.props.changeMarkerPosition(region)
+            // this.onRegionChange(region, region.latitude, region.longitude);
+            // console.log(this.state)
+          }}
+
+          getDefaultValue={() => ''}
+          query={{
+               key: 'AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc',
+               language: 'en',
+               types: 'geocode',
+          }}
+          styles={{
+            textInputContainer: {
+              width: '100%'
+            },
+            description: {
+              fontWeight: 'bold'
+            },
+            predefinedPlacesDescription: {
+              color: '#1faadb'
+            }
+          }}
+          currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+          currentLocationLabel="Search Now"
+          nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+          GoogleReverseGeocodingQuery={{
+            // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+          }}
+          GooglePlacesSearchQuery={{
+            // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+            rankby: 'distance',
+            types: 'food'
+          }}
+
+          debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+        />
+        </View>
+        <View style={{position: 'absolute', top: 0, zIndex: 70, backgroundColor: 'rgba(255, 255, 255, 0.8)', marginTop: 75}}>
+        <GooglePlacesAutocomplete
+          placeholder={`${this.props.address}`}
+          minLength={2}
+          autoFocus={false}
+          returnKeyType={'search'}
+          listViewDisplayed='auto'
+          fetchDetails={true}
+          renderDescription={row => row.description}
+          onPress={(data, details = null) => {
+            // console.log(data, details)
+            const region = {
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA
+            };
+            this.setState({
+              region: {
+                latitude:  details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+              }
+            });
+            this.props.changeMarkerPosition(region)
+            // this.onRegionChange(region, region.latitude, region.longitude);
+            // console.log(this.state)
+          }}
+
+          getDefaultValue={() => ''}
+          query={{
+               key: 'AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc',
+               language: 'en',
+               types: 'geocode',
+          }}
+          styles={{
+            textInputContainer: {
+              width: '100%'
+            },
+            description: {
+              fontWeight: 'bold'
+            },
+            predefinedPlacesDescription: {
+              color: '#1faadb'
+            }
+          }}
+          currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+          currentLocationLabel="Search Now"
+          nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+          GoogleReverseGeocodingQuery={{
+            // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+          }}
+          GooglePlacesSearchQuery={{
+            // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+            rankby: 'distance',
+            types: 'food'
+          }}
+
+          debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+        />
+        </View>
         <View>
           <MapView
             provider={ PROVIDER_GOOGLE }
@@ -162,7 +275,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  // console.log('ini state ', state)
+  console.log('ini state di drag', state.MapReducer)
   return {
     latitude: state.MapReducer.latitude,
     longitude: state.MapReducer.longitude,
@@ -173,7 +286,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     postCoordinate: (payload) => dispatch(post_coordinate(payload)),
-    fetchAddress: (payload) => dispatch(fetch_address(payload))
+    fetchAddress: (payload) => dispatch(fetch_address(payload)),
+    changeMarkerPosition: (payload) => dispatch(post_coordinate(payload))
   }
 }
 

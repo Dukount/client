@@ -9,7 +9,6 @@ export default class Combine extends Component {
   render() {
     return (
       <View>
-        <Search />
         <Drag />
       </View>
     );
