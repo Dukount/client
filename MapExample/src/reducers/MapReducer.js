@@ -1,17 +1,25 @@
 const defaultState = {
-  latitude: null,
-  longitude: null,
-  address: null
+  latitudeFrom: null,
+  longitudeFrom: null,
+  latitudeTo: null,
+  longitudeTo: null,
+  addressFrom: null,
+  addressTo: null,
+  suggestions: []
 }
 
 const MapReducer = (state=defaultState, action) => {
-  console.log('ini action.payload ', action.payload)
   switch (action.type) {
-    case 'POST_COORDINATE':
-      return {...state, latitude: action.payload.latitude, longitude: action.payload.longitude}
-    case 'POST_ADDRESS':
-      console.log('ini action post_address ', action)
-      return {...state, address: action.address}
+    case 'POST_COORDINATE_FROM':
+      return {...state, latitudeFrom: action.payload.latitudeFrom, longitudeFrom: action.payload.longitudeFrom}
+    case 'POST_ADDRESS_FROM':
+      return {...state, addressFrom: action.addressFrom}
+    case 'POST_COORDINATE_TO':
+      return {...state, latitudeTo: action.payload.latitudeTo, longitudeTo: action.payload.longitudeTo}
+    case 'POST_ADDRESS_TO':
+      return {...state, addressTo: action.addressTo}
+    case 'POST_SUGGESTIONS':
+      return {...state, suggestions: action.suggestions}
     default:
       return state
   }

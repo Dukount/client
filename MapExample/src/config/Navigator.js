@@ -3,16 +3,18 @@ import {
 } from 'react-navigation'
 
 import Home from '../components/Home'
-import Drag from '../components/Drag'
+import DragFrom from '../components/DragFrom'
+import DragTo from '../components/DragTo'
 import Search from '../components/Search'
-import Combine from '../components/Combine'
+import Trafi from '../components/Trafi'
 
 const Navigator = StackNavigator(
   {
     Home: {screen: Home},
-    Drag: {screen: Drag},
+    DragFrom: {screen: DragFrom},
+    DragTo: {screen: DragTo},
     Search: {screen: Search},
-    Combine: {screen: Combine}
+    Trafi: {screen: Trafi}
   }, {
     initialRouteName: 'Home'
   }, {

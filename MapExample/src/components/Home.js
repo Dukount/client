@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableHighlight, Text, Button } from 'react-native';
+import { View, TouchableHighlight, Text } from 'react-native';
+import { connect } from 'react-redux'
 
 class Home extends Component {
 
@@ -7,16 +8,30 @@ class Home extends Component {
     const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
-        <TouchableHighlight onPress={() => navigate('Combine')}>
+        <TouchableHighlight onPress={() => navigate('DragFrom')}>
         <Text style={styles.sentence}>
-          Combine
+          From
         </Text>
         </TouchableHighlight>
 
+        <View>
+          <Text>{this.props.addressFrom}</Text>
+        </View>
 
-        <TouchableHighlight onPress={() => navigate('Search')}>
+
+        <TouchableHighlight onPress={() => navigate('DragTo')}>
         <Text style={styles.sentence}>
-          Search
+          To
+        </Text>
+        </TouchableHighlight>
+
+        <View>
+          <Text>{this.props.addressTo}</Text>
+        </View>
+
+        <TouchableHighlight onPress={() => navigate('Trafi')}>
+        <Text style={styles.sentence}>
+          Trafi
         </Text>
         </TouchableHighlight>
       </View>
@@ -38,8 +53,23 @@ const styles = {
   },
   sentence: {
     marginTop: 10,
-    fontSize: 20
+    fontSize: 50
   }
 }
 
-export default Home
+const mapStateToProps = (state) => {
+  return {
+    latitudeFrom: state.MapReducer.latitudeFrom,
+    longitudeFrom: state.MapReducer.longitudeFrom,
+    addressFrom: state.MapReducer.addressFrom,
+    latitudeTo: state.MapReducer.latitudeTo,
+    longitudeTo: state.MapReducer.longitudeTo,
+    addressTo: state.MapReducer.addressTo
+  }
+}
+
+const ConnectedComponent = connect(
+  mapStateToProps,
+  null)(Home)
+
+export default ConnectedComponent

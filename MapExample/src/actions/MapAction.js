@@ -1,29 +1,83 @@
 import axios from 'axios'
 
-export const post_coordinate = (payload) => {
-  console.log('ini pondok indah ', payload)
+export const post_coordinate_from = (payload) => {
   return {
-    type: 'POST_COORDINATE',
+    type: 'POST_COORDINATE_FROM',
     payload
   }
 }
 
-export const post_address = (address) => {
+export const post_address_from = (addressFrom) => {
   return {
-    type: 'POST_ADDRESS',
-    address
+    type: 'POST_ADDRESS_FROM',
+    addressFrom
   }
 }
 
-export const fetch_address = (payload) => {
+export const post_coordinate_to = (payload) => {
+  return {
+    type: 'POST_COORDINATE_TO',
+    payload
+  }
+}
+
+export const post_address_to = (addressTo) => {
+  return {
+    type: 'POST_ADDRESS_TO',
+    addressTo
+  }
+}
+
+export const post_suggestions = (suggestions) => {
+  return {
+    type: 'POST_SUGGESTIONS',
+    suggestions
+  }
+}
+
+export const fetch_address_from = (payload) => {
   return(dispatch, getState) => {
-    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${payload.latitude},${payload.longitude}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)
+    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${payload.latitudeFrom},${payload.longitudeFrom}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)
       .then(response => {
-        console.log('ini response ', response.data.results[0].address_components)
+        console.log('ini response fetch_address_from', response.data.results[0].address_components)
         // console.log('ini response jalan ', response.data.results[0].address_components[1].long_name)
         // console.log('ini response kecamatan', response.data.results[0].address_components[4].long_name)
-        let markerAddress = `${response.data.results[0].address_components[1].long_name}, ${response.data.results[0].address_components[4].long_name}`
-        dispatch(post_address(markerAddress))
+        let markerAddress = `${response.data.results[0].address_components[1].long_name},
+        ${response.data.results[0].address_components[2].long_name},
+        ${response.data.results[0].address_components[3].long_name},
+        ${response.data.results[0].address_components[4].long_name},
+        ${response.data.results[0].address_components[5].long_name}`
+        dispatch(post_address_from(markerAddress))
+      })
+      .catch(err => console.log(err))
+  }
+}
+
+export const fetch_address_to = (payload) => {
+  return(dispatch, getState) => {
+    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${payload.latitudeTo},${payload.longitudeTo}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)
+      .then(response => {
+        console.log('ini response fetch_address_to', response.data.results[0].address_components)
+        // console.log('ini response jalan ', response.data.results[0].address_components[1].long_name)
+        // console.log('ini response kecamatan', response.data.results[0].address_components[4].long_name)
+        let markerAddress = `${response.data.results[0].address_components[1].long_name},
+        ${response.data.results[0].address_components[2].long_name},
+        ${response.data.results[0].address_components[3].long_name},
+        ${response.data.results[0].address_components[4].long_name},
+        ${response.data.results[0].address_components[5].long_name}`
+        dispatch(post_address_to(markerAddress))
+      })
+      .catch(err => console.log(err))
+  }
+}
+
+export const fetch_trafi_route = (payload) => {
+  return(dispatch, getState) => {
+    axios.get(`http://api-ext.trafi.com/routes?start_lat=${payload.latitudeFrom}&start_lng=${payload.longitudeFrom}&end_lat=${payload.latitudeTo}&end_lng=${payload.longitudeTo}&time=2017-11-02T07%3A00&is_arrival=true&api_key=42353ead9692f1d0c362a2eb2bd477a2`)
+      .then(response => {
+        console.log(JSON.stringify(response.data.Routes))
+        let suggestionsArr = response.data.Routes
+        dispatch(post_suggestions(suggestionsArr))
       })
       .catch(err => console.log(err))
   }

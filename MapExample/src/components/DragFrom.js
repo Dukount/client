@@ -11,26 +11,24 @@ import {
   Text,
   View,
   Dimensions,
-  Image
+  Image,
+  TouchableHighlight
 } from 'react-native';
 import { connect } from 'react-redux';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-import { post_coordinate, fetch_address } from '../actions/MapAction'
+import { post_coordinate_from, fetch_address_from } from '../actions/MapAction'
 
 
 let { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE = 0;
 const LONGITUDE = 0;
-const LATITUDE_DELTA = 0.0922;
+const LATITUDE_DELTA = 0.41;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const homePlace = { description: 'Home', geometry: { location: { lat: LATITUDE, lng: LONGITUDE } }};
-const workPlace = { description: 'Work', geometry: { location: { lat: LATITUDE, lng: LONGITUDE } }};
-
-class Drag extends Component<{}> {
+class DragFrom extends Component<{}> {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,21 +41,7 @@ class Drag extends Component<{}> {
     };
   }
 
-  latitudelongitudeNullChecker() {
-    if (this.props.latitude !== null && this.props.longitude !== null) {
-      this.setState({
-        region: {
-          latitude: this.props.latitude,
-          longitude: this.props.longitude,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        }
-      });
-    }
-  }
-
   componentDidMount() {
-    this.latitudelongitudeNullChecker()
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
@@ -68,9 +52,9 @@ class Drag extends Component<{}> {
             longitudeDelta: LONGITUDE_DELTA
           }
         });
-        let payload = {latitude: position.coords.latitude, longitude: position.coords.longitude}
-        this.props.postCoordinate(payload)
-        this.props.fetchAddress(payload)
+        let payload = {latitudeFrom: position.coords.latitude, longitudeFrom: position.coords.longitude}
+        this.props.postCoordinateFrom(payload)
+        this.props.fetchAddressFrom(payload)
       },
     (error) => console.log(error.message),
     { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
@@ -79,24 +63,23 @@ class Drag extends Component<{}> {
       position => {
         this.setState({
           region: {
-            latitude:  position.coords.latitude,
+            latitude: position.coords.latitude,
             longitude: position.coords.longitude,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA
           }
         });
-        let payload = {latitude: position.coords.latitude, longitude: position.coords.longitude}
-        this.props.postCoordinate(payload)
-        this.props.fetchAddress(payload)
+        let payload = {latitudeFrom: position.coords.latitude, longitudeFrom: position.coords.longitude}
+        this.props.postCoordinateFrom(payload)
+        this.props.fetchAddressFrom(payload)
       }
     );
   }
 
-  moveDrag(region) {
-    this.setState({region})
-    let payload = {latitude: region.latitude, longitude: region.longitude}
-    this.props.postCoordinate(payload)
-    this.props.fetchAddress(payload)
+  moveDrag() {
+    let payload = {latitudeFrom: this.state.region.latitude, longitudeFrom: this.state.region.longitude}
+    this.props.postCoordinateFrom(payload)
+    this.props.fetchAddressFrom(payload)
   }
 
   componentWillUnmount() {
@@ -104,14 +87,14 @@ class Drag extends Component<{}> {
   }
 
   render() {
-    console.log('ini region di drag ', this.state.region)
+    // console.log('ini region di drag from ', this.state.region)
     // console.log('ini fungsi ', this.latitudelongitudeNullChecker())
     // console.log(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.region.latitude},${this.state.region.longitude}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)
     return (
       <View>
         <View style={{position: 'absolute', top: 0, zIndex: 99, backgroundColor: 'rgba(255, 255, 255, 0.8)', marginTop: 0}}>
         <GooglePlacesAutocomplete
-          placeholder={`${this.props.address}`}
+          placeholder={`${this.props.addressFrom}`}
           minLength={2}
           autoFocus={false}
           returnKeyType={'search'}
@@ -120,11 +103,11 @@ class Drag extends Component<{}> {
           renderDescription={row => row.description}
           onPress={(data, details = null) => {
             // console.log(data, details)
-            const region = {
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA
+            const payload = {
+              latitudeFrom: details.geometry.location.lat,
+              longitudeFrom: details.geometry.location.lng,
+              latitudeDeltaFrom: LATITUDE_DELTA,
+              longitudeDeltaFrom: LONGITUDE_DELTA
             };
             this.setState({
               region: {
@@ -134,69 +117,7 @@ class Drag extends Component<{}> {
                 longitudeDelta: LONGITUDE_DELTA
               }
             });
-            this.props.changeMarkerPosition(region)
-            // this.onRegionChange(region, region.latitude, region.longitude);
-            // console.log(this.state)
-          }}
-
-          getDefaultValue={() => ''}
-          query={{
-               key: 'AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc',
-               language: 'en',
-               types: 'geocode',
-          }}
-          styles={{
-            textInputContainer: {
-              width: '100%'
-            },
-            description: {
-              fontWeight: 'bold'
-            },
-            predefinedPlacesDescription: {
-              color: '#1faadb'
-            }
-          }}
-          currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-          currentLocationLabel="Search Now"
-          nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-          GoogleReverseGeocodingQuery={{
-            // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
-          }}
-          GooglePlacesSearchQuery={{
-            // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-            rankby: 'distance',
-            types: 'food'
-          }}
-
-          debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-        />
-        </View>
-        <View style={{position: 'absolute', top: 0, zIndex: 70, backgroundColor: 'rgba(255, 255, 255, 0.8)', marginTop: 75}}>
-        <GooglePlacesAutocomplete
-          placeholder={`${this.props.address}`}
-          minLength={2}
-          autoFocus={false}
-          returnKeyType={'search'}
-          listViewDisplayed='auto'
-          fetchDetails={true}
-          renderDescription={row => row.description}
-          onPress={(data, details = null) => {
-            // console.log(data, details)
-            const region = {
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA
-            };
-            this.setState({
-              region: {
-                latitude:  details.geometry.location.lat,
-                longitude: details.geometry.location.lng,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
-              }
-            });
-            this.props.changeMarkerPosition(region)
+            this.props.changeMarkerPosition(payload)
             // this.onRegionChange(region, region.latitude, region.longitude);
             // console.log(this.state)
           }}
@@ -236,19 +157,22 @@ class Drag extends Component<{}> {
         <View>
           <MapView
             provider={ PROVIDER_GOOGLE }
-            style={{width: Dimensions.get('window').width, height: 500}}
+            style={{width: Dimensions.get('window').width, height: 500, marginTop: 90}}
             showsUserLocation={ true }
+            showsCompass={true}
+            followsUserLocation={true}
             region={ this.state.region }
-            onRegionChange={ region => this.moveDrag(region) }
-            onRegionChangeComplete={ region => this.setState({region}) }
+            onRegionChange={ region => this.setState({region}) }
+            onRegionChangeComplete={ region => this.setState({region})}
           >
           <MapView.Marker
             coordinate={ this.state.region }
+            onPress={() => this.moveDrag()}
           />
           </MapView>
         </View>
         <View>
-          <Text>{this.props.address}</Text>
+          <Text>{this.props.addressFrom}</Text>
         </View>
       </View>
     );
@@ -275,24 +199,24 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log('ini state di drag', state.MapReducer)
+  console.log('ini state di drag from', state.MapReducer)
   return {
-    latitude: state.MapReducer.latitude,
-    longitude: state.MapReducer.longitude,
-    address: state.MapReducer.address
+    latitudeFrom: state.MapReducer.latitudeFrom,
+    longitudeFrom: state.MapReducer.longitudeFrom,
+    addressFrom: state.MapReducer.addressFrom
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    postCoordinate: (payload) => dispatch(post_coordinate(payload)),
-    fetchAddress: (payload) => dispatch(fetch_address(payload)),
-    changeMarkerPosition: (payload) => dispatch(post_coordinate(payload))
+    postCoordinateFrom: (payload) => dispatch(post_coordinate_from(payload)),
+    fetchAddressFrom: (payload) => dispatch(fetch_address_from(payload)),
+    changeMarkerPosition: (payload) => dispatch(post_coordinate_from(payload))
   }
 }
 
 const ConnectedComponent = connect(
   mapStateToProps,
-  mapDispatchToProps)(Drag)
+  mapDispatchToProps)(DragFrom)
 
 export default ConnectedComponent
