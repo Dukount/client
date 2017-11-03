@@ -21,6 +21,27 @@ export const getDinnerPrice = (payload) => {
   }
 }
 
+export const getBreakfastPriceHome = (payload) => {
+  return {
+    type: 'BREAKFAST_PRICE_HOME',
+    payload
+  }
+}
+
+export const getLunchPriceHome = (payload) => {
+  return {
+    type: 'LUNCH_PRICE_HOME',
+    payload
+  }
+}
+
+export const getDinnerPriceHome = (payload) => {
+  return {
+    type: 'DINNER_PRICE_HOME',
+    payload
+  }
+}
+
 export const getBreakfast = (payload) => {
   return (dispatch, getState) => {
     axios.get(`https://developers.zomato.com/api/v2.1/search?${payload}`, {
@@ -62,6 +83,54 @@ export const getDinner = (payload) => {
     })
     .then(response => {
       dispatch(getDinnerPrice(response.data.restaurants))
+    })
+    .catch(err => {
+      throw err
+    })
+  }
+}
+
+export const getBreakfastHome = (payload) => {
+  return (dispatch, getState) => {
+    axios.get(`https://developers.zomato.com/api/v2.1/search?${payload}`, {
+      headers: {
+        "user-key": "07830e6137694ae1fc34521455c333cd"
+      }
+    })
+    .then(response => {
+      dispatch(getBreakfastPriceHome(response.data.restaurants))
+    })
+    .catch(err => {
+      throw err
+    })
+  }
+}
+
+export const getLunchHome = (payload) => {
+  return (dispatch, getState) => {
+    axios.get(`https://developers.zomato.com/api/v2.1/search?${payload}`, {
+      headers: {
+        "user-key": "07830e6137694ae1fc34521455c333cd"
+      }
+    })
+    .then(response => {
+      dispatch(getLunchPriceHome(response.data.restaurants))
+    })
+    .catch(err => {
+      throw err
+    })
+  }
+}
+
+export const getDinnerHome = (payload) => {
+  return (dispatch, getState) => {
+    axios.get(`https://developers.zomato.com/api/v2.1/search?${payload}`, {
+      headers: {
+        "user-key": "07830e6137694ae1fc34521455c333cd"
+      }
+    })
+    .then(response => {
+      dispatch(getDinnerPriceHome(response.data.restaurants))
     })
     .catch(err => {
       throw err

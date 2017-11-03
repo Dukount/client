@@ -1,7 +1,10 @@
 const defaultState = {
   breakfastResult: [],
   lunchResult : [],
-  dinnerResult: []
+  dinnerResult: [],
+  breakfastResultHome: [],
+  lunchResultHome : [],
+  dinnerResultHome: []
 }
 
 const foodReducer = (state=defaultState, action) => {
@@ -21,6 +24,12 @@ const foodReducer = (state=defaultState, action) => {
     return {...state, lunchResult: result}
   } else if (action.type === 'DINNER_PRICE') {
     return {...state, dinnerResult: result}
+  } else if (action.type === 'BREAKFAST_PRICE_HOME') {
+    return {...state, breakfastResultHome: result}
+  } else if (action.type === 'LUNCH_PRICE_HOME') {
+    return {...state, lunchResultHome: result}
+  } else if (action.type === 'DINNER_PRICE_HOME') {
+    return {...state, dinnerResultHome: result}
   }
   return state
 }
