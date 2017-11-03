@@ -6,11 +6,12 @@ import {
   View,
   Button
 } from 'react-native';
+
 import Calendar from 'react-native-calendar-list'
-const date = new Date()
 const markStyle = {dayTextStyle: {color: 'white', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: '#08a'};
 const markStyleDefault = {dayTextStyle: {color: '#08a', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: 'white'};
 
+const date = new Date()
 const month = new Date().getMonth()+1
 const year = new Date().getFullYear()
 class CalenderClass extends Component<{}>{
@@ -79,16 +80,13 @@ class CalenderClass extends Component<{}>{
     } else {
       if (arrDateSelected.indexOf(a) === -1) {
         arrDateSelected.push(a)
-        console.log('tanggal dimasukan');
       } else {
         arrDateSelected.pop ()
-        console.log('tanggal dibatalkan');
       }
     }
   }
 
   dayPressed(date){
-    console.log(date);
     const newMarks = {...this.state.marks};
     if (newMarks[date] !== markStyle) {
       newMarks[date] = markStyle;
@@ -102,9 +100,6 @@ class CalenderClass extends Component<{}>{
       });
     }
   }
-  yearMonthState () {
-    setState()
-  }
   getDaysInMonth(year, month) {
     var names = [ 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat' ];
     var date = new Date(year, month - 1, 1);
@@ -117,25 +112,20 @@ class CalenderClass extends Component<{}>{
   }
 
   convertAllDate() {
-    console.log(this.getDaysInMonth(this.state.year, this.state.month));
     var day = this.getDaysInMonth(this.state.year, this.state.month)
-    // console.log(day[1].split("-")[1]);
-    const newMarks = {...this.state.marks};
-    const date = []
+    var newMarks = {...this.state.marks};
     var arrDateSelected = this.state.dateSelected
     for (var i = 0; i < day.length; i++) {
-      if (day[i].split("-")[1] === "mon" || day[i].split("-")[1] === "tue" || day[i].split("-")[1] === "wed" || day[i].split("-")[1] === "thu" || day[i].split("-")[1] === "fri" ) {
+      var dayCondition = day[i].split("-")[1]
+      if (dayCondition === "mon" || dayCondition === "tue" || dayCondition === "wed" || dayCondition === "thu" || dayCondition === "fri" ) {
         var dateFor = day[i].split("-")[0]
         if (dateFor.length === 1) {
-          var dateState =
-          // console.log(`${this.state.year}-${this.state.month}-${0+dateFor}`);
           newMarks[`${this.state.year}-${this.state.month}-${0+dateFor}`] = markStyle;
           arrDateSelected.push(`${this.state.year}-${this.state.month}-${0+dateFor}`)
           this.setState({
             marks: newMarks,
           });
         } else {
-          // console.log(`${this.state.year}-${this.state.month}-${dateFor}`);
           newMarks[`${this.state.year}-${this.state.month}-${dateFor}`] = markStyle;
           arrDateSelected.push(`${this.state.year}-${this.state.month}-${dateFor}`)
           this.setState({
@@ -144,11 +134,34 @@ class CalenderClass extends Component<{}>{
         }
       }
     }
-    console.log(this.state.dateSelected);
+  }
+  clearAllDate() {
+    var day = this.getDaysInMonth(this.state.year, this.state.month)
+    var newMarks = {...this.state.marks};
+    for (var i = 0; i < day.length; i++) {
+      var dateClear = day[i].split("-")[0]
+      if (dateClear.length === 1) {
+        newMarks[`${this.state.year}-${this.state.month}-${0+dateClear}`] = markStyleDefault
+        this.setState({
+          marks: newMarks,
+        });
+      } else {
+        newMarks[`${this.state.year}-${this.state.month}-${dateClear}`] = markStyleDefault
+        this.setState({
+          marks: newMarks,
+        });
+      }
+    }
+    this.clearState()
+  }
+
+  clearState() {
+    this.setState({
+      dateSelected: []
+    })
   }
 
   render () {
-    // console.log('====', this.state.dateSelected);
     return (
       <View>
         <Text>{date.toString()}</Text>
@@ -162,7 +175,11 @@ class CalenderClass extends Component<{}>{
           headerHeight={40} />
         <Button
           onPress={()=> this.convertAllDate()}
-          title="Test"
+          title="Workday Default"
+        />
+        <Button
+          onPress={()=> this.clearAllDate()}
+          title="Hapus State"
         />
       </View>
     )
