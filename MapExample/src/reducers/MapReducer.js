@@ -5,7 +5,8 @@ const defaultState = {
   longitudeTo: null,
   addressFrom: null,
   addressTo: null,
-  suggestions: []
+  suggestions: [],
+  uberSuggestions: []
 }
 
 const MapReducer = (state=defaultState, action) => {
@@ -20,6 +21,8 @@ const MapReducer = (state=defaultState, action) => {
       return {...state, addressTo: action.addressTo}
     case 'POST_SUGGESTIONS':
       return {...state, suggestions: action.suggestions}
+    case 'POST_UBER_SUGGESTIONS':
+      return {...state, uberSuggestions: action.uberSuggestions}
     default:
       return state
   }

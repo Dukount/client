@@ -7,6 +7,7 @@ import DragFrom from '../components/DragFrom'
 import DragTo from '../components/DragTo'
 import Search from '../components/Search'
 import Trafi from '../components/Trafi'
+import Uber from '../components/Uber'
 
 const Navigator = StackNavigator(
   {
@@ -14,7 +15,8 @@ const Navigator = StackNavigator(
     DragFrom: {screen: DragFrom},
     DragTo: {screen: DragTo},
     Search: {screen: Search},
-    Trafi: {screen: Trafi}
+    Trafi: {screen: Trafi},
+    Uber: {screen: Uber}
   }, {
     initialRouteName: 'Home'
   }, {

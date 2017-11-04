@@ -34,6 +34,12 @@ class Home extends Component {
           Trafi
         </Text>
         </TouchableHighlight>
+
+        <TouchableHighlight onPress={() => navigate('Uber')}>
+        <Text style={styles.sentence}>
+          Uber
+        </Text>
+        </TouchableHighlight>
       </View>
     );
   }

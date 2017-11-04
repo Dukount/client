@@ -10,12 +10,11 @@ import { connect } from 'react-redux'
 import { fetch_trafi_route } from '../actions/MapAction'
 
 class Trafi extends Component {
-  constructor() {
-    super()
-    this.state= {
+  constructor(props) {
+    super(props)
+    this.state = {
       routes: [],
-      num: 0,
-      transport: []
+      num: 0
     }
   }
 
@@ -30,9 +29,7 @@ class Trafi extends Component {
   }
 
   checkSegmentTransport(transportName) {
-    let transportSegments = []
     if (transportName === null) {
-      transportSegments.push('Walk')
       return `Just Walk`
     } else if(transportName !== null && transportName.Name.split(' ').indexOf('TransJakarta') !== -1 ) {
       return `${transportName.Name} IDR 3500 1 kali bayar dari halte pertama`
@@ -70,7 +67,11 @@ class Trafi extends Component {
 
   checkSegmentFrom(segment) {
     if (segment.Transport == null) {
-      return `From: ${segment.StartPoint.Name}`
+      if (segment.StartPoint.Name === "") {
+        return `From: ${this.props.addressFrom.filter(Boolean).join(',')}`
+      } else {
+        return `From: ${segment.StartPoint.Name}`
+      }
     } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('TransJakarta') !== -1) {
       return `From Bus Shelter: ${segment.StartPoint.Name}`
     } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('KRL') !== -1) {
@@ -82,7 +83,11 @@ class Trafi extends Component {
 
   checkSegmentTo(segment) {
     if (segment.Transport == null) {
-      return `To: ${segment.EndPoint.Name}`
+      if (segment.EndPoint.Name === "") {
+        return `To: ${this.props.addressTo.filter(Boolean).join(',')}`
+      } else {
+        return `To: ${segment.EndPoint.Name}`
+      }
     } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('TransJakarta') !== -1) {
       return `To Bus Shelter: ${segment.EndPoint.Name}`
     } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('KRL') !== -1) {
@@ -100,51 +105,56 @@ class Trafi extends Component {
     console.log(this.state.routes)
     return (
       <View>
-        <View>
         {!this.props.suggestions ? <Text>Check your routes</Text> : (
-          <View style={{marginTop: 0, top: 0}}>
-          <Button
-            title="Trafi Route"
-            onPress={() => this.fetchTrafiRouteMethod()}
-          />
-          <FlatList
-            data={this.props.suggestions}
-            keyExtractor={(item, idx) => idx}
-            initialNumToRender={50}
-            removeClippedSubviews={false}
-            style={{marginBottom: 110}}
-            renderItem={({item}) => {
-              console.log('ini suggestion ', item)
-              return (
-                <View style={styles.preferenceLabel}>
-                  <Text>{this.checkPreferenceLabel(item)}</Text>
-                  <Text>{this.state.routes[this.state.num].label}</Text>
-                  <Text>{this.state.routes[this.state.num].price}</Text>
-                  <Text>{this.numCounter()}</Text>
-                  <View>{item.RouteSegments.map(segment => {
-                    return (
-                      <View style={styles.routeSegments}>
-                        <Text style={styles.durationText}>{segment.DurationMinutes} Menit</Text>
-                        <Text style={styles.startText}>{this.checkSegmentFrom(segment)}</Text>
-                        <Text style={styles.endText}>{this.checkSegmentTo(segment)}</Text>
-                        <Text style={styles.transportName}>{this.checkSegmentTransport(segment.Transport)}</Text>
-                      </View>
-                    )
-                  })}
+          <View style={styles.container}>
+            <Button
+              title="Trafi Route"
+              onPress={() => this.fetchTrafiRouteMethod()}
+            />
+            <FlatList
+              data={this.props.suggestions}
+              keyExtractor={(item, idx) => idx}
+              initialNumToRender={50}
+              removeClippedSubviews={false}
+              style={styles.flatList}
+              renderItem={({item}) => {
+                console.log('ini suggestion ', item)
+                return (
+                  <View style={styles.preferenceLabel}>
+                    <Text>{this.checkPreferenceLabel(item)}</Text>
+                    <Text>{this.state.routes[this.state.num].label}</Text>
+                    <Text>{this.state.routes[this.state.num].price}</Text>
+                    <Text>{this.numCounter()}</Text>
+                    <View>{item.RouteSegments.map(segment => {
+                      return (
+                        <View style={styles.routeSegments}>
+                          <Text style={styles.durationText}>{segment.DurationMinutes} Menit</Text>
+                          <Text style={styles.startText}>{this.checkSegmentFrom(segment)}</Text>
+                          <Text style={styles.endText}>{this.checkSegmentTo(segment)}</Text>
+                          <Text style={styles.transportName}>{this.checkSegmentTransport(segment.Transport)}</Text>
+                        </View>
+                      )
+                    })}
+                    </View>
                   </View>
-                </View>
-              )
-            }}
-          />
+                )
+              }}
+            />
           </View>
         )}
-        </View>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 0,
+    top: 0
+  },
+  flatList: {
+    marginBottom: 70
+  },
   preferenceLabel: {
     borderRadius: 4,
     borderWidth: 1,

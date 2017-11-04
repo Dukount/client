@@ -91,7 +91,7 @@ class DragTo extends Component<{}> {
     // console.log(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.region.latitude},${this.state.region.longitude}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)
     return (
       <View>
-        <View style={{position: 'absolute', top: 0, zIndex: 99, backgroundColor: 'rgba(255, 255, 255, 0.8)', marginTop: 0}}>
+        <View style={styles.container}>
         <GooglePlacesAutocomplete
           placeholder={`${this.props.addressTo}`}
           minLength={2}
@@ -129,9 +129,7 @@ class DragTo extends Component<{}> {
           }}
           styles={{
             textInputContainer: {
-              width: 350,
-              height: 50,
-              paddingBottom: 50
+              width: 360
             },
             description: {
               fontWeight: 'bold'
@@ -140,8 +138,7 @@ class DragTo extends Component<{}> {
               color: '#1faadb'
             }
           }}
-          currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-          currentLocationLabel="Search Now"
+          currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
           nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
           GoogleReverseGeocodingQuery={{
             // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
@@ -158,7 +155,7 @@ class DragTo extends Component<{}> {
         <View>
           <MapView
             provider={ PROVIDER_GOOGLE }
-            style={{width: Dimensions.get('window').width, height: 500, marginTop: 90}}
+            style={styles.mapView}
             showsUserLocation={ true }
             showsCompass={true}
             followsUserLocation={true}
@@ -182,21 +179,17 @@ class DragTo extends Component<{}> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    position: 'absolute',
+    top: 0,
+    zIndex: 99,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    marginTop: 0
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  mapView: {
+    width: Dimensions.get('window').width,
+    height: 500,
+    marginTop: 40
+  }
 });
 
 const mapStateToProps = (state) => {
