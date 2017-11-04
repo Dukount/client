@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log('ini state di drag from', state.MapReducer)
+  // console.log('ini state di drag from', state.MapReducer)
   return {
     latitudeFrom: state.MapReducer.latitudeFrom,
     longitudeFrom: state.MapReducer.longitudeFrom,

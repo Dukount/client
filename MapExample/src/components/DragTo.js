@@ -86,7 +86,7 @@ class DragTo extends Component<{}> {
   }
 
   render() {
-    console.log('ini region di drag to ', this.state.region)
+    // console.log('ini region di drag to ', this.state.region)
     // console.log('ini fungsi ', this.latitudelongitudeNullChecker())
     // console.log(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.region.latitude},${this.state.region.longitude}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)
     return (
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log('ini state di drag to', state.MapReducer.addressTo)
+  // console.log('ini state di drag to', state.MapReducer.addressTo)
   return {
     latitudeTo: state.MapReducer.latitudeTo,
     longitudeTo: state.MapReducer.longitudeTo,
