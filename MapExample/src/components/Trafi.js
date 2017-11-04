@@ -14,7 +14,8 @@ class Trafi extends Component {
     super()
     this.state= {
       routes: [],
-      num: 0
+      num: 0,
+      transport: []
     }
   }
 
@@ -33,17 +34,10 @@ class Trafi extends Component {
     if (transportName === null) {
       transportSegments.push('Walk')
       return `Just Walk`
-    } else if(transportName !== null && transportName.Name.split(' ').indexOf('TransJakarta') !== -1 && transportSegments.indexOf('TransJakarta') === -1) {
-      transportSegments.push('TransJakarta')
-      return `${transportName.Name} IDR 3500`
-    } else if(transportName !== null && transportName.Name.split(' ').indexOf('KRL') !== -1 && transportSegments.indexOf('KRL') === -1) {
-      transportSegments.push('KRl')
-      return `${transportName.Name} IDR 4000`
     } else if(transportName !== null && transportName.Name.split(' ').indexOf('TransJakarta') !== -1 ) {
-      transportSegments.push('TransJakarta')
-      return `${transportName.Name}`
+      return `${transportName.Name} IDR 3500 1 kali bayar dari halte pertama`
     } else if(transportName !== null && transportName.Name.split(' ').indexOf('KRL') !== -1 ) {
-      return `${transportName.Name}`
+      return `${transportName.Name} IDR 4000 1 kali bayar dari stasiun pertama`
     } else {
       return `${transportName.Name} IDR 4000`
     }
@@ -68,9 +62,33 @@ class Trafi extends Component {
         }
       })
       console.log(`Labelnya ${label.PreferenceLabel} dan ${transport} dan harganya ${harga}`)
-      this.state.routes.push({label: label.PreferenceLabel, price: harga, transport: transport})
+      this.state.routes.push({label: label.PreferenceLabel, price: harga})
     } else {
       return 'No Label'
+    }
+  }
+
+  checkSegmentFrom(segment) {
+    if (segment.Transport == null) {
+      return `From: ${segment.StartPoint.Name}`
+    } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('TransJakarta') !== -1) {
+      return `From Bus Shelter: ${segment.StartPoint.Name}`
+    } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('KRL') !== -1) {
+      return `From Station: ${segment.StartPoint.Name}`
+    } else if (segment.Transport !== null && (segment.Transport.Name.split(' ').indexOf('TransJakarta') === -1 && segment.Transport.Name.split(' ').indexOf('KRL') === -1)) {
+      return `From MiniBus Stop: ${segment.StartPoint.Name}`
+    }
+  }
+
+  checkSegmentTo(segment) {
+    if (segment.Transport == null) {
+      return `To: ${segment.EndPoint.Name}`
+    } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('TransJakarta') !== -1) {
+      return `To Bus Shelter: ${segment.EndPoint.Name}`
+    } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('KRL') !== -1) {
+      return `To Station: ${segment.EndPoint.Name}`
+    } else if (segment.Transport !== null && (segment.Transport.Name.split(' ').indexOf('TransJakarta') === -1 && segment.Transport.Name.split(' ').indexOf('KRL') === -1)) {
+      return `To MiniBus Stop: ${segment.EndPoint.Name}`
     }
   }
 
@@ -79,16 +97,22 @@ class Trafi extends Component {
   }
 
   render() {
+    console.log(this.state.routes)
     return (
       <View>
         <View>
         {!this.props.suggestions ? <Text>Check your routes</Text> : (
+          <View style={{marginTop: 0, top: 0}}>
+          <Button
+            title="Trafi Route"
+            onPress={() => this.fetchTrafiRouteMethod()}
+          />
           <FlatList
             data={this.props.suggestions}
             keyExtractor={(item, idx) => idx}
             initialNumToRender={50}
             removeClippedSubviews={false}
-            style={{marginBottom: 50}}
+            style={{marginBottom: 110}}
             renderItem={({item}) => {
               console.log('ini suggestion ', item)
               return (
@@ -100,9 +124,9 @@ class Trafi extends Component {
                   <View>{item.RouteSegments.map(segment => {
                     return (
                       <View style={styles.routeSegments}>
-                        <Text style={styles.durationText}>{segment.DurationMinutes}</Text>
-                        <Text style={styles.startText}>{segment.StartPoint.Name}</Text>
-                        <Text style={styles.endText}>{segment.EndPoint.Name}</Text>
+                        <Text style={styles.durationText}>{segment.DurationMinutes} Menit</Text>
+                        <Text style={styles.startText}>{this.checkSegmentFrom(segment)}</Text>
+                        <Text style={styles.endText}>{this.checkSegmentTo(segment)}</Text>
                         <Text style={styles.transportName}>{this.checkSegmentTransport(segment.Transport)}</Text>
                       </View>
                     )
@@ -112,12 +136,9 @@ class Trafi extends Component {
               )
             }}
           />
+          </View>
         )}
         </View>
-        <Button
-          title="Trafi Route"
-          onPress={() => this.fetchTrafiRouteMethod()}
-        />
       </View>
     )
   }
