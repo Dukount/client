@@ -58,6 +58,12 @@ class Uber extends Component {
     }
   }
 
+  fetchUberOptions(uber) {
+    let fare = Math.round((uber.high_estimate + uber.low_estimate)/2)
+    this.state.uberType.push({vehicle: uber.display_name, fare: fare})
+    console.log(this.state.uberType)
+  }
+
 
   render() {
     return (
@@ -65,17 +71,23 @@ class Uber extends Component {
         {!this.props.uberSuggestions ? <Text>Check your uber</Text> : (
           <View>
           <View>
-            <MapView style={styles.map} initialRegion={{
+            <MapView
+              style={styles.map}
+              initialRegion={{
               latitude:this.props.latitudeFrom,
               longitude:this.props.longitudeFrom,
               latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421
-            }}>
+              longitudeDelta: 0.0421}}
+              showsTraffic={true}
+              showsUserLocation={ true }
+              showsCompass={true}
+              followsUserLocation={true}
+            >
 
             <MapView.Polyline
               coordinates={this.state.coords}
-              strokeWidth={2}
-              strokeColor="red"
+              strokeWidth={3}
+              strokeColor="blue"
             />
 
             <MapView.Marker
@@ -109,9 +121,9 @@ class Uber extends Component {
               keyExtractor={(item, idx) => idx}
               style={styles.flatList}
               renderItem={({item}) => {
-                console.log('ini uberSuggestions ', item)
                 return (
                   <View style={styles.uberService}>
+                    <Text>{this.fetchUberOptions(item)}</Text>
                     <Text style={styles.vehicleOption}>Vehicle Option: {item.display_name}</Text>
                     <Text style={styles.tripDuration}>Trip Duration: {Math.round(item.duration/60)} Minutes</Text>
                     <Text style={styles.fareEstimation}>Fare Estimation: IDR {Math.round((item.high_estimate + item.low_estimate)/2)}</Text>

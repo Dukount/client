@@ -130,7 +130,15 @@ class DragFrom extends Component<{}> {
           }}
           styles={{
             textInputContainer: {
-              width: 360
+              width: 360,
+              height: 70
+            },
+            textInput: {
+              marginLeft: 0,
+              marginRight: 0,
+              height: 50,
+              color: '#5d5d5d',
+              fontSize: 15
             },
             description: {
               fontWeight: 'bold'
@@ -164,15 +172,13 @@ class DragFrom extends Component<{}> {
             region={ this.state.region }
             onRegionChange={ region => this.setState({region}) }
             onRegionChangeComplete={ region => this.setState({region})}
+            showsTraffic={true}
           >
           <MapView.Marker
             coordinate={ this.state.region }
             onPress={() => this.moveDrag()}
           />
           </MapView>
-        </View>
-        <View>
-          <Text>{this.props.addressFrom}</Text>
         </View>
       </View>
     );
@@ -189,7 +195,7 @@ const styles = StyleSheet.create({
   },
   mapView: {
     width: Dimensions.get('window').width,
-    height: 500,
+    height: 520,
     marginTop: 40
   }
 });
