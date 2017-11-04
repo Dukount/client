@@ -42,6 +42,14 @@ export const getDinnerPriceHome = (payload) => {
   }
 }
 
+export const sendResultData = (payload) => {
+  console.log('payload', payload)
+  return {
+    type: 'RESULT_FOOD_PRICE_FINAL',
+    payload
+  }
+}
+
 export const getBreakfast = (payload) => {
   return (dispatch, getState) => {
     axios.get(`https://developers.zomato.com/api/v2.1/search?${payload}`, {

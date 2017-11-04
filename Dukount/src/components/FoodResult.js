@@ -5,11 +5,13 @@ import {
   Picker,
   Button,
   TouchableOpacity,
+  TouchableHighlight,
   Dimensions,
   Image,
   StyleSheet
 } from "react-native"
 import { connect } from "react-redux"
+import { StackNavigator } from 'react-navigation'
 
 import {
   getBreakfast,
@@ -17,11 +19,15 @@ import {
   getDinner,
   getBreakfastHome,
   getLunchHome,
-  getDinnerHome
+  getDinnerHome,
+  sendResultData
 } from "../actions/foodAction";
 
 
 class FoodResult extends Component {
+  static navigationOptions = {
+    title: 'FoodResultScreen'
+  }
   constructor() {
     super()
     this.state = {
@@ -74,11 +80,13 @@ class FoodResult extends Component {
       return (<Text style={styles.nullFont}>-</Text>)
     }
   }
+  
 
   render () {
     console.log('sarapan ',this.props.breakfastPrice)
     console.log('siang ',this.props.lunchPrice)
     console.log('malem ',this.props.dinnerPrice)
+    const { navigate } =   this.props.navigation
     return (
       <View style={styles.container}>
         <View style={styles.picker}>
@@ -133,17 +141,19 @@ class FoodResult extends Component {
           </View>
           </TouchableOpacity>
         </View>
-        <View style={{marginBottom: 50}}>
-          <View style={styles.foodCard}>
-            <Image source={require('../assets/img/food.png')} style={styles.foodIcon}/>
-            <View style={styles.foodCardContent}>
-              <Text style={styles.cardHeader}>Food Outcome</Text>
-              {
-                this.resultOutcome()
-              }
-              <Text style={styles.perMonthFont}>(per month)</Text>
-            </View>
+        <View>
+        <TouchableHighlight onPress={() => navigate('FoodDetailScreen')}>
+        <View style={styles.foodCard}>
+          <Image source={require('../assets/img/food.png')} style={styles.foodIcon}/>
+          <View style={styles.foodCardContent}>
+            <Text style={styles.cardHeader}>Food Outcome</Text>
+            {
+              this.resultOutcome()
+            }
+            <Text style={styles.perMonthFont}>(per month)</Text>
           </View>
+        </View>
+        </TouchableHighlight>
           <View style={styles.transportCard}>
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
@@ -152,14 +162,6 @@ class FoodResult extends Component {
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
-          <Text>Food at work:</Text>
-          <Text>Breakfast: Rp {parseFloat(this.props.breakfastPrice / 1000).toFixed(3)}</Text>
-          <Text>Lunch: Rp {parseFloat(this.props.lunchPrice / 1000).toFixed(3)}</Text>
-          <Text>Dinner: Rp {parseFloat(this.props.dinnerPrice / 1000).toFixed(3)}</Text>
-          <Text>Food at home:</Text>
-          <Text>Breakfast: Rp {parseFloat(this.props.breakfastPriceHome / 1000).toFixed(3)}</Text>
-          <Text>Lunch: Rp {parseFloat(this.props.lunchPriceHome / 1000).toFixed(3)}</Text>
-          <Text>Dinner: Rp {parseFloat(this.props.dinnerPriceHome / 1000).toFixed(3)}</Text>
         </View>
       </View>
     )
@@ -173,7 +175,8 @@ const mapDispatchToProps = (dispatch) => {
     sortDataDinner: (data) => dispatch(getDinner(data)),
     sortDataBreakfastAtHome: (data) => dispatch(getBreakfastHome(data)),
     sortDataLunchAtHome: (data) => dispatch(getLunchHome(data)),
-    sortDataDinnerAtHome: (data) => dispatch(getDinnerHome(data))
+    sortDataDinnerAtHome: (data) => dispatch(getDinnerHome(data)),
+    resultSumPrice: (data) => dispatch(sendResultData(data))
   }
 }
 

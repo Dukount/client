@@ -3,15 +3,20 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
 import Calendar from 'react-native-calendar-list'
+import { StackNavigator } from 'react-navigation'
 const date = new Date()
 const markStyle = {dayTextStyle: {color: 'white', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: '#08a'};
 const markStyleDefault = {dayTextStyle: {color: '#08a', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: 'white'};
 
 
 class CalenderClass extends Component<{}>{
+  static navigationOptions = {
+    title: 'CalendarScreen'
+  }
   constructor() {
     super()
     this.state = {
@@ -98,6 +103,7 @@ class CalenderClass extends Component<{}>{
     }
   }
   render () {
+    const { navigate } =   this.props.navigation
     // console.log('====', this.state.dateSelected);
     return (
       <View>
@@ -110,6 +116,7 @@ class CalenderClass extends Component<{}>{
           onDatePress={(a) => this.setEventCounting(a)}
           rowHeight={40}
           headerHeight={40} />
+        <Button title='Submit' onPress={() => navigate('FoodResultScreen')}/>
       </View>
     )
   }

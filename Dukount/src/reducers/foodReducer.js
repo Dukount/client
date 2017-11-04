@@ -4,7 +4,8 @@ const defaultState = {
   dinnerResult: [],
   breakfastResultHome: [],
   lunchResultHome : [],
-  dinnerResultHome: []
+  dinnerResultHome: [],
+  resultFinal: []
 }
 
 const foodReducer = (state=defaultState, action) => {
@@ -12,7 +13,6 @@ const foodReducer = (state=defaultState, action) => {
   let priceSum = 0
   let result = []
   if(data) {
-    console.log('ini----0----', data)
     data.map(price => {
       priceSum += price.restaurant.average_cost_for_two / 2
     })
@@ -30,6 +30,8 @@ const foodReducer = (state=defaultState, action) => {
     return {...state, lunchResultHome: result}
   } else if (action.type === 'DINNER_PRICE_HOME') {
     return {...state, dinnerResultHome: result}
+  } else if (action.type === 'RESULT_FOOD_PRICE_FINAL') {
+    return {...state, resultFinal: action.payload}
   }
   return state
 }
