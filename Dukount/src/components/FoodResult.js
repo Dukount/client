@@ -6,7 +6,8 @@ import {
   Button,
   TouchableOpacity,
   Dimensions,
-  Image
+  Image,
+  StyleSheet
 } from "react-native"
 import { connect } from "react-redux"
 
@@ -68,9 +69,9 @@ class FoodResult extends Component {
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
     const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
-       return (<Text style={{marginTop: 15, fontSize: 24, fontWeight: 'bold', color: '#F4FF81'}}>Rp {resultFoodFinal}.000</Text>)
+       return (<Text style={styles.resultFont}>Rp {resultFoodFinal}.000</Text>)
     }else {
-      return (<Text style={{marginTop: 15, fontSize: 24, color: 'white'}}>-</Text>)
+      return (<Text style={styles.nullFont}>-</Text>)
     }
   }
 
@@ -79,84 +80,86 @@ class FoodResult extends Component {
     console.log('siang ',this.props.lunchPrice)
     console.log('malem ',this.props.dinnerPrice)
     return (
-      <View style={{flexDirection: 'column', flex: 2}}>
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor:'rgba(29, 129, 229, 0.1)', paddingHorizontal: 10, justifyContent: 'flex-end', marginBottom: 1}}>
-        <View style={{width: 240}}>
-          <Text style={{fontWeight: 'bold', color: '#1d81e5', fontSize: 18, textAlign: 'left'}}>Breakfast:</Text>
-        </View>
-        <View>
-          <Picker
-          style={{width: 100}}
-          selectedValue={this.state.breakfast}
-          onValueChange={(itemValue, itemIndex) => this.setState({breakfast:
-          itemValue})}>
-          <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
-          <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
-          </Picker>
-        </View>
-        </View>
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor:'rgba(29, 129, 229, 0.1)', paddingHorizontal: 10, justifyContent: 'flex-end', marginBottom: 1}}>
-        <View style={{width: 240}}>
-          <Text style={{fontWeight: 'bold', color: '#1d81e5', fontSize: 18}}>Lunch:</Text>
-        </View>
-        <View>
-          <Picker
-          style={{width: 100}}
-          selectedValue={this.state.lunch}
-          onValueChange={(itemValue, itemIndex) => this.setState({lunch:
-          itemValue})}>
-          <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
-          <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
-          </Picker>
-        </View>
-        </View>
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', marginBottom: 10, backgroundColor:'rgba(29, 129, 229, 0.1)', paddingHorizontal: 10, justifyContent: 'flex-end'}}>
-        <View style={{width: 240}}>
-          <Text style={{fontWeight: 'bold', color: '#1d81e5', fontSize: 18}}>Dinner:</Text>
-        </View>
-          <Picker
-          style={{width: 100}}
-          selectedValue={this.state.dinner}
-          onValueChange={(itemValue, itemIndex) => this.setState({dinner:
-          itemValue})}>
-          <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
-          <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
-          </Picker>
-        </View>
-        <View style={{marginBottom: 20}}>
-        <TouchableOpacity onPress={() => this.getResult()}>
-        <View style={{backgroundColor:'#1d81e5', padding: 15, alignItems: 'center', borderRadius: 3, width: 300, alignSelf: 'center'}}>
-          <Text style={{color:'white', fontWeight: 'bold'}}>Check Price</Text>
-        </View>
-        </TouchableOpacity>
-        </View>
-        <View style={{marginBottom: 50}}>
-        <View style={{backgroundColor: '#57A8F8', alignSelf: 'center', height: 120, width: 350, marginBottom: 2, borderRadius: 4, flexDirection: 'row'}}>
-          <Image source={require('../assets/img/food.png')} style={{width: 58, height: 110, marginLeft: 20, marginTop: 5}}/>
-          <View style={{flexDirection: 'column', alignItems: 'center', marginLeft: 50, width: 150}}>
-          <Text style={{fontSize: 18,fontWeight: 'bold', color: 'white', fontStyle: 'italic', marginTop: 10}}>Food Outcome</Text>
-          {
-            this.resultOutcome()
-          }
-          <Text style={{color: 'white', fontStyle: 'italic', fontSize: 11}}>(per month)</Text>
+      <View style={styles.container}>
+        <View style={styles.picker}>
+          <View style={{width: 240}}>
+            <Text style={styles.pickerLabel}>Breakfast:</Text>
+          </View>
+          <View>
+            <Picker
+            style={{width: 100}}
+            selectedValue={this.state.breakfast}
+            onValueChange={(itemValue, itemIndex) => this.setState({breakfast:
+            itemValue})}>
+            <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
+            <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
+            </Picker>
           </View>
         </View>
-        <View style={{backgroundColor: '#1DE9B6', alignSelf: 'center', height: 120, width: 350, marginBottom: 2, borderRadius: 4, flexDirection: 'row'}}>
-        <Image source={require('../assets/img/transport.png')} style={{width: 90, height: 110, marginLeft: 17, marginTop: 5}}/>
-        <View style={{flexDirection: 'column', alignItems: 'center', marginLeft: 10, width: 180}}>
-        <Text style={{fontSize: 18,fontWeight: 'bold', color: 'white', fontStyle: 'italic', marginTop: 10}}>Transport Outcome</Text>
-        <Text style={{marginTop: 15, fontSize: 24, fontWeight: 'bold', color: '#F4FF81'}}>-</Text>
-        <Text style={{color: 'white', fontStyle: 'italic', fontSize: 11}}>(per month)</Text>
+        <View style={styles.picker}>
+          <View style={{width: 240}}>
+            <Text style={styles.pickerLabel}>Lunch:</Text>
+          </View>
+          <View>
+            <Picker
+            style={{width: 100}}
+            selectedValue={this.state.lunch}
+            onValueChange={(itemValue, itemIndex) => this.setState({lunch:
+            itemValue})}>
+            <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
+            <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
+            </Picker>
+          </View>
         </View>
+        <View style={styles.picker}>
+          <View style={{width: 240}}>
+            <Text style={styles.pickerLabel}>Dinner:</Text>
+          </View>
+          <View>
+            <Picker
+            style={{width: 100}}
+            selectedValue={this.state.dinner}
+            onValueChange={(itemValue, itemIndex) => this.setState({dinner:
+            itemValue})}>
+            <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
+            <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
+            </Picker>
+          </View>
         </View>
-        <Text>Food at work:</Text>
-        <Text>Breakfast: Rp {parseFloat(this.props.breakfastPrice / 1000).toFixed(3)}</Text>
-        <Text>Lunch: Rp {parseFloat(this.props.lunchPrice / 1000).toFixed(3)}</Text>
-        <Text>Dinner: Rp {parseFloat(this.props.dinnerPrice / 1000).toFixed(3)}</Text>
-        <Text>Food at home:</Text>
-        <Text>Breakfast: Rp {parseFloat(this.props.breakfastPriceHome / 1000).toFixed(3)}</Text>
-        <Text>Lunch: Rp {parseFloat(this.props.lunchPriceHome / 1000).toFixed(3)}</Text>
-        <Text>Dinner: Rp {parseFloat(this.props.dinnerPriceHome / 1000).toFixed(3)}</Text>
+        <View style={{marginBottom: 20, marginTop: 10}}>
+          <TouchableOpacity onPress={() => this.getResult()}>
+          <View style={styles.button}>
+            <Text style={styles.textButton}>Check Price</Text>
+          </View>
+          </TouchableOpacity>
+        </View>
+        <View style={{marginBottom: 50}}>
+          <View style={styles.foodCard}>
+            <Image source={require('../assets/img/food.png')} style={styles.foodIcon}/>
+            <View style={styles.foodCardContent}>
+              <Text style={styles.cardHeader}>Food Outcome</Text>
+              {
+                this.resultOutcome()
+              }
+              <Text style={styles.perMonthFont}>(per month)</Text>
+            </View>
+          </View>
+          <View style={styles.transportCard}>
+            <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
+            <View style={styles.transportCardContent}>
+              <Text style={styles.cardHeader}>Transport Outcome</Text>
+              <Text style={styles.nullFont}>-</Text>
+              <Text style={styles.perMonthFont}>(per month)</Text>
+            </View>
+          </View>
+          <Text>Food at work:</Text>
+          <Text>Breakfast: Rp {parseFloat(this.props.breakfastPrice / 1000).toFixed(3)}</Text>
+          <Text>Lunch: Rp {parseFloat(this.props.lunchPrice / 1000).toFixed(3)}</Text>
+          <Text>Dinner: Rp {parseFloat(this.props.dinnerPrice / 1000).toFixed(3)}</Text>
+          <Text>Food at home:</Text>
+          <Text>Breakfast: Rp {parseFloat(this.props.breakfastPriceHome / 1000).toFixed(3)}</Text>
+          <Text>Lunch: Rp {parseFloat(this.props.lunchPriceHome / 1000).toFixed(3)}</Text>
+          <Text>Dinner: Rp {parseFloat(this.props.dinnerPriceHome / 1000).toFixed(3)}</Text>
         </View>
       </View>
     )
@@ -184,5 +187,103 @@ const mapStateToProps = (state, ownProps) => {
     dinnerPriceHome: state.price.dinnerResultHome
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    flex: 2
+  },
+  picker: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor:'rgba(29, 129, 229, 0.1)',
+    paddingHorizontal: 10,
+    justifyContent: 'flex-end',
+    marginBottom: 1
+  },
+  pickerLabel: {
+    fontWeight: 'bold',
+    color: '#1d81e5',
+    fontSize: 18
+  },
+  button: {
+    backgroundColor:'#1d81e5',
+    padding: 15,
+    alignItems: 'center',
+    borderRadius: 3,
+    width: 300,
+    alignSelf: 'center'
+  },
+  textButton: {
+    color:'white',
+    fontWeight: 'bold'
+  },
+  foodCard: {
+    backgroundColor: '#57A8F8',
+    alignSelf: 'center',
+    height: 120,
+    width: 350,
+    marginBottom: 2,
+    borderRadius: 4,
+    flexDirection: 'row'
+  },
+  transportCard: {
+    backgroundColor: '#1DE9B6',
+    alignSelf: 'center',
+    height: 120,
+    width: 350,
+    marginBottom: 2,
+    borderRadius: 4,
+    flexDirection: 'row'
+  },
+  foodIcon: {
+    width: 58,
+    height: 110,
+    marginLeft: 20,
+    marginTop: 5
+  },
+  transportIcon: {
+    width: 90,
+    height: 110,
+    marginLeft: 17,
+    marginTop: 5
+  },
+  foodCardContent: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginLeft: 50,
+    width: 150
+  },
+  transportCardContent: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginLeft: 10,
+    width: 180
+  },
+  cardHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+    fontStyle: 'italic',
+    marginTop: 10
+  },
+  perMonthFont: {
+    color: 'white',
+    fontStyle: 'italic',
+    fontSize: 11
+  },
+  resultFont: {
+    marginTop: 15,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#F4FF81'
+  },
+  nullFont: {
+    marginTop: 15,
+    fontSize: 24,
+    color: 'white'
+  }
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(FoodResult)
