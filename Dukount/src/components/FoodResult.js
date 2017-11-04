@@ -66,11 +66,13 @@ class FoodResult extends Component {
   }
 
   resultOutcome () {
+    const dayWork = this.props.calendarWorkDay.length
+    const dayHome = 30 - dayWork
     const sumFoodOutcome = this.props.breakfastPrice[0] + this.props.lunchPrice[0] + this.props.dinnerPrice[0]
-    const sumFoodOutcomeResult = sumFoodOutcome * this.state.activityDay
+    const sumFoodOutcomeResult = sumFoodOutcome * dayWork
 
     const sumFoodOutcomeHome = this.props.breakfastPriceHome[0] + this.props.lunchPriceHome[0] + this.props.dinnerPriceHome[0]
-    const sumFoodOutcomeResultHome =  sumFoodOutcomeHome * this.state.homeday
+    const sumFoodOutcomeResultHome =  sumFoodOutcomeHome * dayHome
 
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
     const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
@@ -80,12 +82,10 @@ class FoodResult extends Component {
       return (<Text style={styles.nullFont}>-</Text>)
     }
   }
-  
+
 
   render () {
-    console.log('sarapan ',this.props.breakfastPrice)
-    console.log('siang ',this.props.lunchPrice)
-    console.log('malem ',this.props.dinnerPrice)
+    console.log("ini ganang ", this.props.calendarWorkDay);
     const { navigate } =   this.props.navigation
     return (
       <View style={styles.container}>
@@ -180,14 +180,15 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
     breakfastPrice: state.price.breakfastResult,
     lunchPrice: state.price.lunchResult,
     dinnerPrice: state.price.dinnerResult,
     breakfastPriceHome: state.price.breakfastResultHome,
     lunchPriceHome: state.price.lunchResultHome,
-    dinnerPriceHome: state.price.dinnerResultHome
+    dinnerPriceHome: state.price.dinnerResultHome,
+    calendarWorkDay: state.price.workCalendar
   }
 }
 

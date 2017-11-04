@@ -12,18 +12,16 @@ class FoodDetail extends Component {
   }
   constructor() {
     super()
-    this.state = {
-      activityDay: 20,
-      homeday: 10
-    }
   }
 
   resultOutcome () {
+    const dayWork = this.props.calendarWorkDay.length
+    const dayHome = 30 - dayWork
     const sumFoodOutcome = this.props.breakfastPrice[0] + this.props.lunchPrice[0] + this.props.dinnerPrice[0]
-    const sumFoodOutcomeResult = sumFoodOutcome * this.state.activityDay
+    const sumFoodOutcomeResult = sumFoodOutcome * dayWork
 
     const sumFoodOutcomeHome = this.props.breakfastPriceHome[0] + this.props.lunchPriceHome[0] + this.props.dinnerPriceHome[0]
-    const sumFoodOutcomeResultHome =  sumFoodOutcomeHome * this.state.homeday
+    const sumFoodOutcomeResultHome =  sumFoodOutcomeHome * dayHome
 
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
     const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
@@ -35,7 +33,6 @@ class FoodDetail extends Component {
   }
 
   render() {
-    console.log('wkwkwkwkwk ', this.props.resultAllFinal)
     return (
       <View>
       <Text>Result Final:</Text>
@@ -63,7 +60,8 @@ const mapStateToProps = (state) => {
     breakfastPriceHome: state.price.breakfastResultHome,
     lunchPriceHome: state.price.lunchResultHome,
     dinnerPriceHome: state.price.dinnerResultHome,
-    resultAllFinal: state.price.resultFinal
+    resultAllFinal: state.price.resultFinal,
+    calendarWorkDay: state.price.workCalendar
   }
 }
 
