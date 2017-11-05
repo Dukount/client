@@ -161,13 +161,13 @@ class CalenderClass extends Component<{}>{
         var dateHomeFor = day[i].split("-")[0]
         if (dateHomeFor.length === 1) {
           arrDateUnselected.push(`${this.state.year}-${this.state.month}-${0+dateHomeFor}`)
-          console.log('===================Sabtu minggu00', arrDateUnselected );
+          // console.log('===================Sabtu minggu00', arrDateUnselected );
         } else {
           arrDateUnselected.push(`${this.state.year}-${this.state.month}-${dateHomeFor}`)
         }
       }
     }
-    console.log('sebelum di push ===========', this.state.dateUnselected);
+    // console.log('sebelum di push ===========', this.state.dateUnselected);
   }
   clearAllDate() {
     var day = this.getDaysInMonth(this.state.year, this.state.month)
@@ -217,7 +217,7 @@ class CalenderClass extends Component<{}>{
 
   jalan () {
     const { navigate } =   this.props.navigation
-    navigate('FoodResultScreen')
+    navigate('TempResultScreen')
     this.submitToStore()
   }
   render () {

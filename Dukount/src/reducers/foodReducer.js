@@ -13,7 +13,7 @@ const namaFunction = (ganang) => {
   let data = ganang
   let priceSum = 0
   let result = []
-  console.log('ini data', data)
+  // console.log('ini data', data)
   if(data) {
     data.map(harga => {
       priceSum += harga.restaurant.average_cost_for_two / 2

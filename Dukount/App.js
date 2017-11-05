@@ -6,8 +6,6 @@ import {
 import { Provider } from "react-redux";
 
 import store from './src/store'
-import FoodResult from './src/components/FoodResult'
-import Calendar from './src/components/Calendar'
 import Navigation from './src/route/Navigation'
 
 export default class App extends Component<{}> {

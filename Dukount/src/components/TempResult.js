@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   Dimensions,
   Image,
+  Item,
   StyleSheet
 } from "react-native"
 import { connect } from "react-redux"
@@ -22,9 +23,15 @@ import {
   getDinnerHome,
   sendResultData
 } from "../actions/foodAction";
+import {
+  fetch_trafi_route,
+  fetch_uber_fare,
+  trafi_label_index,
+  post_trafi_fare
+} from '../actions/MapAction'
 
 
-class FoodResult extends Component {
+class TempResult extends Component {
   static navigationOptions = {
     title: 'FoodResultScreen'
   }
@@ -37,14 +44,21 @@ class FoodResult extends Component {
       breakfastResult: '',
       lunchResult: '',
       dinnerResult: '',
-      activityDay: 20,
-      homeday: 10
+      TransportMode: true,
+      trafiLabel: [],
+      trafiLabelTotalFare: [],
+      selectedTrafiLabel: '',
+      trafiSuggestionPrice: '-',
+      uberLabel: [],
+      uberTotalLabelFare: [],
+      selectedUberLabel: '',
+      uberSuggestionPrice: '-'
     }
   }
 
   getResult () {
-    let workLocation = 'Sudirman'
-    let homeLocation = 'Tangerang'
+    let workLocation = this.props.addressTo[4]
+    let homeLocation = this.props.addressFrom[4]
     let breakfastSort = this.state.breakfast
     let lunchSort = this.state.lunch
     let dinnerSort = this.state.dinner
@@ -77,15 +91,145 @@ class FoodResult extends Component {
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
     const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
-       return (<Text style={styles.resultFont}>Rp {resultFoodFinal}.000</Text>)
+       return (<Text style={styles.resultFont}>IDR {resultFoodFinal}.000</Text>)
     }else {
       return (<Text style={styles.nullFont}>-</Text>)
     }
   }
 
+  fetchTrafiRouteMethod() {
+    let payload = {
+      latitudeFrom: this.props.latitudeFrom,
+      longitudeFrom: this.props.longitudeFrom,
+      latitudeTo: this.props.latitudeTo,
+      longitudeTo: this.props.longitudeTo
+    }
+    this.props.fetchTrafiRoute(payload)
+  }
+
+  fetchUberFareMethod() {
+  let payload = {
+      latitudeFrom: this.props.latitudeFrom,
+      longitudeFrom: this.props.longitudeFrom,
+      latitudeTo: this.props.latitudeTo,
+      longitudeTo: this.props.longitudeTo
+    }
+    this.props.fetchUberFare(payload)
+  }
+
+  checkFoodTransportation() {
+    this.getResult()
+    this.trafiSuggestionsLabel()
+    this.trafiSuggestionsFare()
+    this.transportInfoSummary()
+    this.postLabelIndex()
+  }
+
+  checkFoodUber() {
+    this.getResult()
+    this.uberSuggestionsLabel()
+  }
+
+  validateCheckPrice() {
+    if (this.state.TransportMode === true) {
+      this.checkFoodTransportation()
+    } else if (this.state.TransportMode === false){
+      this.checkFoodUber()
+    }
+  }
+
+  componentDidMount() {
+    this.fetchTrafiRouteMethod()
+    this.fetchUberFareMethod()
+  }
+
+  trafiSuggestionsLabel() {
+    let label = this.props.trafiSuggestions.map(suggestion => {
+      return suggestion.PreferenceLabel
+    })
+    this.setState({
+      trafiLabel: label
+    })
+  }
+
+  uberSuggestionsLabel() {
+    let uberArrTemp = []
+    let label = this.props.uberSuggestions.map(suggestion => {
+      uberArrTemp.push(suggestion.display_name)
+    })
+    this.setState({
+      uberLabel: uberArrTemp
+    })
+    console.log(this.state.uberLabel)
+  }
+
+  trafiSuggestionsFare() {
+    let Transports = []
+    let farePerLabel = []
+    let transport = []
+    let fare = 0
+    let fareSuggestion = this.props.trafiSuggestions.map(suggestion => {
+      suggestion.RouteSegments.map(segment => {
+        if (segment.Transport === null) {
+          fare += 0
+        } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('TransJakarta') !== -1 && transport.indexOf('TransJakarta') === -1) {
+          transport.push('TransJakarta')
+          fare += 3500
+        } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('KRL') !== -1 && transport.indexOf('KRL') === -1) {
+          transport.push('KRL')
+          fare += 4000
+        } else if (segment.Transport !== null && segment.Transport.Name.split(' ').indexOf('KRL') === -1 && segment.Transport.Name.split(' ').indexOf('TransJakarta') === -1) {
+          transport.push(segment.Transport.Name)
+          fare += 4000
+        }
+      })
+      Transports.push(transport)
+      farePerLabel.push(fare)
+      transport=[]
+      fare = 0
+    })
+    this.setState({
+      trafiLabelTotalFare: farePerLabel
+    })
+  }
+
+  transportInfoSummary() {
+    if (this.state.selectedTrafiLabel === '') {
+      console.log(this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length)
+      this.setState({
+        trafiSuggestionPrice: `${this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length}`
+      })
+      // return ((this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length)/1000).toFixed(3)
+    } else {
+      this.setState({
+        trafiSuggestionPrice: `${this.state.trafiLabelTotalFare[this.state.selectedTrafiLabel] * 2 * this.props.calendarWorkDay.length}`
+      })
+      // return ((this.state.trafiLabelTotalFare[this.state.selectedTrafiLabel] * 2 * this.props.calendarWorkDay.length)/1000).toFixed(3)
+    }
+  }
+
+  checkerTrafiSuggestionsPrice() {
+    if (this.state.trafiSuggestionPrice === '-') {
+      return '-'
+    } else if (isNaN(this.state.trafiSuggestionPrice) === true) {
+      this.props.postTrafiFare(`${this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length}`)
+      return `${this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length}`
+    } else if (isNaN(this.state.trafiSuggestionPrice) === false) {
+      this.props.postTrafiFare(this.state.trafiSuggestionPrice)
+      return this.state.trafiSuggestionPrice
+    }
+  }
+
+  postLabelIndex() {
+  let payload = {
+      index: this.state.selectedTrafiLabel === '' ? 0 : this.state.selectedTrafiLabel
+    }
+    this.props.postLabelIndex(payload)
+  }
+
 
   render () {
-    console.log("ini ganang ", this.props.calendarWorkDay);
+    console.log('ini TransportMode ', this.state.TransportMode)
     const { navigate } =   this.props.navigation
     return (
       <View style={styles.container}>
@@ -134,8 +278,50 @@ class FoodResult extends Component {
             </Picker>
           </View>
         </View>
+        <View style={styles.picker}>
+          <View style={{width: 240}}>
+            <Text style={styles.pickerLabel}>Transport:</Text>
+          </View>
+          <View>
+            <Picker
+            style={{width: 100}}
+            mode="dropdown"
+            selectedValue={this.state.selectedTrafiLabel}
+            onValueChange={(itemValue, itemIndex) => this.setState({selectedTrafiLabel:
+            itemValue})}>
+            {this.state.trafiLabel.map((item, index) => {
+              return (
+                <Item label={item} value={index} key={index}/>
+              )
+            })}
+            </Picker>
+          </View>
+        </View>
+        <View>
+        <View style={{width: 240}}>
+          <Text style={styles.pickerLabel}>Transport Mode:</Text>
+        </View>
+        <View>
+          <Button
+            title="Public Transport"
+            onPress={() => {
+              this.setState({
+                TransportMode: true
+              })
+            }}
+          />
+          <Button
+            title="Onlyne Transport"
+            onPress={() => {
+              this.setState({
+                TransportMode: false
+              })
+            }}
+          />
+        </View>
+        </View>
         <View style={{marginBottom: 20, marginTop: 10}}>
-          <TouchableOpacity onPress={() => this.getResult()}>
+          <TouchableOpacity onPress={() => this.validateCheckPrice()}>
           <View style={styles.button}>
             <Text style={styles.textButton}>Check Price</Text>
           </View>
@@ -154,14 +340,16 @@ class FoodResult extends Component {
           </View>
         </View>
         </TouchableHighlight>
+        <TouchableHighlight onPress={() => navigate('PublicTransport')}>
           <View style={styles.transportCard}>
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Transport Outcome</Text>
-              <Text style={styles.nullFont}>-</Text>
+              <Text style={styles.nullFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
+        </TouchableHighlight>
         </View>
       </View>
     )
@@ -176,7 +364,11 @@ const mapDispatchToProps = (dispatch) => {
     sortDataBreakfastAtHome: (data) => dispatch(getBreakfastHome(data)),
     sortDataLunchAtHome: (data) => dispatch(getLunchHome(data)),
     sortDataDinnerAtHome: (data) => dispatch(getDinnerHome(data)),
-    resultSumPrice: (data) => dispatch(sendResultData(data))
+    resultSumPrice: (data) => dispatch(sendResultData(data)),
+    fetchTrafiRoute: (payload) => dispatch(fetch_trafi_route(payload)),
+    fetchUberFare: (payload) => dispatch(fetch_uber_fare(payload)),
+    postLabelIndex: (payload) => dispatch(trafi_label_index(payload)),
+    postTrafiFare: (payload) => dispatch(post_trafi_fare(payload))
   }
 }
 
@@ -188,7 +380,15 @@ const mapStateToProps = (state) => {
     breakfastPriceHome: state.price.breakfastResultHome,
     lunchPriceHome: state.price.lunchResultHome,
     dinnerPriceHome: state.price.dinnerResultHome,
-    calendarWorkDay: state.price.workCalendar
+    calendarWorkDay: state.price.workCalendar,
+    latitudeFrom: state.MapReducer.latitudeFrom,
+    longitudeFrom: state.MapReducer.longitudeFrom,
+    addressFrom: state.MapReducer.addressFrom,
+    latitudeTo: state.MapReducer.latitudeTo,
+    longitudeTo: state.MapReducer.longitudeTo,
+    addressTo: state.MapReducer.addressTo,
+    trafiSuggestions: state.MapReducer.suggestions,
+    uberSuggestions: state.MapReducer.uberSuggestions
   }
 }
 
@@ -290,4 +490,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(FoodResult)
+export default connect(mapStateToProps, mapDispatchToProps)(TempResult)
