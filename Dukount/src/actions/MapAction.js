@@ -56,6 +56,28 @@ export const post_trafi_fare = (payload) => {
   }
 }
 
+export const post_uber_fare = (payload) => {
+  return {
+    type: 'POST_UBER_FARE',
+    payload
+  }
+}
+
+export const post_uber_type = (payload) => {
+  return {
+    type: 'POST_UBER_TYPE',
+    payload
+  }
+}
+
+export const post_uber_duration = (payload) => {
+  return {
+    type: 'POST_UBER_DURATION',
+    payload
+  }
+}
+
+
 export const fetch_address_from = (payload) => {
   return(dispatch, getState) => {
     axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${payload.latitudeFrom},${payload.longitudeFrom}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)

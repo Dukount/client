@@ -9,7 +9,8 @@ import {
   Dimensions,
   Image,
   Item,
-  StyleSheet
+  StyleSheet,
+  ScrollView
 } from "react-native"
 import { connect } from "react-redux"
 import { StackNavigator } from 'react-navigation'
@@ -27,7 +28,10 @@ import {
   fetch_trafi_route,
   fetch_uber_fare,
   trafi_label_index,
-  post_trafi_fare
+  post_trafi_fare,
+  post_uber_fare,
+  post_uber_duration,
+  post_uber_type
 } from '../actions/MapAction'
 
 
@@ -49,8 +53,7 @@ class TempResult extends Component {
       trafiLabelTotalFare: [],
       selectedTrafiLabel: '',
       trafiSuggestionPrice: '-',
-      uberLabel: [],
-      uberTotalLabelFare: [],
+      uberLabel: ['uberMotor','uberPOOL','uberX','uberXL','uberBLACK'],
       selectedUberLabel: '',
       uberSuggestionPrice: '-'
     }
@@ -127,7 +130,7 @@ class TempResult extends Component {
 
   checkFoodUber() {
     this.getResult()
-    this.uberSuggestionsLabel()
+    this.uberSuggestionsFare()
   }
 
   validateCheckPrice() {
@@ -135,6 +138,76 @@ class TempResult extends Component {
       this.checkFoodTransportation()
     } else if (this.state.TransportMode === false){
       this.checkFoodUber()
+    }
+  }
+
+  validatePicker() {
+    if (this.state.TransportMode === true) {
+      return (
+        <View>
+          <Picker
+          style={{width: 100}}
+          mode="dropdown"
+          selectedValue={this.state.selectedTrafiLabel}
+          onValueChange={(itemValue, itemIndex) => this.setState({selectedTrafiLabel:
+          itemValue})}>
+          {this.state.trafiLabel.map((item, index) => {
+            return (
+              <Item label={item} value={index} key={index}/>
+            )
+          })}
+          </Picker>
+        </View>
+      )
+    } else if (this.state.TransportMode === false){
+      return (
+        <View>
+          <Picker
+          style={{width: 100}}
+          mode="dropdown"
+          selectedValue={this.state.selectedUberLabel}
+          onValueChange={(itemValue, itemIndex) => this.setState({selectedUberLabel:
+          itemValue})}>
+          {this.state.uberLabel.map((item, index) => {
+            return (
+              <Item label={item} value={index} key={index}/>
+            )
+          })}
+          </Picker>
+        </View>
+      )
+    }
+  }
+
+  validateTransportationSummary() {
+    if (this.state.TransportMode === true) {
+      const { navigate } =   this.props.navigation
+      return (
+        <TouchableHighlight onPress={() => navigate('PublicTransport')}>
+          <View style={styles.transportCard}>
+            <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
+            <View style={styles.transportCardContent}>
+              <Text style={styles.cardHeader}>Transport Outcome</Text>
+              <Text style={styles.nullFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
+              <Text style={styles.perMonthFont}>(per month)</Text>
+            </View>
+          </View>
+        </TouchableHighlight>
+      )
+    } else if (this.state.TransportMode === false) {
+      const { navigate } =   this.props.navigation
+      return (
+        <TouchableHighlight onPress={() => navigate('UberTransport')}>
+          <View style={styles.transportCard}>
+            <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
+            <View style={styles.transportCardContent}>
+              <Text style={styles.cardHeader}>Uber Outcome</Text>
+              <Text style={styles.nullFont}>IDR {this.state.uberSuggestionsFare}</Text>
+              <Text style={styles.perMonthFont}>(per month)</Text>
+            </View>
+          </View>
+        </TouchableHighlight>
+      )
     }
   }
 
@@ -150,17 +223,6 @@ class TempResult extends Component {
     this.setState({
       trafiLabel: label
     })
-  }
-
-  uberSuggestionsLabel() {
-    let uberArrTemp = []
-    let label = this.props.uberSuggestions.map(suggestion => {
-      uberArrTemp.push(suggestion.display_name)
-    })
-    this.setState({
-      uberLabel: uberArrTemp
-    })
-    console.log(this.state.uberLabel)
   }
 
   trafiSuggestionsFare() {
@@ -227,11 +289,53 @@ class TempResult extends Component {
     this.props.postLabelIndex(payload)
   }
 
+  uberSuggestionsFare() {
+    console.log(this.props.uberSuggestions)
+    if (this.state.selectedUberLabel === '' || this.state.selectedUberLabel === 0) {
+      this.setState({
+        uberSuggestionsFare: Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length
+      })
+      this.props.postUberFare(`${Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length}`)
+      this.props.postUberType(`${this.props.uberSuggestions[0].display_name}`)
+      this.props.postUberDuration(`${Math.round(this.props.uberSuggestions[0].duration/60)}`)
+    } else if (this.state.selectedUberLabel === 1) {
+      this.setState({
+        uberSuggestionsFare: Math.round((this.props.uberSuggestions[1].high_estimate + this.props.uberSuggestions[1].low_estimate)/2) * 2 * this.props.calendarWorkDay.length
+      })
+      this.props.postUberFare(`${Math.round((this.props.uberSuggestions[1].high_estimate + this.props.uberSuggestions[1].low_estimate)/2) * 2 * this.props.calendarWorkDay.length}`)
+      this.props.postUberType(`${this.props.uberSuggestions[1].display_name}`)
+      this.props.postUberDuration(`${Math.round(this.props.uberSuggestions[1].duration/60)}`)
+    } else if (this.state.selectedUberLabel === 2) {
+      this.setState({
+        uberSuggestionsFare: Math.round((this.props.uberSuggestions[2].high_estimate + this.props.uberSuggestions[2].low_estimate)/2) * 2 * this.props.calendarWorkDay.length
+      })
+      this.props.postUberFare(`${Math.round((this.props.uberSuggestions[2].high_estimate + this.props.uberSuggestions[2].low_estimate)/2) * 2 * this.props.calendarWorkDay.length}`)
+      this.props.postUberType(`${this.props.uberSuggestions[2].display_name}`)
+      this.props.postUberDuration(`${Math.round(this.props.uberSuggestions[2].duration/60)}`)
+    } else if (this.state.selectedUberLabel === 3) {
+      this.setState({
+        uberSuggestionsFare: Math.round((this.props.uberSuggestions[3].high_estimate + this.props.uberSuggestions[3].low_estimate)/2) * 2 * this.props.calendarWorkDay.length
+      })
+      this.props.postUberFare(`${Math.round((this.props.uberSuggestions[3].high_estimate + this.props.uberSuggestions[3].low_estimate)/2) * 2 * this.props.calendarWorkDay.length}`)
+      this.props.postUberType(`${this.props.uberSuggestions[3].display_name}`)
+      this.props.postUberDuration(`${Math.round(this.props.uberSuggestions[3].duration/60)}`)
+    } else if (this.state.selectedUberLabel === 4) {
+      this.setState({
+        uberSuggestionsFare: Math.round((this.props.uberSuggestions[4].high_estimate + this.props.uberSuggestions[4].low_estimate)/2) * 2 * this.props.calendarWorkDay.length
+      })
+      this.props.postUberFare(`${Math.round((this.props.uberSuggestions[4].high_estimate + this.props.uberSuggestions[4].low_estimate)/2) * 2 * this.props.calendarWorkDay.length}`)
+      this.props.postUberType(`${this.props.uberSuggestions[4].display_name}`)
+      this.props.postUberDuration(`${Math.round(this.props.uberSuggestions[4].duration/60)}`)
+    }
+  }
+
 
   render () {
     console.log('ini TransportMode ', this.state.TransportMode)
-    const { navigate } =   this.props.navigation
+    console.log('ini uberLabel ', this.state.selectedUberLabel)
+    const { navigate } = this.props.navigation
     return (
+      <ScrollView>
       <View style={styles.container}>
         <View style={styles.picker}>
           <View style={{width: 240}}>
@@ -282,20 +386,7 @@ class TempResult extends Component {
           <View style={{width: 240}}>
             <Text style={styles.pickerLabel}>Transport:</Text>
           </View>
-          <View>
-            <Picker
-            style={{width: 100}}
-            mode="dropdown"
-            selectedValue={this.state.selectedTrafiLabel}
-            onValueChange={(itemValue, itemIndex) => this.setState({selectedTrafiLabel:
-            itemValue})}>
-            {this.state.trafiLabel.map((item, index) => {
-              return (
-                <Item label={item} value={index} key={index}/>
-              )
-            })}
-            </Picker>
-          </View>
+          {this.validatePicker()}
         </View>
         <View>
         <View style={{width: 240}}>
@@ -340,18 +431,10 @@ class TempResult extends Component {
           </View>
         </View>
         </TouchableHighlight>
-        <TouchableHighlight onPress={() => navigate('PublicTransport')}>
-          <View style={styles.transportCard}>
-            <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
-            <View style={styles.transportCardContent}>
-              <Text style={styles.cardHeader}>Transport Outcome</Text>
-              <Text style={styles.nullFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
-              <Text style={styles.perMonthFont}>(per month)</Text>
-            </View>
-          </View>
-        </TouchableHighlight>
+        {this.validateTransportationSummary()}
         </View>
       </View>
+      </ScrollView>
     )
   }
 }
@@ -368,7 +451,10 @@ const mapDispatchToProps = (dispatch) => {
     fetchTrafiRoute: (payload) => dispatch(fetch_trafi_route(payload)),
     fetchUberFare: (payload) => dispatch(fetch_uber_fare(payload)),
     postLabelIndex: (payload) => dispatch(trafi_label_index(payload)),
-    postTrafiFare: (payload) => dispatch(post_trafi_fare(payload))
+    postTrafiFare: (payload) => dispatch(post_trafi_fare(payload)),
+    postUberFare: (payload) => dispatch(post_uber_fare(payload)),
+    postUberType: (payload) => dispatch(post_uber_type(payload)),
+    postUberDuration: (payload) => dispatch(post_uber_duration(payload))
   }
 }
 
@@ -404,7 +490,7 @@ const styles = StyleSheet.create({
     backgroundColor:'rgba(29, 129, 229, 0.1)',
     paddingHorizontal: 10,
     justifyContent: 'flex-end',
-    marginBottom: 1
+    marginBottom: 1,
   },
   pickerLabel: {
     fontWeight: 'bold',

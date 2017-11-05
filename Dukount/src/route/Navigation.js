@@ -7,6 +7,7 @@ import FoodDetail from '../components/FoodDetail'
 import FromLocation from '../components/Maps/FromLocation'
 import ToLocation from '../components/Maps/ToLocation'
 import PublicTransport from '../components/Maps/PublicTransport'
+import Uber from '../components/Maps/Uber'
 
 const Navigation = StackNavigator({
   Home: { screen: Home },
@@ -15,7 +16,8 @@ const Navigation = StackNavigator({
   FoodDetailScreen: { screen: FoodDetail },
   FromLocation: {screen: FromLocation},
   ToLocation: {screen: ToLocation},
-  PublicTransport: {screen: PublicTransport}
+  PublicTransport: {screen: PublicTransport},
+  UberTransport: {screen: Uber}
 }, {
   initialRouteName: 'Home'
 })
