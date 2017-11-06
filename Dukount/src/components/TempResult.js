@@ -25,7 +25,6 @@ import {
   sendResultData
 } from "../actions/foodAction";
 import {
-  fetch_trafi_route,
   fetch_uber_fare,
   trafi_label_index,
   post_trafi_fare,
@@ -98,16 +97,6 @@ class TempResult extends Component {
     }else {
       return (<Text style={styles.nullFont}>-</Text>)
     }
-  }
-
-  fetchTrafiRouteMethod() {
-    let payload = {
-      latitudeFrom: this.props.latitudeFrom,
-      longitudeFrom: this.props.longitudeFrom,
-      latitudeTo: this.props.latitudeTo,
-      longitudeTo: this.props.longitudeTo
-    }
-    this.props.fetchTrafiRoute(payload)
   }
 
   fetchUberFareMethod() {
@@ -211,7 +200,6 @@ class TempResult extends Component {
   }
 
   componentDidMount() {
-    this.fetchTrafiRouteMethod()
     this.fetchUberFareMethod()
     this.trafiSuggestionsLabel()
   }
@@ -448,7 +436,6 @@ const mapDispatchToProps = (dispatch) => {
     sortDataLunchAtHome: (data) => dispatch(getLunchHome(data)),
     sortDataDinnerAtHome: (data) => dispatch(getDinnerHome(data)),
     resultSumPrice: (data) => dispatch(sendResultData(data)),
-    fetchTrafiRoute: (payload) => dispatch(fetch_trafi_route(payload)),
     fetchUberFare: (payload) => dispatch(fetch_uber_fare(payload)),
     postLabelIndex: (payload) => dispatch(trafi_label_index(payload)),
     postTrafiFare: (payload) => dispatch(post_trafi_fare(payload)),
