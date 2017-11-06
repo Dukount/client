@@ -7,7 +7,7 @@ import {
 
 import { connect } from 'react-redux'
 
-export default class FinalResult extends Component {
+class FinalResult extends Component {
   static navigationOptions = {
     title: 'FinalResult'
   }
@@ -18,8 +18,19 @@ export default class FinalResult extends Component {
   render () {
     return (
       <View>
-        <Text>Your salary :</Text>
+        <Text>Your salary : {this.props.userSalary}</Text>
+        <Text>Your Food Outcome: {this.props.foodOutcome}</Text>
+        <Text>Your Transportation Outcome: </Text>
       </View>
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    userSalary: state.salaryReducer.salary,
+    foodOutcome: state.price.foodFinal
+  }
+}
+
+export default connect(mapStateToProps, null)(FinalResult)

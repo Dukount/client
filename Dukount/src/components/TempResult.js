@@ -94,8 +94,8 @@ class TempResult extends Component {
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
     const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
+      this.props.foodCost(sumPrice)
        return (<Text style={styles.resultFont}>IDR {resultFoodFinal}.000</Text>)
-       this.props.foodCost(sumPrice)
     }else {
       return (<Text style={styles.nullFont}>-</Text>)
     }
@@ -446,7 +446,7 @@ const mapDispatchToProps = (dispatch) => {
     postUberFare: (payload) => dispatch(post_uber_fare(payload)),
     postUberType: (payload) => dispatch(post_uber_type(payload)),
     postUberDuration: (payload) => dispatch(post_uber_duration(payload)),
-    foodCost: (payload) => dispatch(send_food_cost(payload))
+    foodCost: (sumPrice) => dispatch(send_food_cost(sumPrice))
   }
 }
 
