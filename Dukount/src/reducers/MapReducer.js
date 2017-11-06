@@ -12,7 +12,8 @@ const defaultState = {
   uberFare: null,
   uberType: null,
   uberDuration: null,
-  transportMode: null
+  transportMode: null,
+  transportRecommendedPackage: null
 }
 
 const MapReducer = (state=defaultState, action) => {
@@ -42,6 +43,8 @@ const MapReducer = (state=defaultState, action) => {
       return {...state, uberDuration: action.payload}
     case 'POST_TRANSPORT_MODE':
       return {...state, transportMode: action.payload}
+    case 'FETCH_TRANSPORT_COST_PACKAGE':
+      return {...state, transportRecommendedPackage: action.payload}
     default:
       return state
   }

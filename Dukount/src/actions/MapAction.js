@@ -84,6 +84,13 @@ export const post_transport_mode = (payload) => {
   }
 }
 
+export const fetch_transport_cost_package = (payload) => {
+  return {
+    type: 'FETCH_TRANSPORT_COST_PACKAGE',
+    payload
+  }
+}
+
 export const fetch_address_from = (payload) => {
   return(dispatch, getState) => {
     axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${payload.latitudeFrom},${payload.longitudeFrom}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)

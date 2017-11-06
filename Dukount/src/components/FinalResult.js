@@ -73,6 +73,7 @@ class FinalResult extends Component {
         <Text>Your Transportation Outcome: {this.state.transportResult}</Text>
         <Text>Your Final Outcome : {this.state.userOutcome}</Text>
         <Text>The rest of Salary  : {this.state.salaryRestUser}</Text>
+        <Text>Jangan Lupa Paket Hemat dengan makan paket cost seharga IDR {this.props.foodCostPackage} dan transport paket recommended IDR {this.props.transportRecommendedPackage} </Text>
       </View>
     )
   }
@@ -84,8 +85,9 @@ const mapStateToProps = (state) => {
     foodOutcome: state.price.foodFinal,
     userTransportMode: state.MapReducer.transportMode,
     uberTransportPrice: state.MapReducer.uberFare,
-    trafiTransportPrice: state.MapReducer.trafiFare
-
+    trafiTransportPrice: state.MapReducer.trafiFare,
+    foodCostPackage: state.salaryReducer.foodCostPackage,
+    transportRecommendedPackage: state.MapReducer.transportRecommendedPackage
   }
 }
 
