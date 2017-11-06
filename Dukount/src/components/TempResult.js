@@ -34,6 +34,9 @@ import {
   post_uber_type,
   post_transport_mode
 } from '../actions/MapAction'
+import {
+  fetch_food_cost_package
+} from '../actions/salaryAction'
 
 
 class TempResult extends Component {
@@ -56,7 +59,8 @@ class TempResult extends Component {
       trafiSuggestionPrice: '-',
       uberLabel: ['uberMotor','uberPOOL','uberX','uberXL','uberBLACK'],
       selectedUberLabel: '',
-      uberSuggestionPrice: '-'
+      uberSuggestionPrice: '-',
+      foodCostPrice: null
     }
   }
 
@@ -94,6 +98,7 @@ class TempResult extends Component {
 
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
     const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
+
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
       this.props.foodCost(sumPrice)
        return (<Text style={styles.resultFont}>IDR {resultFoodFinal}.000</Text>)
@@ -122,6 +127,15 @@ class TempResult extends Component {
   checkFoodUber() {
     this.getResult()
     this.uberSuggestionsFare()
+  }
+
+  fetchingCostPricePackage() {
+    if (this.state.breakfast === 'cost' && this.state.lunch === 'cost' && this.state.dinner === 'cost') {
+      if (this.props.foodFinal === null) {
+        this.props.fetchFoodCostPackage(this.props.foodFinal)
+      }
+      this.props.fetchFoodCostPackage(this.props.foodFinal)
+    }
   }
 
   validateCheckPrice() {
@@ -324,7 +338,7 @@ class TempResult extends Component {
 
 
   render () {
-    console.log('ini state ', this.state.foodPriceResult);
+    console.log('ini foodCostPrice ', this.state.foodCostPrice);
     const { navigate } = this.props.navigation
     return (
       <ScrollView>
@@ -450,7 +464,8 @@ const mapDispatchToProps = (dispatch) => {
     postUberType: (payload) => dispatch(post_uber_type(payload)),
     postUberDuration: (payload) => dispatch(post_uber_duration(payload)),
     foodCost: (sumPrice) => dispatch(send_food_cost(sumPrice)),
-    postTransportMode: (payload) => dispatch(post_transport_mode(payload))
+    postTransportMode: (payload) => dispatch(post_transport_mode(payload)),
+    fetchFoodCostPackage: (payload) => dispatch(fetch_food_cost_package(payload))
   }
 }
 
@@ -471,7 +486,8 @@ const mapStateToProps = (state) => {
     addressTo: state.MapReducer.addressTo,
     trafiSuggestions: state.MapReducer.suggestions,
     uberSuggestions: state.MapReducer.uberSuggestions,
-    userSalary: state.salaryReducer.salary
+    userSalary: state.salaryReducer.salary,
+    foodFinal: state.price.foodFinal
   }
 }
 
