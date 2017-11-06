@@ -16,10 +16,12 @@ class FinalResult extends Component {
   }
 
   render () {
+    var dataPrice = this.props.foodOutcome
+    var resultFood = parseFloat(dataPrice / 1000000).toFixed(3)
     return (
       <View>
         <Text>Your salary : {this.props.userSalary}</Text>
-        <Text>Your Food Outcome: {this.props.foodOutcome}</Text>
+        <Text>Your Food Outcome: IDR {resultFood}.000</Text>
         <Text>Your Transportation Outcome: </Text>
       </View>
     )
