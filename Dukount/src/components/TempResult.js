@@ -22,7 +22,8 @@ import {
   getBreakfastHome,
   getLunchHome,
   getDinnerHome,
-  sendResultData
+  sendResultData,
+  postFoodCost
 } from "../actions/foodAction";
 import {
   fetch_uber_fare,
@@ -93,7 +94,8 @@ class TempResult extends Component {
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
     const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
-       return (<Text style={styles.resultFont}>IDR {resultFoodFinal}.000</Text>)
+      this.props.postFoodCost(sumPrice)
+      return (<Text style={styles.resultFont}>IDR {resultFoodFinal}.000</Text>)
     }else {
       return (<Text style={styles.nullFont}>-</Text>)
     }
@@ -441,7 +443,8 @@ const mapDispatchToProps = (dispatch) => {
     postTrafiFare: (payload) => dispatch(post_trafi_fare(payload)),
     postUberFare: (payload) => dispatch(post_uber_fare(payload)),
     postUberType: (payload) => dispatch(post_uber_type(payload)),
-    postUberDuration: (payload) => dispatch(post_uber_duration(payload))
+    postUberDuration: (payload) => dispatch(post_uber_duration(payload)),
+    postFoodCost: (payload) => dispatch(postFoodCost(payload))
   }
 }
 

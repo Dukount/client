@@ -153,3 +153,10 @@ export const getDinnerHome = (payload) => {
     })
   }
 }
+
+export const postFoodCost = (payload) => {
+  return {
+    type: 'POST_FOOD_COST',
+    payload
+  }
+}
