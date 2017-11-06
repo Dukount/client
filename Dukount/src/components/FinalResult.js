@@ -50,9 +50,37 @@ class FinalResult extends Component {
     console.log('gaji ', salary);
 
     this.setState({
-      userOutcome: parseFloat(sumOutcome),
-      salaryRestUser: parseFloat(restSalary)
+      userOutcome: sumOutcome,
+      salaryRestUser: restSalary
     })
+  }
+
+  cheapestTransportFare(firstTrafiFare) {
+    return (firstTrafiFare * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
+
+  stringConverter(string) {
+    if (string !== null) {
+      return (string).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    } else {
+      return 'You miss something to submit'
+    }
+  }
+
+  numberConverter(number) {
+    if (number !== null) {
+      return (number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    } else {
+      return 'You miss something to submit'
+    }
+  }
+
+  foodCostGenerator(foodCost) {
+    if (foodCost !== null) {
+      return foodCost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    } else {
+      return 'Zomato API Request exceeded the maximum limit'
+    }
   }
 
   componentWillMount() {
@@ -64,16 +92,15 @@ class FinalResult extends Component {
   }
 
   render () {
-    var dataPrice = this.props.foodOutcome
-    var resultFood = parseFloat(dataPrice / 1000000).toFixed(3)
+    // var foodPrice = this.props.foodOutcome.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     return (
       <View>
-        <Text>Your salary : {this.props.userSalary}</Text>
-        <Text>Your Food Outcome: IDR {resultFood}.000</Text>
-        <Text>Your Transportation Outcome: {this.state.transportResult}</Text>
-        <Text>Your Final Outcome : {this.state.userOutcome}</Text>
-        <Text>The rest of Salary  : {this.state.salaryRestUser}</Text>
-        <Text>Jangan Lupa Paket Hemat dengan makan paket cost seharga IDR {this.props.foodCostPackage} dan transport paket recommended IDR {this.props.transportRecommendedPackage} </Text>
+        <Text>Your salary : {this.stringConverter(this.props.userSalary)}</Text>
+        <Text>Your Food Outcome: IDR {this.foodCostGenerator(this.props.foodOutcome)}</Text>
+        <Text>Your Transportation Outcome: {this.stringConverter(this.state.transportResult)}</Text>
+        <Text>Your Final Outcome : {this.numberConverter(this.state.userOutcome)}</Text>
+        <Text>The rest of Salary  : {this.numberConverter(this.state.salaryRestUser)}</Text>
+        <Text>Jangan Lupa Paket Hemat dengan makan paket cost seharga IDR {this.props.foodCostPackage} dan transport paket recommended IDR {this.cheapestTransportFare(this.props.firstTrafiFare)} </Text>
       </View>
     )
   }
@@ -87,7 +114,8 @@ const mapStateToProps = (state) => {
     uberTransportPrice: state.MapReducer.uberFare,
     trafiTransportPrice: state.MapReducer.trafiFare,
     foodCostPackage: state.salaryReducer.foodCostPackage,
-    transportRecommendedPackage: state.MapReducer.transportRecommendedPackage
+    firstTrafiFare: state.MapReducer.firstTrafiFare,
+    calendarWorkDay: state.price.workCalendar
   }
 }
 

@@ -20,6 +20,12 @@ class Home extends Component {
     };
   }
 
+  delimiter(num) {
+    return num
+    .replace(/\D/g, "")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
+
   render() {
     console.log('ini salary di home ', this.state.salary)
     const { navigate } = this.props.navigation
@@ -32,8 +38,8 @@ class Home extends Component {
               multiline = {true}
               numberOfLines = {4}
               maxLength = {20}
-              onChangeText={(salary) => this.setState({salary})}
-              value={this.state.salary}
+              onChangeText={(salary) => this.setState({salary: salary.split(',').join('')})}
+              value={this.delimiter(this.state.salary)}
               keyboardType = {'numeric'}
               placeholder={'Input your salary'}
             />

@@ -124,8 +124,7 @@ class ToLocation extends Component<{}> {
           getDefaultValue={() => ''}
           query={{
             key: 'AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc',
-            language: 'en',
-            types: 'geocode'
+            language: 'en'
           }}
           styles={{
             textInputContainer: {

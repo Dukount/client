@@ -33,7 +33,8 @@ import {
   post_uber_duration,
   post_uber_type,
   post_transport_mode,
-  fetch_transport_cost_package
+  fetch_transport_cost_package,
+  fetch_first_trafi_fare
 } from '../actions/MapAction'
 import {
   fetch_food_cost_package
@@ -98,11 +99,11 @@ class TempResult extends Component {
     const sumFoodOutcomeResultHome =  sumFoodOutcomeHome * dayHome
 
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
-    const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
+    const resultFoodFinal = parseFloat(sumPrice)
 
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
       this.props.foodCost(sumPrice)
-       return (<Text style={styles.resultFont}>IDR {resultFoodFinal}.000</Text>)
+       return (<Text style={styles.resultFont}>IDR {resultFoodFinal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>)
     }else {
       return (<Text style={styles.nullFont}>-</Text>)
     }
@@ -209,7 +210,7 @@ class TempResult extends Component {
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Transport Outcome</Text>
-              <Text style={styles.nullFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
+              <Text style={styles.nullFont}>{this.checkerTrafiSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
@@ -223,7 +224,7 @@ class TempResult extends Component {
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Uber Outcome</Text>
-              <Text style={styles.nullFont}>IDR {this.state.uberSuggestionsFare}</Text>
+              <Text style={styles.nullFont}>IDR {this.checkerUberSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
@@ -292,14 +293,31 @@ class TempResult extends Component {
   }
 
   checkerTrafiSuggestionsPrice() {
-    if (this.state.trafiSuggestionPrice === '-') {
+    if (this.state.trafiSuggestionPrice === '-' && this.props.trafiFare !== null) {
+      this.props.postTrafiFare(`${this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length}`)
+      return `${(this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+    } else if (this.state.trafiSuggestionPrice === '-') {
       return '-'
     } else if (isNaN(this.state.trafiSuggestionPrice) === true) {
+      this.props.fetchFirstTrafiFare(this.state.trafiLabelTotalFare[0])
       this.props.postTrafiFare(`${this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length}`)
-      return `${this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length}`
+      return `${(this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
     } else if (isNaN(this.state.trafiSuggestionPrice) === false) {
       this.props.postTrafiFare(this.state.trafiSuggestionPrice)
-      return this.state.trafiSuggestionPrice
+      return (this.state.trafiSuggestionPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+  }
+
+  checkerUberSuggestionsPrice() {
+    if(this.state.uberSuggestionsFare === undefined && this.props.uberFare === null) {
+      return '-'
+    } else if (this.state.uberSuggestionsFare !== '-' && this.props.uberFare !== null && this.props.uberType === 'uberMotor') {
+      this.props.postUberFare(`${Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length}`)
+      this.props.postUberType(`${this.props.uberSuggestions[0].display_name}`)
+      this.props.postUberDuration(`${Math.round(this.props.uberSuggestions[0].duration/60)}`)
+      return (Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    } else {
+      return (this.state.uberSuggestionsFare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     }
   }
 
@@ -352,7 +370,7 @@ class TempResult extends Component {
 
 
   render () {
-    console.log('ini selectedTrafiLabel ', this.state.selectedTrafiLabel);
+    console.log('ini uberSuggestionsFare ', this.state.uberSuggestionsFare);
     const { navigate } = this.props.navigation
     return (
       <ScrollView>
@@ -480,7 +498,8 @@ const mapDispatchToProps = (dispatch) => {
     foodCost: (sumPrice) => dispatch(send_food_cost(sumPrice)),
     postTransportMode: (payload) => dispatch(post_transport_mode(payload)),
     fetchFoodCostPackage: (payload) => dispatch(fetch_food_cost_package(payload)),
-    fetchTransportCostPackage: (payload) => dispatch(fetch_transport_cost_package(payload))
+    fetchTransportCostPackage: (payload) => dispatch(fetch_transport_cost_package(payload)),
+    fetchFirstTrafiFare: (payload) => dispatch(fetch_first_trafi_fare(payload))
   }
 }
 
@@ -504,7 +523,10 @@ const mapStateToProps = (state) => {
     userSalary: state.salaryReducer.salary,
     foodFinal: state.price.foodFinal,
     transportMode: state.MapReducer.transportMode,
-    trafiFare: state.MapReducer.trafiFare
+    trafiFare: state.MapReducer.trafiFare,
+    firstTrafiFare: state.MapReducer.firstTrafiFare,
+    uberFare: state.MapReducer.uberFare,
+    uberType: state.MapReducer.uberType
   }
 }
 

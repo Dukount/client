@@ -126,7 +126,6 @@ class FromLocation extends Component<{}> {
           query={{
                key: 'AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc',
                language: 'en',
-               types: 'geocode',
           }}
           styles={{
             textInputContainer: {

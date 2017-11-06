@@ -104,20 +104,18 @@ class PublicTransport extends Component {
   }
 
   render() {
-    console.log('ini labelIndex ', this.props.labelIndex)
-    console.log('ini suggestions index ', this.props.suggestions[this.props.labelIndex])
     return (
       <View>
         {!this.props.suggestions ? <Text>Check your routes</Text> : (
           <View style={styles.container}>
             <Text>{this.checkPreferenceLabel(this.props.suggestions[this.props.labelIndex])}</Text>
             <Text>{this.state.routes[0].label}</Text>
-            <Text>{this.state.routes[0].price}</Text>
+            <Text>IDR {(this.state.routes[0].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / TRIP </Text>
+            <Text>IDR {(this.state.routes[0].price * 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / DAY </Text>
             <FlatList
               data={this.props.suggestions[this.props.labelIndex].RouteSegments}
               keyExtractor={(item, idx) => idx}
               renderItem={({item}) => {
-                console.log('ini suggestion ', item)
                 return (
                   <View style={styles.preferenceLabel}>
                     <Text>{this.checkSegmentFrom(item)}</Text>

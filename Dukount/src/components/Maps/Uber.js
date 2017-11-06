@@ -46,6 +46,7 @@ class Uber extends Component {
   }
 
   render() {
+    console.log(this.props.latitudeFrom)
     return (
       <View>
         <View>
@@ -53,8 +54,8 @@ class Uber extends Component {
             <MapView
               style={styles.map}
               initialRegion={{
-              latitude:this.props.latitudeTo,
-              longitude:this.props.longitudeTo,
+              latitude:this.props.latitudeFrom,
+              longitude:this.props.longitudeFrom,
               latitudeDelta: 0.41,
               longitudeDelta: 0.0421}}
               showsTraffic={true}
@@ -92,7 +93,7 @@ class Uber extends Component {
           <View style={styles.uberService}>
             <Text style={styles.vehicleOption}>Vehicle Option: {this.props.uberType}</Text>
             <Text style={styles.tripDuration}>Trip Duration: {this.props.uberDuration} Minutes</Text>
-            <Text style={styles.fareEstimation}>Fare Estimation: IDR {this.props.uberFare / 2 / this.props.calendarWorkDay.length}</Text>
+            <Text style={styles.fareEstimation}>Fare Estimation: IDR {(this.props.uberFare / 2 / this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
           </View>
         </View>
       </View>
