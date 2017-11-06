@@ -26,13 +26,13 @@ import {
   send_food_cost
 } from "../actions/foodAction";
 import {
-  fetch_trafi_route,
   fetch_uber_fare,
   trafi_label_index,
   post_trafi_fare,
   post_uber_fare,
   post_uber_duration,
-  post_uber_type
+  post_uber_type,
+  post_transport_mode
 } from '../actions/MapAction'
 
 
@@ -102,16 +102,6 @@ class TempResult extends Component {
     }
   }
 
-  fetchTrafiRouteMethod() {
-    let payload = {
-      latitudeFrom: this.props.latitudeFrom,
-      longitudeFrom: this.props.longitudeFrom,
-      latitudeTo: this.props.latitudeTo,
-      longitudeTo: this.props.longitudeTo
-    }
-    this.props.fetchTrafiRoute(payload)
-  }
-
   fetchUberFareMethod() {
   let payload = {
       latitudeFrom: this.props.latitudeFrom,
@@ -124,7 +114,6 @@ class TempResult extends Component {
 
   checkFoodTransportation() {
     this.getResult()
-    this.trafiSuggestionsLabel()
     this.trafiSuggestionsFare()
     this.transportInfoSummary()
     this.postLabelIndex()
@@ -145,6 +134,7 @@ class TempResult extends Component {
 
   validatePicker() {
     if (this.state.TransportMode === true) {
+      this.props.postTransportMode(this.state.TransportMode)
       return (
         <View>
           <Picker
@@ -162,6 +152,7 @@ class TempResult extends Component {
         </View>
       )
     } else if (this.state.TransportMode === false){
+      this.props.postTransportMode(this.state.TransportMode)
       return (
         <View>
           <Picker
@@ -214,8 +205,8 @@ class TempResult extends Component {
   }
 
   componentDidMount() {
-    this.fetchTrafiRouteMethod()
     this.fetchUberFareMethod()
+    this.trafiSuggestionsLabel()
   }
 
   trafiSuggestionsLabel() {
@@ -452,14 +443,14 @@ const mapDispatchToProps = (dispatch) => {
     sortDataLunchAtHome: (data) => dispatch(getLunchHome(data)),
     sortDataDinnerAtHome: (data) => dispatch(getDinnerHome(data)),
     resultSumPrice: (data) => dispatch(sendResultData(data)),
-    fetchTrafiRoute: (payload) => dispatch(fetch_trafi_route(payload)),
     fetchUberFare: (payload) => dispatch(fetch_uber_fare(payload)),
     postLabelIndex: (payload) => dispatch(trafi_label_index(payload)),
     postTrafiFare: (payload) => dispatch(post_trafi_fare(payload)),
     postUberFare: (payload) => dispatch(post_uber_fare(payload)),
     postUberType: (payload) => dispatch(post_uber_type(payload)),
     postUberDuration: (payload) => dispatch(post_uber_duration(payload)),
-    foodCost: (sumPrice) => dispatch(send_food_cost(sumPrice))
+    foodCost: (sumPrice) => dispatch(send_food_cost(sumPrice)),
+    postTransportMode: (payload) => dispatch(post_transport_mode(payload))
   }
 }
 

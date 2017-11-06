@@ -77,6 +77,12 @@ export const post_uber_duration = (payload) => {
   }
 }
 
+export const post_transport_mode = (payload) => {
+  return {
+    type: 'POST_TRANSPORT_MODE',
+    payload
+  }
+}
 
 export const fetch_address_from = (payload) => {
   return(dispatch, getState) => {
