@@ -1,13 +1,49 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, Text } from 'react-native';
+import {
+  View,
+  TouchableHighlight,
+  Text,
+  TextInput,
+  Button
+} from 'react-native';
 import { connect } from 'react-redux'
 
+import {
+  post_salary
+} from '../actions/salaryAction'
+
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      salary: '',
+    };
+  }
 
   render() {
+    console.log('ini salary di home ', this.state.salary)
     const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
+        <View style={styles.salaryInputRow}>
+          <View style={styles.salaryInput}>
+            <TextInput
+              editable = {true}
+              multiline = {true}
+              numberOfLines = {4}
+              maxLength = {20}
+              onChangeText={(salary) => this.setState({salary})}
+              value={this.state.salary}
+              keyboardType = {'numeric'}
+              placeholder={'Input your salary'}
+            />
+          </View>
+          <Button
+            title = 'Save'
+            style={styles.saveButton}
+            onPress={() => this.props.postSalary(this.state.salary)}
+          />
+        </View>
         <TouchableHighlight onPress={() => navigate('CalendarScreen')}>
         <Text style={styles.sentence}>
           Pick Your Workdays
@@ -46,8 +82,24 @@ const styles = {
     justifyContent: 'center'
   },
   sentence: {
-    marginTop: 10,
     fontSize: 30
+  },
+  salaryInputRow: {
+    flexDirection: 'row',
+    top: 0,
+    height: 30,
+    marginTop: 0,
+    marginBottom: 10
+  },
+  salaryInput: {
+    width: 250,
+    height: 35
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    postSalary: (payload) => dispatch(post_salary(payload))
   }
 }
 
@@ -64,6 +116,6 @@ const mapStateToProps = (state) => {
 
 const ConnectedComponent = connect(
   mapStateToProps,
-  null)(Home)
+  mapDispatchToProps)(Home)
 
 export default ConnectedComponent
