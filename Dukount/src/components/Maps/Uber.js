@@ -53,8 +53,8 @@ class Uber extends Component {
             <MapView
               style={styles.map}
               initialRegion={{
-              latitude:-6.200221,
-              longitude:106.834341,
+              latitude:this.props.latitudeTo,
+              longitude:this.props.longitudeTo,
               latitudeDelta: 0.41,
               longitudeDelta: 0.0421}}
               showsTraffic={true}
