@@ -57,6 +57,13 @@ export const dateAction = (payload) => {
   }
 }
 
+export const send_food_cost = (payload) => {
+  return {
+    type: 'FOOD_COST',
+    payload
+  }
+}
+
 
 export const getBreakfast = (payload) => {
   return (dispatch, getState) => {

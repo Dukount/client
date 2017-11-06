@@ -22,7 +22,8 @@ import {
   getBreakfastHome,
   getLunchHome,
   getDinnerHome,
-  sendResultData
+  sendResultData,
+  send_food_cost
 } from "../actions/foodAction";
 import {
   fetch_trafi_route,
@@ -95,6 +96,7 @@ class TempResult extends Component {
     const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
        return (<Text style={styles.resultFont}>IDR {resultFoodFinal}.000</Text>)
+       this.props.foodCost(sumPrice)
     }else {
       return (<Text style={styles.nullFont}>-</Text>)
     }
@@ -331,8 +333,7 @@ class TempResult extends Component {
 
 
   render () {
-    console.log('ini TransportMode ', this.state.TransportMode)
-    console.log('ini uberLabel ', this.state.selectedUberLabel)
+    console.log('ini state ', this.state.foodPriceResult);
     const { navigate } = this.props.navigation
     return (
       <ScrollView>
@@ -392,7 +393,7 @@ class TempResult extends Component {
         <View style={{width: 240}}>
           <Text style={styles.pickerLabel}>Transport Mode:</Text>
         </View>
-        <View>
+        <View style={{flexDirection: 'row', flex: 1}}>
           <Button
             title="Public Transport"
             onPress={() => {
@@ -417,6 +418,9 @@ class TempResult extends Component {
             <Text style={styles.textButton}>Check Price</Text>
           </View>
           </TouchableOpacity>
+        </View>
+        <View>
+          <Button onPress={() => navigate('FinalResult')} title='RESULT' />
         </View>
         <View>
         <TouchableHighlight onPress={() => navigate('FoodDetailScreen')}>
@@ -454,7 +458,8 @@ const mapDispatchToProps = (dispatch) => {
     postTrafiFare: (payload) => dispatch(post_trafi_fare(payload)),
     postUberFare: (payload) => dispatch(post_uber_fare(payload)),
     postUberType: (payload) => dispatch(post_uber_type(payload)),
-    postUberDuration: (payload) => dispatch(post_uber_duration(payload))
+    postUberDuration: (payload) => dispatch(post_uber_duration(payload)),
+    foodCost: (payload) => dispatch(send_food_cost(payload))
   }
 }
 
@@ -474,7 +479,8 @@ const mapStateToProps = (state) => {
     longitudeTo: state.MapReducer.longitudeTo,
     addressTo: state.MapReducer.addressTo,
     trafiSuggestions: state.MapReducer.suggestions,
-    uberSuggestions: state.MapReducer.uberSuggestions
+    uberSuggestions: state.MapReducer.uberSuggestions,
+    userSalary: state.salaryReducer.salary
   }
 }
 
@@ -565,7 +571,7 @@ const styles = StyleSheet.create({
   },
   resultFont: {
     marginTop: 15,
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#F4FF81'
   },

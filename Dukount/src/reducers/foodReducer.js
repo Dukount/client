@@ -6,7 +6,8 @@ const defaultState = {
   lunchResultHome : [],
   dinnerResultHome: [],
   resultFinal: [],
-  workCalendar: []
+  workCalendar: [],
+  foodFinal: null
 }
 
 const namaFunction = (ganang) => {
@@ -47,6 +48,8 @@ const foodReducer = (state=defaultState, action) => {
     return {...state, resultFinal: action.payload}
   } else if (action.type === 'DATE_CLICK') {
     return {...state, workCalendar: action.payload}
+  } else if (action.type === 'FOOD_COST') {
+    return {...state, foodFinal: action.payload}
   }
   return state
 }
