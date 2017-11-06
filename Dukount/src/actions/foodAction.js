@@ -57,6 +57,13 @@ export const dateAction = (payload) => {
   }
 }
 
+export const send_food_cost = (payload) => {
+  return {
+    type: 'FOOD_COST',
+    payload
+  }
+}
+
 
 export const getBreakfast = (payload) => {
   return (dispatch, getState) => {
@@ -151,12 +158,5 @@ export const getDinnerHome = (payload) => {
     .catch(err => {
       throw err
     })
-  }
-}
-
-export const postFoodCost = (payload) => {
-  return {
-    type: 'POST_FOOD_COST',
-    payload
   }
 }
