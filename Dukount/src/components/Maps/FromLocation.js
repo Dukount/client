@@ -95,12 +95,12 @@ class FromLocation extends Component<{}> {
       <View>
       <View>
       <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
-      <View style={{position: 'relative'}}>
+      <View style={{position: 'relative', justifyContent: 'center'}}>
       <TouchableHighlight onPress={() => goBack()}>
-        <Image source={require('../../assets/img/keyboard-right-arrow-button.png')}/>
+        <Image source={require('../../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
       </TouchableHighlight>
       </View>
-      <View style={{height: 30, width: 360, alignItems: 'center', alignSelf: 'center'}}>
+      <View style={{height: 30, width: 360, alignItems: 'center', alignSelf: 'center', position: 'absolute'}}>
         <Image source={require('../../assets/img/logo_small_white.png')} style={{height: 30, width: 130}} />
       </View>
       </View>
