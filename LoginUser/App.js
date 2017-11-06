@@ -12,13 +12,17 @@ import {
   View
 } from 'react-native';
 import Login from './src/components/Login'
+import { Provider } from 'react-redux'
+import store from './src/store'
 
 export default class App extends Component<{}> {
   render() {
     return (
-      <View>
-        <Login/>
-      </View>
+      <Provider store={store}>
+        <View>
+          <Login/>
+        </View>
+      </Provider>
     );
   }
 }

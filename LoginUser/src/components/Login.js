@@ -7,6 +7,8 @@ import {
   TextInput,
   Button
 } from 'react-native';
+import { postGetUser } from '../actions/actionUser'
+import { connect } from 'react-redux'
 
 class Login extends Component<{}> {
   constructor() {
@@ -20,6 +22,11 @@ class Login extends Component<{}> {
 
   validateEmpty () {
     console.log('Berhasil');
+    var user = {
+      username : this.state.login,
+      password : this.state.username
+    }
+    this.props.loginUser(user)
   }
 
   setStateUsername (text) {
@@ -85,4 +92,11 @@ class Login extends Component<{}> {
 
 }
 
-export default Login
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loginUser: (payload) => dispatch(userAction(payload)),
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Login)
