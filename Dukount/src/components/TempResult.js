@@ -31,7 +31,8 @@ import {
   post_trafi_fare,
   post_uber_fare,
   post_uber_duration,
-  post_uber_type
+  post_uber_type,
+  post_transport_mode
 } from '../actions/MapAction'
 
 
@@ -133,6 +134,7 @@ class TempResult extends Component {
 
   validatePicker() {
     if (this.state.TransportMode === true) {
+      this.props.postTransportMode(this.state.TransportMode)
       return (
         <View>
           <Picker
@@ -150,6 +152,7 @@ class TempResult extends Component {
         </View>
       )
     } else if (this.state.TransportMode === false){
+      this.props.postTransportMode(this.state.TransportMode)
       return (
         <View>
           <Picker
@@ -446,7 +449,8 @@ const mapDispatchToProps = (dispatch) => {
     postUberFare: (payload) => dispatch(post_uber_fare(payload)),
     postUberType: (payload) => dispatch(post_uber_type(payload)),
     postUberDuration: (payload) => dispatch(post_uber_duration(payload)),
-    foodCost: (sumPrice) => dispatch(send_food_cost(sumPrice))
+    foodCost: (sumPrice) => dispatch(send_food_cost(sumPrice)),
+    postTransportMode: (payload) => dispatch(post_transport_mode(payload))
   }
 }
 
