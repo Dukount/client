@@ -122,7 +122,6 @@ class TempResult extends Component {
 
   checkFoodTransportation() {
     this.getResult()
-    this.trafiSuggestionsLabel()
     this.trafiSuggestionsFare()
     this.transportInfoSummary()
     this.postLabelIndex()
@@ -214,6 +213,7 @@ class TempResult extends Component {
   componentDidMount() {
     this.fetchTrafiRouteMethod()
     this.fetchUberFareMethod()
+    this.trafiSuggestionsLabel()
   }
 
   trafiSuggestionsLabel() {

@@ -14,6 +14,7 @@ const date = new Date()
 
 
 import { dateAction } from "../actions/foodAction";
+import { fetch_trafi_route } from '../actions/MapAction'
 const markStyle = {dayTextStyle: {color: 'white', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: '#08a'};
 const markStyleDefault = {dayTextStyle: {color: '#08a', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: 'white'};
 
@@ -38,9 +39,6 @@ class CalenderClass extends Component<{}>{
       buttonDefault: false,
       buttonDelete: false
     }
-  }
-  componentWillMount() {
-    // this.homeDayDefaultScreen()
   }
 
   convertFormatDate () {
@@ -220,6 +218,21 @@ class CalenderClass extends Component<{}>{
     navigate('TempResultScreen')
     this.submitToStore()
   }
+
+  fetchTrafiRouteMethod() {
+    let payload = {
+      latitudeFrom: this.props.latitudeFrom,
+      longitudeFrom: this.props.longitudeFrom,
+      latitudeTo: this.props.latitudeTo,
+      longitudeTo: this.props.longitudeTo
+    }
+    this.props.fetchTrafiRoute(payload)
+  }
+
+  componentDidMount() {
+    this.fetchTrafiRouteMethod()
+  }
+
   render () {
     // console.log('====', this.state.dateSelected);
     return (
@@ -263,7 +276,17 @@ class CalenderClass extends Component<{}>{
 const mapDispatchToProps = (dispatch) => {
   return {
     dateToStore: (payload) => dispatch(dateAction(payload)),
+    fetchTrafiRoute: (payload) => dispatch(fetch_trafi_route(payload)),
   }
 }
 
-export default connect(null, mapDispatchToProps)(CalenderClass)
+const mapStateToProps = (state) => {
+  return {
+    latitudeFrom: state.MapReducer.latitudeFrom,
+    longitudeFrom: state.MapReducer.longitudeFrom,
+    latitudeTo: state.MapReducer.latitudeTo,
+    longitudeTo: state.MapReducer.longitudeTo,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CalenderClass)
