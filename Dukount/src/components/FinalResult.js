@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text
 } from 'react-native';
+import { Pie } from 'react-native-pathjs-charts'
 
 import { connect } from 'react-redux'
 
@@ -66,6 +67,48 @@ class FinalResult extends Component {
   render () {
     var dataPrice = this.props.foodOutcome
     var resultFood = parseFloat(dataPrice / 1000000).toFixed(3)
+    var transport = parseFloat(this.state.transportResult)
+    var sum = dataPrice + transport
+    var salaryData = this.props.userSalary
+    var money = (+salaryData) - sum
+
+    let data = [{
+      "name": "Food",
+      "population": dataPrice
+    }, {
+      "name": "Transport",
+      "population": transport
+    }, {
+      "name": "Money Left",
+      "population": money
+    }]
+
+    let options = {
+      margin: {
+        top: 20,
+        left: 20,
+        right: 20,
+        bottom: 20
+      },
+      width: 350,
+      height: 350,
+      color: '#2980B9',
+      r: 50,
+      R: 150,
+      legendPosition: 'topLeft',
+      animate: {
+        type: 'oneByOne',
+        duration: 200,
+        fillTransition: 3
+      },
+      label: {
+        fontFamily: 'Arial',
+        fontSize: 8,
+        fontWeight: true,
+        color: '#ECF0F1'
+      }
+    }
+
     return (
       <View>
         <Text>Your salary : {this.props.userSalary}</Text>
@@ -73,6 +116,12 @@ class FinalResult extends Component {
         <Text>Your Transportation Outcome: {this.state.transportResult}</Text>
         <Text>Your Final Outcome : {this.state.userOutcome}</Text>
         <Text>The rest of Salary  : {this.state.salaryRestUser}</Text>
+        <View>
+          <Pie
+            data={data}
+            options={options}
+            accessorKey="population" />
+        </View>
       </View>
     )
   }

@@ -21,7 +21,8 @@ const Navigation = StackNavigator({
   UberTransport: {screen: Uber},
   FinalResult: {screen: FinalResult}
 }, {
-  initialRouteName: 'Home'
+  initialRouteName: 'Home',
+  headerMode: 'none'
 })
 
 export default Navigation

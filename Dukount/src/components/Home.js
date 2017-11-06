@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { StackNavigator } from 'react-navigation'
 import {
   View,
   TouchableHighlight,
@@ -77,7 +78,7 @@ class Home extends Component {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: '#d1ddf0',
+    backgroundColor: '#1d81e5',
     alignItems: 'center',
     justifyContent: 'center'
   },
