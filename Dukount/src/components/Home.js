@@ -26,7 +26,7 @@ class Home extends Component {
   delimiter(num) {
     return num
     .replace(/\D/g, "")
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
   }
 
   render() {
@@ -38,13 +38,14 @@ class Home extends Component {
         <Image source={require('../assets/img/logo_small_white.png')} style={{height: 50, width: 210, marginBottom: 30}} />
       </View>
         <View style={styles.salaryInputRow}>
+        <Text>IDR (Indonesian Rupiah)</Text>
           <View style={styles.salaryInput}>
             <TextInput
               editable = {true}
               multiline = {true}
               numberOfLines = {4}
               maxLength = {20}
-              onChangeText={(salary) => this.setState({salary: salary.split(',').join('')})}
+              onChangeText={(salary) => this.setState({salary: salary.split('.').join('')})}
               value={this.delimiter(this.state.salary)}
               keyboardType = {'numeric'}
               placeholder={'Input your salary'}

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
-  Text
+  Text,
+  TouchableHighlight,
+  Image
 } from 'react-native';
 import { Pie } from 'react-native-pathjs-charts'
 
@@ -57,12 +59,12 @@ class FinalResult extends Component {
   }
 
   cheapestTransportFare(firstTrafiFare) {
-    return (firstTrafiFare * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    return (firstTrafiFare * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
   }
 
   stringConverter(string) {
     if (string !== null) {
-      return (string).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return (string).replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     } else {
       return 'You miss something to submit'
     }
@@ -70,7 +72,7 @@ class FinalResult extends Component {
 
   numberConverter(number) {
     if (number !== null) {
-      return (number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return (number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     } else {
       return 'You miss something to submit'
     }
@@ -78,7 +80,7 @@ class FinalResult extends Component {
 
   foodCostGenerator(foodCost) {
     if (foodCost !== null) {
-      return foodCost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return foodCost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     } else {
       return 'Zomato API Request exceeded the maximum limit'
     }
@@ -137,14 +139,28 @@ class FinalResult extends Component {
       }
     }
 
+    const {goBack} = this.props.navigation;
     return (
+    <View>
       <View>
-      <Text>Your salary : {this.stringConverter(this.props.userSalary)}</Text>
+        <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
+          <View style={{position: 'relative', justifyContent: 'center'}}>
+          <TouchableHighlight onPress={() => goBack()}>
+            <Image source={require('../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
+          </TouchableHighlight>
+          </View>
+          <View style={{height: 30, width: 360, alignItems: 'center', alignSelf: 'center', position: 'absolute'}}>
+            <Image source={require('../assets/img/logo_small_white.png')} style={{height: 30, width: 130}} />
+          </View>
+        </View>
+      </View>
+      <View>
+      <Text>Your salary: IDR {this.stringConverter(this.props.userSalary)}</Text>
       <Text>Your Food Outcome: IDR {this.foodCostGenerator(this.props.foodOutcome)}</Text>
-      <Text>Your Transportation Outcome: {this.stringConverter(this.state.transportResult)}</Text>
-      <Text>Your Final Outcome : {this.numberConverter(this.state.userOutcome)}</Text>
-      <Text>The rest of Salary  : {this.numberConverter(this.state.salaryRestUser)}</Text>
-      <Text>Jangan Lupa Paket Hemat dengan makan paket cost seharga IDR {this.props.foodCostPackage} dan transport paket recommended IDR {this.cheapestTransportFare(this.props.firstTrafiFare)} </Text>
+      <Text>Your Transportation Outcome: IDR {this.stringConverter(this.state.transportResult)}</Text>
+      <Text>Your Final Outcome: IDR{this.numberConverter(this.state.userOutcome)}</Text>
+      <Text>The rest of Salary: IDR {this.numberConverter(this.state.salaryRestUser)}</Text>
+      <Text>Jangan Lupa Paket Hemat dengan makan paket cost seharga IDR {this.numberConverter(this.props.foodCostPackage)} dan transport paket recommended IDR {this.cheapestTransportFare(this.props.firstTrafiFare)} </Text>
         <View>
           <Pie
             data={data}
@@ -152,6 +168,7 @@ class FinalResult extends Component {
             accessorKey="population" />
         </View>
       </View>
+    </View>
     )
   }
 }

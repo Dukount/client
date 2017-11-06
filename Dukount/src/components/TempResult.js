@@ -103,7 +103,7 @@ class TempResult extends Component {
 
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
       this.props.foodCost(sumPrice)
-       return (<Text style={styles.resultFont}>IDR {resultFoodFinal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>)
+       return (<Text style={styles.resultFont}>IDR {resultFoodFinal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>)
     }else {
       return (<Text style={styles.nullFont}>-</Text>)
     }
@@ -210,7 +210,7 @@ class TempResult extends Component {
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Transport Outcome</Text>
-              <Text style={styles.nullFont}>{this.checkerTrafiSuggestionsPrice()}</Text>
+              <Text style={styles.nullFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
@@ -295,16 +295,16 @@ class TempResult extends Component {
   checkerTrafiSuggestionsPrice() {
     if (this.state.trafiSuggestionPrice === '-' && this.props.trafiFare !== null) {
       this.props.postTrafiFare(`${this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length}`)
-      return `${(this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+      return `${(this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     } else if (this.state.trafiSuggestionPrice === '-') {
       return '-'
     } else if (isNaN(this.state.trafiSuggestionPrice) === true) {
       this.props.fetchFirstTrafiFare(this.state.trafiLabelTotalFare[0])
       this.props.postTrafiFare(`${this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length}`)
-      return `${(this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
+      return `${(this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     } else if (isNaN(this.state.trafiSuggestionPrice) === false) {
       this.props.postTrafiFare(this.state.trafiSuggestionPrice)
-      return (this.state.trafiSuggestionPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return (this.state.trafiSuggestionPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     }
   }
 
@@ -315,9 +315,9 @@ class TempResult extends Component {
       this.props.postUberFare(`${Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length}`)
       this.props.postUberType(`${this.props.uberSuggestions[0].display_name}`)
       this.props.postUberDuration(`${Math.round(this.props.uberSuggestions[0].duration/60)}`)
-      return (Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return (Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     } else {
-      return (this.state.uberSuggestionsFare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return (this.state.uberSuggestionsFare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     }
   }
 
@@ -371,7 +371,7 @@ class TempResult extends Component {
 
   render () {
     console.log('ini uberSuggestionsFare ', this.state.uberSuggestionsFare);
-    const { navigate } = this.props.navigation
+    const { goBack, navigate } = this.props.navigation
     return (
       <ScrollView>
       <View>
