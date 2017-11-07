@@ -168,8 +168,9 @@ class PublicTransport extends Component {
         {!this.props.suggestions ? <Text>Check your routes</Text> : (
           <View style={styles.container}>
           <Text>{this.checkPreferenceLabel(this.props.suggestions[this.props.labelIndex])}</Text>
-          <View style={{width: 200, backgroundColor: '#1DE9B6', height: 50, padding: 15, alignSelf: 'center', borderRadius: 5}}>
-          <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white'}}>{this.state.routes[0].label}</Text>
+          <View style={{width: 200, backgroundColor: '#1d81e5', height: 50, padding: 10, alignSelf: 'center', borderRadius: 5}}>
+          <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 16}}>Transportation Detail</Text>
+          <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 12}}>{this.state.routes[0].label}</Text>
           </View>
             <Text>Duration Total: {this.props.suggestions[this.props.labelIndex].DurationMinutes} Minutes</Text>
             <Text>IDR {(this.state.routes[0].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} / TRIP </Text>
