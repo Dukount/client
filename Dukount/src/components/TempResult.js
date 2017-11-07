@@ -62,7 +62,8 @@ class TempResult extends Component {
       uberLabel: ['uberMotor','uberPOOL','uberX','uberXL','uberBLACK'],
       selectedUberLabel: '',
       uberSuggestionPrice: '-',
-      foodCostPrice: null
+      foodCostPrice: null,
+      showResultButton: false
     }
   }
 
@@ -105,7 +106,7 @@ class TempResult extends Component {
       this.props.foodCost(sumPrice)
        return (<Text style={styles.resultFont}>IDR {resultFoodFinal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>)
     }else {
-      return (<Text style={styles.nullFont}>-</Text>)
+      return (<Text style={styles.resultFont}>-</Text>)
     }
   }
 
@@ -159,6 +160,9 @@ class TempResult extends Component {
     } else if (this.state.TransportMode === false){
       this.checkFoodUber()
     }
+    this.setState({
+      showResultButton: true
+    })
   }
 
   validatePicker() {
@@ -210,7 +214,7 @@ class TempResult extends Component {
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Transport Outcome</Text>
-              <Text style={styles.nullFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
+              <Text style={styles.resultFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
@@ -224,7 +228,7 @@ class TempResult extends Component {
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Uber Outcome</Text>
-              <Text style={styles.nullFont}>IDR {this.checkerUberSuggestionsPrice()}</Text>
+              <Text style={styles.resultFont}>IDR {this.checkerUberSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
@@ -406,6 +410,21 @@ class TempResult extends Component {
     }
   }
 
+  showResult () {
+    const { goBack, navigate } = this.props.navigation
+    if (this.state.showResultButton === true) {
+      return (
+        <View style={{marginBottom: 5}}>
+          <TouchableOpacity onPress={() => navigate('FinalResult')}>
+          <View style={styles.buttonResult}>
+            <Text style={styles.textButtonResult}>See Result</Text>
+          </View>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+  }
+
 
   render () {
     console.log('ini uberSuggestionsFare ', this.state.uberSuggestionsFare);
@@ -429,7 +448,8 @@ class TempResult extends Component {
         <Text style={styles.pickerLabelTransportMode}>Food Mode:</Text>
       </View>
         <View style={styles.picker}>
-          <View style={{width: 240}}>
+          <View style={{width: 240, flexDirection: 'row'}}>
+            <Image source={require('../assets/img/two-bread-toasts.png')} style={{height: 30, width: 30, marginRight: 1}} />
             <Text style={styles.pickerLabel}>Breakfast:</Text>
           </View>
           <View>
@@ -444,7 +464,8 @@ class TempResult extends Component {
           </View>
         </View>
         <View style={styles.picker}>
-          <View style={{width: 240}}>
+          <View style={{width: 240, flexDirection: 'row'}}>
+          <Image source={require('../assets/img/roast-turkey.png')} style={{height: 30, width: 30, marginRight: 2}} />
             <Text style={styles.pickerLabel}>Lunch:</Text>
           </View>
           <View>
@@ -459,7 +480,8 @@ class TempResult extends Component {
           </View>
         </View>
         <View style={styles.picker}>
-          <View style={{width: 240}}>
+          <View style={{width: 240, flexDirection: 'row'}}>
+          <Image source={require('../assets/img/dinner.png')} style={{height: 30, width: 30, marginRight: 2}} />
             <Text style={styles.pickerLabel}>Dinner:</Text>
           </View>
           <View>
@@ -485,20 +507,14 @@ class TempResult extends Component {
           {this.validatePicker()}
         </View>
         </View>
-        <View style={{marginBottom: 20, marginTop: 10}}>
+        <View style={{marginBottom: 3, marginTop: 10}}>
           <TouchableOpacity onPress={() => this.validateCheckPrice()}>
           <View style={styles.button}>
             <Text style={styles.textButton}>Check Price</Text>
           </View>
           </TouchableOpacity>
         </View>
-        <View>
-          <TouchableOpacity onPress={() => navigate('FinalResult')}>
-          <View style={styles.buttonResult}>
-            <Text style={styles.textButtonResult}>See Result</Text>
-          </View>
-          </TouchableOpacity>
-        </View>
+        {this.showResult()}
         <View>
         <TouchableHighlight onPress={() => navigate('FoodDetailScreen')}>
         <View style={styles.foodCard}>
