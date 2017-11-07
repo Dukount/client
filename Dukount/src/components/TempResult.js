@@ -174,7 +174,7 @@ class TempResult extends Component {
           itemValue})}>
           {this.state.trafiLabel.map((item, index) => {
             return (
-              <Item label={item} value={index} key={index}/>
+              <Item label={item} value={index} key={index} color="#1d81e5"/>
             )
           })}
           </Picker>
@@ -192,7 +192,7 @@ class TempResult extends Component {
           itemValue})}>
           {this.state.uberLabel.map((item, index) => {
             return (
-              <Item label={item} value={index} key={index}/>
+              <Item label={item} value={index} key={index} color="#1d81e5"/>
             )
           })}
           </Picker>
@@ -368,6 +368,44 @@ class TempResult extends Component {
     }
   }
 
+  activeTransportMode () {
+    if (this.state.TransportMode ===  true) {
+      return (
+        <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 7}}>
+        <TouchableOpacity onPress={() => {this.setState({TransportMode: true})}}>
+          <View style={{backgroundColor:'#DE790C', padding: 5, alignItems: 'center', borderRadius: 3, width: 170, height: 40, alignSelf: 'center', marginTop: 5, marginRight: 5,flexDirection: 'row', justifyContent: 'center', marginLeft: 10}}>
+            <Image source={require('../assets/img/bus-and-train-silhouettes_white.png')} style={{height: 40, width: 40, marginRight: 2}} />
+            <Text style={{color:'white', fontWeight: 'bold', fontSize: 12,textAlign: 'center'}}>Public Transportation</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {this.setState({TransportMode: false})}}>
+          <View style={{borderWidth: 2, borderColor:'#57A42D', padding: 5, alignItems: 'center', borderRadius: 3, width: 170, height: 40, alignSelf: 'center', marginTop: 5, marginRight: 10,flexDirection: 'row', justifyContent: 'center', marginLeft: 5}}>
+            <Image source={require('../assets/img/scooter-front-view.png')} style={{height: 30, width: 30, marginRight: 2}} />
+            <Text style={{color:'#57A42D', fontWeight: 'bold', fontSize: 12,textAlign: 'center'}}>Online Transportation</Text>
+          </View>
+        </TouchableOpacity>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 7}}>
+        <TouchableOpacity onPress={() => {this.setState({TransportMode: true})}}>
+          <View style={{borderWidth: 2, borderColor:'#DE790C', padding: 5, alignItems: 'center', borderRadius: 3, width: 170, height: 40, alignSelf: 'center', marginTop: 5, marginRight: 5,flexDirection: 'row', justifyContent: 'center', marginLeft: 10}}>
+            <Image source={require('../assets/img/bus-and-train-silhouettes.png')} style={{height: 40, width: 40, marginRight: 2}} />
+            <Text style={{color:'#DE790C', fontWeight: 'bold', fontSize: 12,textAlign: 'center'}}>Public Transportation</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {this.setState({TransportMode: false})}}>
+          <View style={{backgroundColor:'#57A42D', padding: 5, alignItems: 'center', borderRadius: 3, width: 170, height: 40, alignSelf: 'center', marginTop: 5, marginRight: 10,flexDirection: 'row', justifyContent: 'center', marginLeft: 5}}>
+            <Image source={require('../assets/img/scooter-front-view_white.png')} style={{height: 30, width: 30, marginRight: 2}} />
+            <Text style={{color:'white', fontWeight: 'bold', fontSize: 12,textAlign: 'center'}}>Online Transportation</Text>
+          </View>
+        </TouchableOpacity>
+        </View>
+      )
+    }
+  }
+
 
   render () {
     console.log('ini uberSuggestionsFare ', this.state.uberSuggestionsFare);
@@ -387,6 +425,9 @@ class TempResult extends Component {
       </View>
       </View>
       <View style={styles.container}>
+      <View style={{width: 240, alignSelf: 'center', marginTop: 7}}>
+        <Text style={styles.pickerLabelTransportMode}>Food Mode:</Text>
+      </View>
         <View style={styles.picker}>
           <View style={{width: 240}}>
             <Text style={styles.pickerLabel}>Breakfast:</Text>
@@ -432,33 +473,16 @@ class TempResult extends Component {
             </Picker>
           </View>
         </View>
+        <View>
+        <View style={{width: 240, alignSelf: 'center', marginTop: 7}}>
+          <Text style={styles.pickerLabelTransportMode}>Transport Mode:</Text>
+        </View>
+          {this.activeTransportMode()}
         <View style={styles.picker}>
           <View style={{width: 240}}>
             <Text style={styles.pickerLabel}>Transport:</Text>
           </View>
           {this.validatePicker()}
-        </View>
-        <View>
-        <View style={{width: 240}}>
-          <Text style={styles.pickerLabel}>Transport Mode:</Text>
-        </View>
-        <View style={{flexDirection: 'row', flex: 1}}>
-          <Button
-            title="Public Transport"
-            onPress={() => {
-              this.setState({
-                TransportMode: true
-              })
-            }}
-          />
-          <Button
-            title="Onlyne Transport"
-            onPress={() => {
-              this.setState({
-                TransportMode: false
-              })
-            }}
-          />
         </View>
         </View>
         <View style={{marginBottom: 20, marginTop: 10}}>
@@ -469,7 +493,11 @@ class TempResult extends Component {
           </TouchableOpacity>
         </View>
         <View>
-          <Button onPress={() => navigate('FinalResult')} title='RESULT' />
+          <TouchableOpacity onPress={() => navigate('FinalResult')}>
+          <View style={styles.buttonResult}>
+            <Text style={styles.textButtonResult}>See Result</Text>
+          </View>
+          </TouchableOpacity>
         </View>
         <View>
         <TouchableHighlight onPress={() => navigate('FoodDetailScreen')}>
@@ -548,29 +576,50 @@ const styles = StyleSheet.create({
     flex: 2
   },
   picker: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor:'rgba(29, 129, 229, 0.1)',
     paddingHorizontal: 10,
     justifyContent: 'flex-end',
     marginBottom: 1,
+    height: 35
   },
   pickerLabel: {
     fontWeight: 'bold',
     color: '#1d81e5',
     fontSize: 18
   },
+  pickerLabelTransportMode: {
+    fontWeight: 'bold',
+    color: '#1d81e5',
+    fontSize: 14,
+    textAlign: 'center'
+  },
   button: {
     backgroundColor:'#1d81e5',
-    padding: 15,
+    padding: 5,
     alignItems: 'center',
     borderRadius: 3,
-    width: 300,
+    width: 200,
     alignSelf: 'center'
+  },
+  buttonResult: {
+    borderColor:'#1d81e5',
+    borderWidth: 2,
+    padding: 3,
+    alignItems: 'center',
+    borderRadius: 7,
+    width: 120,
+    alignSelf: 'center',
+    marginTop: 5
   },
   textButton: {
     color:'white',
+    fontWeight: 'bold'
+  },
+  textButtonResult: {
+    color:'#1d81e5',
     fontWeight: 'bold'
   },
   foodCard: {
