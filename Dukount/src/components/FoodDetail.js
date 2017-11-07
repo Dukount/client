@@ -35,7 +35,7 @@ class FoodDetail extends Component {
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
     console.log('ini sumPrice ', sumPrice)
     if(sumPrice && isNaN(sumPrice) === false) {
-       return (<Text>IDR {sumPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>)
+       return (<Text style={{textAlign: 'center', alignItems: 'center', fontWeight: 'bold', color: 'white', fontSize: 16, fontStyle: 'italic'}}>IDR {sumPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} (per-month)</Text>)
     }else {
       return (<Text>-</Text>)
     }
@@ -57,18 +57,46 @@ class FoodDetail extends Component {
       </View>
       </View>
       </View>
-      <Text>Result Final:</Text>
-      {
-        this.resultOutcome()
-      }
-      <Text>Food at work:</Text>
-      <Text>Breakfast: IDR {(this.props.breakfastPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
-      <Text>Lunch: IDR {(this.props.lunchPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
-      <Text>Dinner: IDR {(this.props.dinnerPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
-      <Text>Food at home:</Text>
-      <Text>Breakfast: IDR {(this.props.breakfastPriceHome).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
-      <Text>Lunch: IDR {(this.props.lunchPriceHome).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
-      <Text>Dinner: IDR {(this.props.dinnerPriceHome).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+      <View style={{width: 320, backgroundColor: '#1d81e5', alignSelf: 'center', height: 60, marginTop: 10, height: 70, borderRadius: 5}}>
+      <View style={{justifyContent: 'center', padding: 10}}>
+      <Text style={{textAlign: 'center', fontSize: 24, color: 'white', fontWeight: 'bold'}}>Total Food Outcome</Text>
+        {
+          this.resultOutcome()
+        }
+      </View>
+      </View>
+      <Text style={{fontSize: 22, textAlign: 'center', fontWeight: 'bold', color: '#1d81e5', marginTop: 20}}>Food at work:</Text>
+      <View style={{width: 280, borderColor: '#1d81e5', borderWidth: 1.5, borderRadius: 5, height: 40, alignSelf: 'center', flexDirection: 'row', padding: 5}}>
+        <Image source={require('../assets/img/two-bread-toasts.png')} style={{height: 30, width: 30}} />
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Breakfast: IDR {(this.props.breakfastPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>(per-day)</Text>
+      </View>
+      <View style={{width: 280, borderColor: '#1d81e5', borderWidth: 1.5, borderRadius: 5, height: 40, alignSelf: 'center', flexDirection: 'row', padding: 5, margin: 2}}>
+        <Image source={require('../assets/img/roast-turkey.png')} style={{height: 30, width: 30, marginRight: 2}} />
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Lunch: IDR {(this.props.lunchPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>(per-day)</Text>
+      </View>
+      <View style={{width: 280, borderColor: '#1d81e5', borderWidth: 1.5, borderRadius: 5, height: 40, alignSelf: 'center', flexDirection: 'row', padding: 5}}>
+        <Image source={require('../assets/img/dinner.png')} style={{height: 30, width: 30, marginRight: 2}} />
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Dinner: IDR {(this.props.dinnerPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>(per-day)</Text>
+      </View>
+      <Text style={{fontSize: 22, textAlign: 'center', fontWeight: 'bold', color: '#1d81e5', marginTop: 20}}>Food at home:</Text>
+      <View style={{width: 280, borderColor: '#1d81e5', borderWidth: 1.5, borderRadius: 5, height: 40, alignSelf: 'center', flexDirection: 'row', padding: 5}}>
+        <Image source={require('../assets/img/two-bread-toasts.png')} style={{height: 30, width: 30}} />
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Breakfast: IDR {(this.props.breakfastPriceHome).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>(per-day)</Text>
+      </View>
+      <View style={{width: 280, borderColor: '#1d81e5', borderWidth: 1.5, borderRadius: 5, height: 40, alignSelf: 'center', flexDirection: 'row', padding: 5, margin: 2}}>
+        <Image source={require('../assets/img/roast-turkey.png')} style={{height: 30, width: 30, marginRight: 2, margin: 2}} />
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Lunch: IDR {(this.props.lunchPriceHome).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>(per-day)</Text>
+      </View>
+      <View style={{width: 280, borderColor: '#1d81e5', borderWidth: 1.5, borderRadius: 5, height: 40, alignSelf: 'center', flexDirection: 'row', padding: 5}}>
+        <Image source={require('../assets/img/dinner.png')} style={{height: 30, width: 30, marginRight: 2}} />
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Dinner: IDR {(this.props.dinnerPriceHome).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>(per-day)</Text>
+      </View>
       </View>
     );
   }
