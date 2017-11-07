@@ -7,7 +7,7 @@ import {
   TextInput,
   Button
 } from 'react-native';
-import { postGetUser } from '../actions/actionUser'
+import { registerThunk } from '../actions/actionUser'
 import { connect } from 'react-redux'
 
 class Register extends Component<{}> {
@@ -26,9 +26,9 @@ class Register extends Component<{}> {
   validateEmpty () {
     console.log('Berhasil');
     var user = {
-      name: this.state.name
-      username : this.state.login,
-      password : this.state.username,
+      name: this.state.name,
+      username : this.state.username,
+      password : this.state.password,
       email: this.state.email,
       telp: this.state.telp
     }
@@ -101,6 +101,10 @@ class Register extends Component<{}> {
       <View>
         <TextInput
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          onChangeText={(text) => this.setStateName(text)}
+        />
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           onChangeText={(text) => this.setStateUsername(text)}
         />
         <Text>ini username : {this.state.username}</Text>
@@ -138,7 +142,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    registerUser: (payload) => dispatch(loginThunk(payload)),
+    registerUser: (payload) => dispatch(registerThunk(payload)),
   }
 }
 
