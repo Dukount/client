@@ -30,7 +30,7 @@ class PublicTransport extends Component {
 
   checkSegmentTransport(transportName) {
     if (transportName === null) {
-      return `Just Walk`
+      return ''
     } else if(transportName !== null && transportName.Name.split(' ').indexOf('TransJakarta') !== -1 ) {
       return `${transportName.Name} IDR 3500 one time pay from first bus shelter`
     } else if(transportName !== null && transportName.Name.split(' ').indexOf('KRL') !== -1 ) {
@@ -100,6 +100,50 @@ class PublicTransport extends Component {
     }
   }
 
+  captionForIcon(item) {
+    if (item.Transport == null) {
+      return (
+        <View>
+        <Image
+          style={{height: 25, width: 25}}
+          source={{uri: `${item.IconUrl}`}}
+        />
+        <Text>Take a Walk</Text>
+        </View>
+      )
+    } else if (item.Transport !== null && item.Transport.Name.split(' ').indexOf('TransJakarta') !== -1) {
+      return (
+        <View>
+        <Text>TransJakarta Corridor</Text>
+        <Image
+          style={{height: 25, width: 25}}
+          source={{uri: `${item.IconUrl}`}}
+        />
+        </View>
+      )
+    } else if (item.Transport !== null && item.Transport.Name.split(' ').indexOf('KRL') !== -1) {
+      return (
+        <View>
+        <Text>Commuterline</Text>
+        <Image
+          style={{height: 25, width: 25}}
+          source={{uri: `${item.IconUrl}`}}
+        />
+        </View>
+      )
+    } else {
+      return (
+        <View>
+        <Text>MiniBus No.</Text>
+        <Image
+          style={{height: 25, width: 25}}
+          source={{uri: `${item.IconUrl}`}}
+        />
+        </View>
+      )
+    }
+  }
+
   componentDidMount() {
     // console.log('ini routes ', this.state.routes)
   }
@@ -120,10 +164,7 @@ class PublicTransport extends Component {
               renderItem={({item}) => {
                 return (
                   <View style={styles.preferenceLabel}>
-                    <Image
-                      style={{height: 25, width: 25}}
-                      source={{uri: `${item.IconUrl}`}}
-                    />
+                    {this.captionForIcon(item)}
                     <Text>Duration: {item.DurationMinutes} Minutes</Text>
                     <Text>{this.checkSegmentFrom(item)}</Text>
                     <Text>{this.checkSegmentTo(item)}</Text>
@@ -143,7 +184,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 0,
     top: 0,
-    marginBottom: 150
+    marginBottom: 170
   },
   flatList: {
     marginBottom: 200

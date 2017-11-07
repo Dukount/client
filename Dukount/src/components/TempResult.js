@@ -153,6 +153,9 @@ class TempResult extends Component {
     this.transportInfoSummary()
     this.fetchingFoodCostPricePackage()
     this.fetchingTransportCostPricePackage()
+    this.breakfastType()
+    this.lunchType()
+    this.dinnerType()
     this.postLabelIndex()
   }
 
@@ -160,6 +163,9 @@ class TempResult extends Component {
     this.getResult()
     this.uberSuggestionsFare()
     this.fetchingFoodCostPricePackage()
+    this.breakfastType()
+    this.lunchType()
+    this.dinnerType()
     this.fetchingTransportCostPricePackage()
   }
 

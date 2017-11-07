@@ -33,9 +33,9 @@ class FoodDetail extends Component {
     const sumFoodOutcomeResultHome =  sumFoodOutcomeHome * dayHome
 
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
-    const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
-    if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
-       return (<Text>Rp {resultFoodFinal}.000</Text>)
+    console.log('ini sumPrice ', sumPrice)
+    if(sumPrice && isNaN(sumPrice) === false) {
+       return (<Text>IDR {sumPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>)
     }else {
       return (<Text>-</Text>)
     }
@@ -62,13 +62,13 @@ class FoodDetail extends Component {
         this.resultOutcome()
       }
       <Text>Food at work:</Text>
-      <Text>Breakfast: Rp {parseFloat(this.props.breakfastPrice / 1000).toFixed(3)}</Text>
-      <Text>Lunch: Rp {parseFloat(this.props.lunchPrice / 1000).toFixed(3)}</Text>
-      <Text>Dinner: Rp {parseFloat(this.props.dinnerPrice / 1000).toFixed(3)}</Text>
+      <Text>Breakfast: IDR {(this.props.breakfastPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+      <Text>Lunch: IDR {(this.props.lunchPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+      <Text>Dinner: IDR {(this.props.dinnerPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
       <Text>Food at home:</Text>
-      <Text>Breakfast: Rp {parseFloat(this.props.breakfastPriceHome / 1000).toFixed(3)}</Text>
-      <Text>Lunch: Rp {parseFloat(this.props.lunchPriceHome / 1000).toFixed(3)}</Text>
-      <Text>Dinner: Rp {parseFloat(this.props.dinnerPriceHome / 1000).toFixed(3)}</Text>
+      <Text>Breakfast: IDR {(this.props.breakfastPriceHome).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+      <Text>Lunch: IDR {(this.props.lunchPriceHome).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+      <Text>Dinner: IDR {(this.props.dinnerPriceHome).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
       </View>
     );
   }
