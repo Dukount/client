@@ -86,6 +86,14 @@ class FromLocation extends Component<{}> {
     navigator.geolocation.clearWatch(this.watchID);
   }
 
+  addressJoiner(address) {
+    if (address === null) {
+      return address
+    } else {
+      return address.join(' ')
+    }
+  }
+
   render() {
     const {goBack} = this.props.navigation;
     // console.log('ini region di drag from ', this.state.region)
@@ -107,7 +115,7 @@ class FromLocation extends Component<{}> {
       </View>
         <View style={styles.container}>
         <GooglePlacesAutocomplete
-          placeholder={`${this.props.addressFrom}`}
+          placeholder={`${this.addressJoiner(this.props.addressFrom)}`}
           minLength={2}
           autoFocus={false}
           returnKeyType={'search'}

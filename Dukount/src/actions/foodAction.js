@@ -64,6 +64,26 @@ export const send_food_cost = (payload) => {
   }
 }
 
+export const fetch_breakfast_type = (payload) => {
+  return {
+    type: 'FETCH_BREAKFAST_TYPE',
+    payload
+  }
+}
+
+export const fetch_lunch_type = (payload) => {
+  return {
+    type: 'FETCH_LUNCH_TYPE',
+    payload
+  }
+}
+
+export const fetch_dinner_type = (payload) => {
+  return {
+    type: 'FETCH_DINNER_TYPE',
+    payload
+  }
+}
 
 export const getBreakfast = (payload) => {
   return (dispatch, getState) => {

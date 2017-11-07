@@ -23,7 +23,10 @@ import {
   getLunchHome,
   getDinnerHome,
   sendResultData,
-  send_food_cost
+  send_food_cost,
+  fetch_breakfast_type,
+  fetch_lunch_type,
+  fetch_dinner_type
 } from "../actions/foodAction";
 import {
   fetch_uber_fare,
@@ -106,6 +109,30 @@ class TempResult extends Component {
        return (<Text style={styles.resultFont}>IDR {resultFoodFinal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>)
     }else {
       return (<Text style={styles.nullFont}>-</Text>)
+    }
+  }
+
+  breakfastType() {
+    if (this.state.breakfast === 'cost') {
+      this.props.fetchBreakfastType('cost')
+    } else {
+      this.props.fetchBreakfastType('rate')
+    }
+  }
+
+  lunchType() {
+    if (this.state.lunch === 'cost') {
+      this.props.fetchLunchType('cost')
+    } else {
+      this.props.fetchLunchType('rate')
+    }
+  }
+
+  dinnerType() {
+    if (this.state.dinner === 'cost') {
+      this.props.fetchDinnerType('cost')
+    } else {
+      this.props.fetchDinnerType('rate')
     }
   }
 
@@ -368,6 +395,13 @@ class TempResult extends Component {
     }
   }
 
+  moveToResult() {
+    const { navigate } = this.props.navigation
+    this.breakfastType()
+    this.lunchType()
+    this.dinnerType()
+    navigate('FinalResult')
+  }
 
   render () {
     console.log('ini uberSuggestionsFare ', this.state.uberSuggestionsFare);
@@ -469,7 +503,7 @@ class TempResult extends Component {
           </TouchableOpacity>
         </View>
         <View>
-          <Button onPress={() => navigate('FinalResult')} title='RESULT' />
+          <Button onPress={() => this.moveToResult()} title='RESULT' />
         </View>
         <View>
         <TouchableHighlight onPress={() => navigate('FoodDetailScreen')}>
@@ -511,7 +545,10 @@ const mapDispatchToProps = (dispatch) => {
     postTransportMode: (payload) => dispatch(post_transport_mode(payload)),
     fetchFoodCostPackage: (payload) => dispatch(fetch_food_cost_package(payload)),
     fetchTransportCostPackage: (payload) => dispatch(fetch_transport_cost_package(payload)),
-    fetchFirstTrafiFare: (payload) => dispatch(fetch_first_trafi_fare(payload))
+    fetchFirstTrafiFare: (payload) => dispatch(fetch_first_trafi_fare(payload)),
+    fetchBreakfastType: (payload) => dispatch(fetch_breakfast_type(payload)),
+    fetchLunchType: (payload) => dispatch(fetch_lunch_type(payload)),
+    fetchDinnerType: (payload) => dispatch(fetch_dinner_type(payload))
   }
 }
 

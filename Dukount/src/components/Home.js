@@ -29,8 +29,15 @@ class Home extends Component {
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
   }
 
+  addressJoiner(address) {
+    if (address === null) {
+      return address
+    } else {
+      return address.join(' ')
+    }
+  }
+
   render() {
-    console.log('ini salary di home ', this.state.salary)
     const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
@@ -67,7 +74,7 @@ class Home extends Component {
         </TouchableHighlight>
 
         <View style={styles.toBox}>
-          <Text style={styles.textToBox}>{this.props.addressFrom}</Text>
+          <Text style={styles.textToBox}>{this.addressJoiner(this.props.addressFrom)}</Text>
         </View>
 
         <TouchableHighlight onPress={() => navigate('ToLocation')}>
@@ -79,7 +86,7 @@ class Home extends Component {
         </View>
         </TouchableHighlight>
         <View style={styles.toBox}>
-          <Text style={styles.textToBox}>{this.props.addressTo}</Text>
+          <Text style={styles.textToBox}>{this.addressJoiner(this.props.addressTo)}</Text>
         </View>
         <TouchableHighlight onPress={() => navigate('CalendarScreen')}>
         <View style={styles.buttonPickWork}>
