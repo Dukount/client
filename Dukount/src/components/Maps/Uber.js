@@ -155,8 +155,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 65,
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-    zIndex: 10
+    height: Dimensions.get('window').height
   },
 });
 
