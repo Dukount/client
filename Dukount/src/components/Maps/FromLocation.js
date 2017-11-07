@@ -86,15 +86,36 @@ class FromLocation extends Component<{}> {
     navigator.geolocation.clearWatch(this.watchID);
   }
 
+  addressJoiner(address) {
+    if (address === null) {
+      return address
+    } else {
+      return address.join(' ')
+    }
+  }
+
   render() {
+    const {goBack} = this.props.navigation;
     // console.log('ini region di drag from ', this.state.region)
     // console.log('ini fungsi ', this.latitudelongitudeNullChecker())
     // console.log(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${this.state.region.latitude},${this.state.region.longitude}&key=AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc`)
     return (
       <View>
+      <View>
+      <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
+      <View style={{position: 'relative', justifyContent: 'center'}}>
+      <TouchableHighlight onPress={() => goBack()}>
+        <Image source={require('../../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
+      </TouchableHighlight>
+      </View>
+      <View style={{height: 30, width: 360, alignItems: 'center', alignSelf: 'center', position: 'absolute'}}>
+        <Image source={require('../../assets/img/logo_small_white.png')} style={{height: 30, width: 130}} />
+      </View>
+      </View>
+      </View>
         <View style={styles.container}>
         <GooglePlacesAutocomplete
-          placeholder={`${this.props.addressFrom}`}
+          placeholder={`${this.addressJoiner(this.props.addressFrom)}`}
           minLength={2}
           autoFocus={false}
           returnKeyType={'search'}
@@ -126,19 +147,19 @@ class FromLocation extends Component<{}> {
           query={{
                key: 'AIzaSyDTZ5oouZfOtVZ9yjOmoHYrhceyCcpmQsc',
                language: 'en',
-               types: 'geocode',
           }}
           styles={{
             textInputContainer: {
               width: 360,
-              height: 70
+              height: 50,
+              marginTop: -7
             },
             textInput: {
               marginLeft: 0,
               marginRight: 0,
-              height: 50,
-              color: '#5d5d5d',
-              fontSize: 15
+              height: 40,
+              color: 'black',
+              fontSize: 10
             },
             description: {
               fontWeight: 'bold'
@@ -187,15 +208,14 @@ class FromLocation extends Component<{}> {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 0,
+    top: 40,
     zIndex: 99,
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     marginTop: 0
   },
   mapView: {
     width: Dimensions.get('window').width,
-    height: 520,
-    marginTop: 40
+    height: Dimensions.get('window').height
   }
 });
 

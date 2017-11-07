@@ -22,17 +22,26 @@ import {
   getBreakfastHome,
   getLunchHome,
   getDinnerHome,
-  sendResultData
+  sendResultData,
+  send_food_cost,
+  fetch_breakfast_type,
+  fetch_lunch_type,
+  fetch_dinner_type
 } from "../actions/foodAction";
 import {
-  fetch_trafi_route,
   fetch_uber_fare,
   trafi_label_index,
   post_trafi_fare,
   post_uber_fare,
   post_uber_duration,
-  post_uber_type
+  post_uber_type,
+  post_transport_mode,
+  fetch_transport_cost_package,
+  fetch_first_trafi_fare
 } from '../actions/MapAction'
+import {
+  fetch_food_cost_package
+} from '../actions/salaryAction'
 
 
 class TempResult extends Component {
@@ -55,7 +64,9 @@ class TempResult extends Component {
       trafiSuggestionPrice: '-',
       uberLabel: ['uberMotor','uberPOOL','uberX','uberXL','uberBLACK'],
       selectedUberLabel: '',
-      uberSuggestionPrice: '-'
+      uberSuggestionPrice: '-',
+      foodCostPrice: null,
+      showResultButton: false
     }
   }
 
@@ -92,22 +103,38 @@ class TempResult extends Component {
     const sumFoodOutcomeResultHome =  sumFoodOutcomeHome * dayHome
 
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
-    const resultFoodFinal = parseFloat(sumPrice / 1000000).toFixed(3)
+    const resultFoodFinal = parseFloat(`${sumPrice}`)
+
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
-       return (<Text style={styles.resultFont}>IDR {resultFoodFinal}.000</Text>)
+      this.props.foodCost(resultFoodFinal)
+       return (<Text style={styles.resultFont}>IDR {resultFoodFinal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>)
     }else {
-      return (<Text style={styles.nullFont}>-</Text>)
+      return (<Text style={styles.resultFont}>-</Text>)
     }
   }
 
-  fetchTrafiRouteMethod() {
-    let payload = {
-      latitudeFrom: this.props.latitudeFrom,
-      longitudeFrom: this.props.longitudeFrom,
-      latitudeTo: this.props.latitudeTo,
-      longitudeTo: this.props.longitudeTo
+  breakfastType() {
+    if (this.state.breakfast === 'cost') {
+      this.props.fetchBreakfastType('cost')
+    } else {
+      this.props.fetchBreakfastType('rate')
     }
-    this.props.fetchTrafiRoute(payload)
+  }
+
+  lunchType() {
+    if (this.state.lunch === 'cost') {
+      this.props.fetchLunchType('cost')
+    } else {
+      this.props.fetchLunchType('rate')
+    }
+  }
+
+  dinnerType() {
+    if (this.state.dinner === 'cost') {
+      this.props.fetchDinnerType('cost')
+    } else {
+      this.props.fetchDinnerType('rate')
+    }
   }
 
   fetchUberFareMethod() {
@@ -122,15 +149,42 @@ class TempResult extends Component {
 
   checkFoodTransportation() {
     this.getResult()
-    this.trafiSuggestionsLabel()
     this.trafiSuggestionsFare()
     this.transportInfoSummary()
+    this.fetchingFoodCostPricePackage()
+    this.fetchingTransportCostPricePackage()
+    this.breakfastType()
+    this.lunchType()
+    this.dinnerType()
     this.postLabelIndex()
   }
 
   checkFoodUber() {
     this.getResult()
     this.uberSuggestionsFare()
+    this.fetchingFoodCostPricePackage()
+    this.breakfastType()
+    this.lunchType()
+    this.dinnerType()
+    this.fetchingTransportCostPricePackage()
+  }
+
+  fetchingFoodCostPricePackage() {
+    if (this.state.breakfast === 'cost' && this.state.lunch === 'cost' && this.state.dinner === 'cost') {
+      if (this.props.foodFinal === null) {
+        this.props.fetchFoodCostPackage(this.props.foodFinal)
+      }
+      this.props.fetchFoodCostPackage(this.props.foodFinal)
+    }
+  }
+
+  fetchingTransportCostPricePackage() {
+    if (this.props.transportMode === true && this.state.selectedTrafiLabel === '') {
+      if (this.props.transportMode === null) {
+        this.props.fetchTransportCostPackage(this.props.trafiFare)
+      }
+      this.props.fetchTransportCostPackage(this.props.trafiFare)
+    }
   }
 
   validateCheckPrice() {
@@ -139,10 +193,14 @@ class TempResult extends Component {
     } else if (this.state.TransportMode === false){
       this.checkFoodUber()
     }
+    this.setState({
+      showResultButton: true
+    })
   }
 
   validatePicker() {
     if (this.state.TransportMode === true) {
+      this.props.postTransportMode(this.state.TransportMode)
       return (
         <View>
           <Picker
@@ -153,13 +211,14 @@ class TempResult extends Component {
           itemValue})}>
           {this.state.trafiLabel.map((item, index) => {
             return (
-              <Item label={item} value={index} key={index}/>
+              <Item label={item} value={index} key={index} color="#1d81e5"/>
             )
           })}
           </Picker>
         </View>
       )
     } else if (this.state.TransportMode === false){
+      this.props.postTransportMode(this.state.TransportMode)
       return (
         <View>
           <Picker
@@ -170,7 +229,7 @@ class TempResult extends Component {
           itemValue})}>
           {this.state.uberLabel.map((item, index) => {
             return (
-              <Item label={item} value={index} key={index}/>
+              <Item label={item} value={index} key={index} color="#1d81e5"/>
             )
           })}
           </Picker>
@@ -188,7 +247,7 @@ class TempResult extends Component {
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Transport Outcome</Text>
-              <Text style={styles.nullFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
+              <Text style={styles.resultFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
@@ -202,7 +261,7 @@ class TempResult extends Component {
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Uber Outcome</Text>
-              <Text style={styles.nullFont}>IDR {this.state.uberSuggestionsFare}</Text>
+              <Text style={styles.resultFont}>IDR {this.checkerUberSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
@@ -212,8 +271,8 @@ class TempResult extends Component {
   }
 
   componentDidMount() {
-    this.fetchTrafiRouteMethod()
     this.fetchUberFareMethod()
+    this.trafiSuggestionsLabel()
   }
 
   trafiSuggestionsLabel() {
@@ -271,14 +330,31 @@ class TempResult extends Component {
   }
 
   checkerTrafiSuggestionsPrice() {
-    if (this.state.trafiSuggestionPrice === '-') {
+    if (this.state.trafiSuggestionPrice === '-' && this.props.trafiFare !== null) {
+      this.props.postTrafiFare(`${this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length}`)
+      return `${(this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
+    } else if (this.state.trafiSuggestionPrice === '-') {
       return '-'
     } else if (isNaN(this.state.trafiSuggestionPrice) === true) {
+      this.props.fetchFirstTrafiFare(this.state.trafiLabelTotalFare[0])
       this.props.postTrafiFare(`${this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length}`)
-      return `${this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length}`
+      return `${(this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     } else if (isNaN(this.state.trafiSuggestionPrice) === false) {
       this.props.postTrafiFare(this.state.trafiSuggestionPrice)
-      return this.state.trafiSuggestionPrice
+      return (this.state.trafiSuggestionPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    }
+  }
+
+  checkerUberSuggestionsPrice() {
+    if(this.state.uberSuggestionsFare === undefined && this.props.uberFare === null) {
+      return '-'
+    } else if (this.state.uberSuggestionsFare !== '-' && this.props.uberFare !== null && this.props.uberType === 'uberMotor') {
+      this.props.postUberFare(`${Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length}`)
+      this.props.postUberType(`${this.props.uberSuggestions[0].display_name}`)
+      this.props.postUberDuration(`${Math.round(this.props.uberSuggestions[0].duration/60)}`)
+      return (Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    } else {
+      return (this.state.uberSuggestionsFare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     }
   }
 
@@ -329,16 +405,90 @@ class TempResult extends Component {
     }
   }
 
+  activeTransportMode () {
+    if (this.state.TransportMode ===  true) {
+      return (
+        <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 7}}>
+        <TouchableOpacity onPress={() => {this.setState({TransportMode: true})}}>
+          <View style={{backgroundColor:'#DE790C', padding: 5, alignItems: 'center', borderRadius: 3, width: 170, height: 40, alignSelf: 'center', marginTop: 5, marginRight: 5,flexDirection: 'row', justifyContent: 'center', marginLeft: 10}}>
+            <Image source={require('../assets/img/bus-and-train-silhouettes_white.png')} style={{height: 40, width: 40, marginRight: 2}} />
+            <Text style={{color:'white', fontWeight: 'bold', fontSize: 12,textAlign: 'center'}}>Public Transportation</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {this.setState({TransportMode: false})}}>
+          <View style={{borderWidth: 2, borderColor:'#57A42D', padding: 5, alignItems: 'center', borderRadius: 3, width: 170, height: 40, alignSelf: 'center', marginTop: 5, marginRight: 10,flexDirection: 'row', justifyContent: 'center', marginLeft: 5}}>
+            <Image source={require('../assets/img/scooter-front-view.png')} style={{height: 30, width: 30, marginRight: 2}} />
+            <Text style={{color:'#57A42D', fontWeight: 'bold', fontSize: 12,textAlign: 'center'}}>Online Transportation</Text>
+          </View>
+        </TouchableOpacity>
+        </View>
+      )
+    } else {
+      return (
+        <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 7}}>
+        <TouchableOpacity onPress={() => {this.setState({TransportMode: true})}}>
+          <View style={{borderWidth: 2, borderColor:'#DE790C', padding: 5, alignItems: 'center', borderRadius: 3, width: 170, height: 40, alignSelf: 'center', marginTop: 5, marginRight: 5,flexDirection: 'row', justifyContent: 'center', marginLeft: 10}}>
+            <Image source={require('../assets/img/bus-and-train-silhouettes.png')} style={{height: 40, width: 40, marginRight: 2}} />
+            <Text style={{color:'#DE790C', fontWeight: 'bold', fontSize: 12,textAlign: 'center'}}>Public Transportation</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {this.setState({TransportMode: false})}}>
+          <View style={{backgroundColor:'#57A42D', padding: 5, alignItems: 'center', borderRadius: 3, width: 170, height: 40, alignSelf: 'center', marginTop: 5, marginRight: 10,flexDirection: 'row', justifyContent: 'center', marginLeft: 5}}>
+            <Image source={require('../assets/img/scooter-front-view_white.png')} style={{height: 30, width: 30, marginRight: 2}} />
+            <Text style={{color:'white', fontWeight: 'bold', fontSize: 12,textAlign: 'center'}}>Online Transportation</Text>
+          </View>
+        </TouchableOpacity>
+        </View>
+      )
+    }
+  }
+
+  showResult () {
+    if (this.state.showResultButton === true) {
+      return (
+        <View style={{marginBottom: 5}}>
+          <TouchableOpacity onPress={() => this.moveToResult()}>
+          <View style={styles.buttonResult}>
+            <Text style={styles.textButtonResult}>See Result</Text>
+          </View>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+  }
+
+  moveToResult() {
+    const { navigate } = this.props.navigation
+    this.breakfastType()
+    this.lunchType()
+    this.dinnerType()
+    navigate('FinalResult')
+  }
 
   render () {
-    console.log('ini TransportMode ', this.state.TransportMode)
-    console.log('ini uberLabel ', this.state.selectedUberLabel)
-    const { navigate } = this.props.navigation
+    console.log('ini uberSuggestionsFare ', this.state.uberSuggestionsFare);
+    const { goBack, navigate } = this.props.navigation
     return (
       <ScrollView>
+      <View>
+      <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
+      <View style={{position: 'relative', justifyContent: 'center'}}>
+      <TouchableHighlight onPress={() => goBack()}>
+        <Image source={require('../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
+      </TouchableHighlight>
+      </View>
+      <View style={{height: 30, width: 360, alignItems: 'center', alignSelf: 'center', position: 'absolute'}}>
+        <Image source={require('../assets/img/logo_small_white.png')} style={{height: 30, width: 130}} />
+      </View>
+      </View>
+      </View>
       <View style={styles.container}>
+      <View style={{width: 240, alignSelf: 'center', marginTop: 7}}>
+        <Text style={styles.pickerLabelTransportMode}>Food Mode:</Text>
+      </View>
         <View style={styles.picker}>
-          <View style={{width: 240}}>
+          <View style={{width: 240, flexDirection: 'row'}}>
+            <Image source={require('../assets/img/two-bread-toasts.png')} style={{height: 30, width: 30, marginRight: 1}} />
             <Text style={styles.pickerLabel}>Breakfast:</Text>
           </View>
           <View>
@@ -353,7 +503,8 @@ class TempResult extends Component {
           </View>
         </View>
         <View style={styles.picker}>
-          <View style={{width: 240}}>
+          <View style={{width: 240, flexDirection: 'row'}}>
+          <Image source={require('../assets/img/roast-turkey.png')} style={{height: 30, width: 30, marginRight: 2}} />
             <Text style={styles.pickerLabel}>Lunch:</Text>
           </View>
           <View>
@@ -368,7 +519,8 @@ class TempResult extends Component {
           </View>
         </View>
         <View style={styles.picker}>
-          <View style={{width: 240}}>
+          <View style={{width: 240, flexDirection: 'row'}}>
+          <Image source={require('../assets/img/dinner.png')} style={{height: 30, width: 30, marginRight: 2}} />
             <Text style={styles.pickerLabel}>Dinner:</Text>
           </View>
           <View>
@@ -382,42 +534,26 @@ class TempResult extends Component {
             </Picker>
           </View>
         </View>
+        <View>
+        <View style={{width: 240, alignSelf: 'center', marginTop: 7}}>
+          <Text style={styles.pickerLabelTransportMode}>Transport Mode:</Text>
+        </View>
+          {this.activeTransportMode()}
         <View style={styles.picker}>
           <View style={{width: 240}}>
             <Text style={styles.pickerLabel}>Transport:</Text>
           </View>
           {this.validatePicker()}
         </View>
-        <View>
-        <View style={{width: 240}}>
-          <Text style={styles.pickerLabel}>Transport Mode:</Text>
         </View>
-        <View>
-          <Button
-            title="Public Transport"
-            onPress={() => {
-              this.setState({
-                TransportMode: true
-              })
-            }}
-          />
-          <Button
-            title="Onlyne Transport"
-            onPress={() => {
-              this.setState({
-                TransportMode: false
-              })
-            }}
-          />
-        </View>
-        </View>
-        <View style={{marginBottom: 20, marginTop: 10}}>
+        <View style={{marginBottom: 3, marginTop: 10}}>
           <TouchableOpacity onPress={() => this.validateCheckPrice()}>
           <View style={styles.button}>
             <Text style={styles.textButton}>Check Price</Text>
           </View>
           </TouchableOpacity>
         </View>
+        {this.showResult()}
         <View>
         <TouchableHighlight onPress={() => navigate('FoodDetailScreen')}>
         <View style={styles.foodCard}>
@@ -448,13 +584,20 @@ const mapDispatchToProps = (dispatch) => {
     sortDataLunchAtHome: (data) => dispatch(getLunchHome(data)),
     sortDataDinnerAtHome: (data) => dispatch(getDinnerHome(data)),
     resultSumPrice: (data) => dispatch(sendResultData(data)),
-    fetchTrafiRoute: (payload) => dispatch(fetch_trafi_route(payload)),
     fetchUberFare: (payload) => dispatch(fetch_uber_fare(payload)),
     postLabelIndex: (payload) => dispatch(trafi_label_index(payload)),
     postTrafiFare: (payload) => dispatch(post_trafi_fare(payload)),
     postUberFare: (payload) => dispatch(post_uber_fare(payload)),
     postUberType: (payload) => dispatch(post_uber_type(payload)),
-    postUberDuration: (payload) => dispatch(post_uber_duration(payload))
+    postUberDuration: (payload) => dispatch(post_uber_duration(payload)),
+    foodCost: (sumPrice) => dispatch(send_food_cost(sumPrice)),
+    postTransportMode: (payload) => dispatch(post_transport_mode(payload)),
+    fetchFoodCostPackage: (payload) => dispatch(fetch_food_cost_package(payload)),
+    fetchTransportCostPackage: (payload) => dispatch(fetch_transport_cost_package(payload)),
+    fetchFirstTrafiFare: (payload) => dispatch(fetch_first_trafi_fare(payload)),
+    fetchBreakfastType: (payload) => dispatch(fetch_breakfast_type(payload)),
+    fetchLunchType: (payload) => dispatch(fetch_lunch_type(payload)),
+    fetchDinnerType: (payload) => dispatch(fetch_dinner_type(payload))
   }
 }
 
@@ -474,7 +617,14 @@ const mapStateToProps = (state) => {
     longitudeTo: state.MapReducer.longitudeTo,
     addressTo: state.MapReducer.addressTo,
     trafiSuggestions: state.MapReducer.suggestions,
-    uberSuggestions: state.MapReducer.uberSuggestions
+    uberSuggestions: state.MapReducer.uberSuggestions,
+    userSalary: state.salaryReducer.salary,
+    foodFinal: state.price.foodFinal,
+    transportMode: state.MapReducer.transportMode,
+    trafiFare: state.MapReducer.trafiFare,
+    firstTrafiFare: state.MapReducer.firstTrafiFare,
+    uberFare: state.MapReducer.uberFare,
+    uberType: state.MapReducer.uberType
   }
 }
 
@@ -484,29 +634,50 @@ const styles = StyleSheet.create({
     flex: 2
   },
   picker: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor:'rgba(29, 129, 229, 0.1)',
     paddingHorizontal: 10,
     justifyContent: 'flex-end',
     marginBottom: 1,
+    height: 35
   },
   pickerLabel: {
     fontWeight: 'bold',
     color: '#1d81e5',
     fontSize: 18
   },
+  pickerLabelTransportMode: {
+    fontWeight: 'bold',
+    color: '#1d81e5',
+    fontSize: 14,
+    textAlign: 'center'
+  },
   button: {
     backgroundColor:'#1d81e5',
-    padding: 15,
+    padding: 5,
     alignItems: 'center',
     borderRadius: 3,
-    width: 300,
+    width: 200,
     alignSelf: 'center'
+  },
+  buttonResult: {
+    borderColor:'#1d81e5',
+    borderWidth: 2,
+    padding: 3,
+    alignItems: 'center',
+    borderRadius: 7,
+    width: 120,
+    alignSelf: 'center',
+    marginTop: 5
   },
   textButton: {
     color:'white',
+    fontWeight: 'bold'
+  },
+  textButtonResult: {
+    color:'#1d81e5',
     fontWeight: 'bold'
   },
   foodCard: {
@@ -519,7 +690,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   transportCard: {
-    backgroundColor: '#1DE9B6',
+    backgroundColor: '#57A42D',
     alignSelf: 'center',
     height: 120,
     width: 350,
@@ -565,7 +736,7 @@ const styles = StyleSheet.create({
   },
   resultFont: {
     marginTop: 15,
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#F4FF81'
   },

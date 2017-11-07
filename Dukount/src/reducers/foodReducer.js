@@ -6,7 +6,11 @@ const defaultState = {
   lunchResultHome : [],
   dinnerResultHome: [],
   resultFinal: [],
-  workCalendar: []
+  workCalendar: [],
+  foodFinal: null,
+  breakfastType: null,
+  lunchType: null,
+  dinnerType: null
 }
 
 const namaFunction = (ganang) => {
@@ -47,6 +51,14 @@ const foodReducer = (state=defaultState, action) => {
     return {...state, resultFinal: action.payload}
   } else if (action.type === 'DATE_CLICK') {
     return {...state, workCalendar: action.payload}
+  } else if (action.type === 'FOOD_COST') {
+    return {...state, foodFinal: action.payload}
+  } else if (action.type === 'FETCH_BREAKFAST_TYPE') {
+    return {...state, breakfastType: action.payload}
+  } else if (action.type === 'FETCH_LUNCH_TYPE') {
+    return {...state, lunchType: action.payload}
+  } else if (action.type === 'FETCH_DINNER_TYPE') {
+    return {...state, dinnerType: action.payload}
   }
   return state
 }

@@ -9,9 +9,12 @@ const defaultState = {
   uberSuggestions: [],
   labelIndex: null,
   trafiFare: null,
+  firstTrafiFare: null,
   uberFare: null,
   uberType: null,
-  uberDuration: null
+  uberDuration: null,
+  transportMode: null,
+  transportRecommendedPackage: null
 }
 
 const MapReducer = (state=defaultState, action) => {
@@ -39,6 +42,12 @@ const MapReducer = (state=defaultState, action) => {
       return {...state, uberType: action.payload}
     case 'POST_UBER_DURATION':
       return {...state, uberDuration: action.payload}
+    case 'POST_TRANSPORT_MODE':
+      return {...state, transportMode: action.payload}
+    case 'FETCH_TRANSPORT_COST_PACKAGE':
+      return {...state, transportRecommendedPackage: action.payload}
+    case 'FETCH_FIRST_TRAFI_FARE':
+      return {...state, firstTrafiFare: action.payload}
     default:
       return state
   }

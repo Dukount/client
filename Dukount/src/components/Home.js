@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { StackNavigator } from 'react-navigation'
 import {
   View,
   TouchableHighlight,
   Text,
   TextInput,
-  Button
+  Button,
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux'
 
@@ -20,55 +23,81 @@ class Home extends Component {
     };
   }
 
+  delimiter(num) {
+    return num
+    .replace(/\D/g, "")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+  }
+
+  addressJoiner(address) {
+    if (address === null) {
+      return address
+    } else {
+      return address.join(' ')
+    }
+  }
+
   render() {
-    console.log('ini salary di home ', this.state.salary)
     const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
+      <View>
+        <Image source={require('../assets/img/logo_small_white.png')} style={{height: 50, width: 210, marginBottom: 30}} />
+      </View>
         <View style={styles.salaryInputRow}>
+        <Text style={{color: 'white'}}>IDR (Indonesian Rupiah)</Text>
           <View style={styles.salaryInput}>
             <TextInput
               editable = {true}
               multiline = {true}
               numberOfLines = {4}
               maxLength = {20}
-              onChangeText={(salary) => this.setState({salary})}
-              value={this.state.salary}
+              style={{color: 'white'}}
+              onChangeText={(salary) => this.setState({salary: salary.split('.').join('')})}
+              value={this.delimiter(this.state.salary)}
               keyboardType = {'numeric'}
               placeholder={'Input your salary'}
+              placeholderTextColor="white"
             />
           </View>
-          <Button
-            title = 'Save'
-            style={styles.saveButton}
-            onPress={() => this.props.postSalary(this.state.salary)}
-          />
+          <TouchableOpacity onPress={() => this.props.postSalary(this.state.salary)}>
+          <View style={styles.button}>
+            <Text style={styles.textButton}>Submit</Text>
+          </View>
+          </TouchableOpacity>
         </View>
-        <TouchableHighlight onPress={() => navigate('CalendarScreen')}>
-        <Text style={styles.sentence}>
-          Pick Your Workdays
-        </Text>
-        </TouchableHighlight>
-
         <TouchableHighlight onPress={() => navigate('FromLocation')}>
-        <Text style={styles.sentence}>
+        <View style={styles.buttonPickTo}>
+        <Image source={require('../assets/img/maps-and-flags.png')} style={{height: 20, width: 20, marginRight: 10}} />
+        <Text style={styles.textButtonPickTo}>
           From Location
         </Text>
+        </View>
         </TouchableHighlight>
 
-        <View>
-          <Text>{this.props.addressFrom}</Text>
+        <View style={styles.toBox}>
+          <Text style={styles.textToBox}>{this.addressJoiner(this.props.addressFrom)}</Text>
         </View>
 
         <TouchableHighlight onPress={() => navigate('ToLocation')}>
-        <Text style={styles.sentence}>
+        <View style={styles.buttonPickTo}>
+        <Image source={require('../assets/img/location-arrow.png')} style={{height: 20, width: 20, marginRight: 10}} />
+        <Text style={styles.textButtonPickTo}>
           To Location
         </Text>
-        </TouchableHighlight>
-
-        <View>
-          <Text>{this.props.addressTo}</Text>
         </View>
+        </TouchableHighlight>
+        <View style={styles.toBox}>
+          <Text style={styles.textToBox}>{this.addressJoiner(this.props.addressTo)}</Text>
+        </View>
+        <TouchableHighlight onPress={() => navigate('CalendarScreen')}>
+        <View style={styles.buttonPickWork}>
+        <Image source={require('../assets/img/date.png')} style={{height: 20, width: 20, marginRight: 10}} />
+        <Text style={styles.textButtonPickWork}>
+          Pick Your Workdays
+        </Text>
+        </View>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -77,7 +106,7 @@ class Home extends Component {
 const styles = {
   container: {
     flex: 1,
-    backgroundColor: '#d1ddf0',
+    backgroundColor: '#1d81e5',
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -85,15 +114,77 @@ const styles = {
     fontSize: 30
   },
   salaryInputRow: {
-    flexDirection: 'row',
     top: 0,
     height: 30,
     marginTop: 0,
-    marginBottom: 10
+    marginBottom: 80
   },
   salaryInput: {
     width: 250,
-    height: 35
+    height: 35,
+    alignSelf: 'center'
+  },
+  button: {
+    backgroundColor:'#57A8F8',
+    padding: 5,
+    alignItems: 'center',
+    borderRadius: 3,
+    width: 140,
+    height: 30,
+    alignSelf: 'center'
+  },
+  buttonPickWork: {
+    backgroundColor:'#2F273A',
+    padding: 5,
+    alignItems: 'center',
+    borderRadius: 3,
+    width: 240,
+    height: 40,
+    alignSelf: 'center',
+    marginTop: 40,
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  textButton: {
+    color:'white',
+    fontWeight: 'bold'
+  },
+  textButtonPickWork: {
+    color:'white',
+    fontWeight: 'bold',
+    fontSize: 18,
+    textAlign: 'center'
+  },
+  buttonPickTo: {
+    backgroundColor:'white',
+    padding: 5,
+    alignItems: 'center',
+    borderRadius: 3,
+    width: 240,
+    height: 40,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  textButtonPickTo: {
+    color:'#1d81e5',
+    fontWeight: 'bold',
+    fontSize: 18
+  },
+  toBox: {
+    borderColor:'white',
+    padding: 5,
+    alignItems: 'center',
+    borderRadius: 3,
+    width: 240,
+    height: 40,
+    alignSelf: 'center',
+    marginBottom: 5,
+    borderWidth: 0.5
+  },
+  textToBox: {
+    color:'white',
+    fontSize: 12
   }
 }
 

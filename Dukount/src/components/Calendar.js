@@ -5,7 +5,10 @@ import {
   Text,
   View,
   Button,
-  ScrollView
+  ScrollView,
+  TouchableOpacity,
+  TouchableHighlight,
+  Image
 } from 'react-native';
 import { connect } from "react-redux"
 import Calendar from 'react-native-calendar-list'
@@ -14,8 +17,9 @@ const date = new Date()
 
 
 import { dateAction } from "../actions/foodAction";
-const markStyle = {dayTextStyle: {color: 'white', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: '#08a'};
-const markStyleDefault = {dayTextStyle: {color: '#08a', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: 'white'};
+import { fetch_trafi_route } from '../actions/MapAction'
+const markStyle = {dayTextStyle: {color: '#C9CDCF', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: '#1d81e5'};
+const markStyleDefault = {dayTextStyle: {color: 'white', fontSize: 14, fontWeight: 'bold'}, dayBackgroundColor: '#C9CDCF'};
 
 
 const month = new Date().getMonth()+1
@@ -38,9 +42,6 @@ class CalenderClass extends Component<{}>{
       buttonDefault: false,
       buttonDelete: false
     }
-  }
-  componentWillMount() {
-    // this.homeDayDefaultScreen()
   }
 
   convertFormatDate () {
@@ -220,10 +221,38 @@ class CalenderClass extends Component<{}>{
     navigate('TempResultScreen')
     this.submitToStore()
   }
+
+  fetchTrafiRouteMethod() {
+    let payload = {
+      latitudeFrom: this.props.latitudeFrom,
+      longitudeFrom: this.props.longitudeFrom,
+      latitudeTo: this.props.latitudeTo,
+      longitudeTo: this.props.longitudeTo
+    }
+    this.props.fetchTrafiRoute(payload)
+  }
+
+  componentDidMount() {
+    this.fetchTrafiRouteMethod()
+  }
+
   render () {
+    const {goBack} = this.props.navigation;
     // console.log('====', this.state.dateSelected);
     return (
       <View>
+        <View>
+          <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
+            <View style={{position: 'relative', justifyContent: 'center'}}>
+            <TouchableHighlight onPress={() => goBack()}>
+              <Image source={require('../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
+            </TouchableHighlight>
+            </View>
+            <View style={{height: 30, width: 360, alignItems: 'center', alignSelf: 'center', position: 'absolute'}}>
+              <Image source={require('../assets/img/logo_small_white.png')} style={{height: 30, width: 130}} />
+            </View>
+          </View>
+        </View>
         <Text>{date.toString()}</Text>
         <Calendar
           marks={this.state.marks}
@@ -233,28 +262,71 @@ class CalenderClass extends Component<{}>{
           onDatePress={(a) => this.setEventCounting(a)}
           rowHeight={40}
           headerHeight={40} />
-
-        <Button
-          onPress={()=> this.convertAllDate()}
-          title="Workday Default"
-          disabled = {this.state.buttonDefault}
-        />
-        <Button
-          onPress={()=> this.clearAllDate()}
-          title="Hapus State"
-          disabled = {this.state.buttonDelete}
-        />
-        <Button
-          onPress={()=> this.jalan()}
-          title="NEXT"
-        />
-        <ScrollView>
-          <Text>WorkDay {this.state.dateSelected.length}</Text>
-          <Text>{JSON.stringify(this.state.dateSelected)}</Text>
-          <Text>HomeDay {this.state.dateUnselected.length}</Text>
-          <Text>{JSON.stringify(this.state.dateUnselected)}</Text>
-        </ScrollView>
-
+        <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 30, marginLeft: 10, marginRight: 10}}>
+        <TouchableOpacity onPress={() => this.convertAllDate()} disabled = {this.state.buttonDefault}>
+        <View style={{borderWidth: 2,
+        borderColor:'#1d81e5',
+        padding: 5,
+        alignItems: 'center',
+        borderRadius: 3,
+        width: 200,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: 40,
+        marginRight: 10,
+        flexDirection: 'row',
+        justifyContent: 'center'}}>
+        <Image source={require('../assets/img/settings-work-tool.png')} style={{height: 20, width: 20, marginRight: 10}} />
+        <Text style={{color:'#1d81e5',
+        fontWeight: 'bold',
+        fontSize: 18,
+        textAlign: 'center'}}>
+          Workday Default
+        </Text>
+        </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.clearAllDate()} disabled = {this.state.buttonDelete}>
+        <View style={{borderWidth: 2,
+        borderColor:'#C91905',
+        padding: 5,
+        alignItems: 'center',
+        borderRadius: 3,
+        width: 100,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: 40,
+        flexDirection: 'row',
+        justifyContent: 'center'}}>
+        <Image source={require('../assets/img/delete.png')} style={{height: 20, width: 20, marginRight: 10}} />
+        <Text style={{color:'#C91905',
+        fontWeight: 'bold',
+        fontSize: 18,
+        textAlign: 'center'}}>
+          Clear
+        </Text>
+        </View>
+        </TouchableOpacity>
+        </View>
+        <TouchableOpacity onPress={() => this.jalan()}>
+        <View style={{backgroundColor:'#1d81e5',
+        padding: 5,
+        alignItems: 'center',
+        borderRadius: 3,
+        width: 250,
+        height: 40,
+        alignSelf: 'center',
+        marginTop: 20,
+        flexDirection: 'row',
+        justifyContent: 'center'}}>
+        <Text style={{color:'white',
+        fontWeight: 'bold',
+        fontSize: 18,
+        textAlign: 'center'}}>
+          Next
+        </Text>
+        <Image source={require('../assets/img/right-chevron.png')} style={{height: 20, width: 20, marginLeft: 20}} />
+        </View>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -263,7 +335,17 @@ class CalenderClass extends Component<{}>{
 const mapDispatchToProps = (dispatch) => {
   return {
     dateToStore: (payload) => dispatch(dateAction(payload)),
+    fetchTrafiRoute: (payload) => dispatch(fetch_trafi_route(payload)),
   }
 }
 
-export default connect(null, mapDispatchToProps)(CalenderClass)
+const mapStateToProps = (state) => {
+  return {
+    latitudeFrom: state.MapReducer.latitudeFrom,
+    longitudeFrom: state.MapReducer.longitudeFrom,
+    latitudeTo: state.MapReducer.latitudeTo,
+    longitudeTo: state.MapReducer.longitudeTo,
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CalenderClass)
