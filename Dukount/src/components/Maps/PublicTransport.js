@@ -5,7 +5,8 @@ import {
   Button,
   FlatList,
   StyleSheet,
-  Image
+  Image,
+  TouchableHighlight
 } from 'react-native'
 import { connect } from 'react-redux'
 import { fetch_trafi_route } from '../../actions/MapAction'
@@ -32,11 +33,11 @@ class PublicTransport extends Component {
     if (transportName === null) {
       return ''
     } else if(transportName !== null && transportName.Name.split(' ').indexOf('TransJakarta') !== -1 ) {
-      return `${transportName.Name} IDR 3500 one time pay from first bus shelter`
+      return `${transportName.Name} IDR 3.500 one time pay from first bus shelter`
     } else if(transportName !== null && transportName.Name.split(' ').indexOf('KRL') !== -1 ) {
-      return `${transportName.Name} IDR 4000 one time pay from first train station`
+      return `${transportName.Name} IDR 4.000 one time pay from first train station`
     } else {
-      return `${transportName.Name} IDR 4000`
+      return `${transportName.Name} IDR 4.000`
     }
   }
 
@@ -149,15 +150,30 @@ class PublicTransport extends Component {
   }
 
   render() {
+    const { goBack, navigate } = this.props.navigation
     return (
       <View>
+      <View>
+      <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
+      <View style={{position: 'relative', justifyContent: 'center'}}>
+      <TouchableHighlight onPress={() => goBack()}>
+        <Image source={require('../../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
+      </TouchableHighlight>
+      </View>
+      <View style={{height: 30, width: 360, alignItems: 'center', alignSelf: 'center', position: 'absolute'}}>
+        <Image source={require('../../assets/img/logo_small_white.png')} style={{height: 30, width: 130}} />
+      </View>
+      </View>
+      </View>
         {!this.props.suggestions ? <Text>Check your routes</Text> : (
           <View style={styles.container}>
-            <Text>{this.checkPreferenceLabel(this.props.suggestions[this.props.labelIndex])}</Text>
-            <Text>{this.state.routes[0].label}</Text>
+          <Text>{this.checkPreferenceLabel(this.props.suggestions[this.props.labelIndex])}</Text>
+          <View style={{width: 200, backgroundColor: '#1DE9B6', height: 50, padding: 15, alignSelf: 'center', borderRadius: 5}}>
+          <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white'}}>{this.state.routes[0].label}</Text>
+          </View>
             <Text>Duration Total: {this.props.suggestions[this.props.labelIndex].DurationMinutes} Minutes</Text>
-            <Text>IDR {(this.state.routes[0].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / TRIP </Text>
-            <Text>IDR {(this.state.routes[0].price * 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / DAY </Text>
+            <Text>IDR {(this.state.routes[0].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} / TRIP </Text>
+            <Text>IDR {(this.state.routes[0].price * 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} / DAY </Text>
             <FlatList
               data={this.props.suggestions[this.props.labelIndex].RouteSegments}
               keyExtractor={(item, idx) => idx}
@@ -184,7 +200,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 0,
     top: 0,
-    marginBottom: 170
+    marginBottom: 300
   },
   flatList: {
     marginBottom: 200
