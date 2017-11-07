@@ -114,6 +114,7 @@ class FinalResult extends Component {
     } else if (Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) > 75) {
       return (
         <View>
+        <Text>It looks like you spend {Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100)} % of your salary for food and transportation</Text>
         <Text>Seriously, you should find a new job with good salary or maybe a side job that suit with your primary job. Find your job here: </Text>
         <Text style={{color: 'green'}}
               onPress={() => Linking.openURL('https://www.glassdoor.com')}>

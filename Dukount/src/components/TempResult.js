@@ -103,10 +103,10 @@ class TempResult extends Component {
     const sumFoodOutcomeResultHome =  sumFoodOutcomeHome * dayHome
 
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
-    const resultFoodFinal = parseFloat(sumPrice)
+    const resultFoodFinal = parseFloat(`${sumPrice}`)
 
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
-      this.props.foodCost(sumPrice)
+      this.props.foodCost(resultFoodFinal)
        return (<Text style={styles.resultFont}>IDR {resultFoodFinal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>)
     }else {
       return (<Text style={styles.resultFont}>-</Text>)
