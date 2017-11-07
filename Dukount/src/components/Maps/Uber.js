@@ -72,7 +72,6 @@ class Uber extends Component {
               longitude:this.props.longitudeFrom,
               latitudeDelta: 0.41,
               longitudeDelta: 0.0421}}
-              showsTraffic={true}
               showsUserLocation={ true }
               showsCompass={true}
             >
@@ -156,7 +155,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 65,
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height
+    height: Dimensions.get('window').height,
+    zIndex: 10
   },
 });
 

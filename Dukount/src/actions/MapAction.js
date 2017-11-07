@@ -136,7 +136,7 @@ export const fetch_address_to = (payload) => {
 
 export const fetch_trafi_route = (payload) => {
   return(dispatch, getState) => {
-    axios.get(`http://api-ext.trafi.com/routes?start_lat=${payload.latitudeFrom}&start_lng=${payload.longitudeFrom}&end_lat=${payload.latitudeTo}&end_lng=${payload.longitudeTo}&is_arrival=false&api_key=42353ead9692f1d0c362a2eb2bd477a2`)
+    axios.get(`http://api-ext.trafi.com/routes?start_lat=${payload.latitudeFrom}&start_lng=${payload.longitudeFrom}&end_lat=${payload.latitudeTo}&end_lng=${payload.longitudeTo}&time=2017-11-10T08%3A00&is_arrival=true&api_key=42353ead9692f1d0c362a2eb2bd477a2`)
       .then(response => {
         console.log(response.data.Routes)
         let suggestionsArr = response.data.Routes
