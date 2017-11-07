@@ -5,7 +5,8 @@ import {
   Text,
   TouchableHighlight,
   Image,
-  Linking
+  Linking,
+  ScrollView
 } from 'react-native';
 import { Pie } from 'react-native-pathjs-charts'
 
@@ -90,44 +91,48 @@ class FinalResult extends Component {
   adviseGenerator() {
     if (Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) < 50) {
       return (
+        <View style={{width: 320, alignSelf: 'center', marginTop: 10}}>
+        <Text style={{fontSize: 14, textAlign: 'center'}}>Your Total Outcome is {Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100)} % of your Salary therefore you could save 20% of your salary's left for saving which is about IDR {(Math.round(((+this.state.salaryRestUser) * 20)/100)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        <Text style={{fontSize: 14, textAlign: 'center', marginTop: 10, fontStyle: 'italic'}}>Consider to spend your money for shopping or traveling, check this: </Text>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <View>
-        <Text>Your Total Outcome is {Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100)} % of your Salary therefore you could save 20% of your salary's left for saving which is about IDR {(Math.round(((+this.state.salaryRestUser) * 20)/100)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
-        <Text>Consider to spend your money for shopping or traveling, check this: </Text>
-        <Text style={{color: 'green'}}
-              onPress={() => Linking.openURL('https://www.tokopedia.com')}>
-          Tokopedia
-        </Text>
-        <Text style={{color: 'red'}}
-              onPress={() => Linking.openURL('https://www.bukalapak.com')}>
-          BukaLapak
-        </Text>
-        <Text style={{color: 'blue'}}
-              onPress={() => Linking.openURL('https://www.traveloka.com')}>
-          Traveloka
-        </Text>
+          <TouchableHighlight onPress={() => Linking.openURL('https://www.tokopedia.com')}>
+            <Image source={require('../assets/img/logo-tokopedia.png')} style={{height: 20, width: 80, marginRight: 10}} />
+          </TouchableHighlight>
+        </View>
+        <TouchableHighlight onPress={() => Linking.openURL('https://www.bukalapak.com')}>
+          <Image source={require('../assets/img/Logo-Bukalapak.png')} style={{height: 20, width: 80}} />
+        </TouchableHighlight>
+        <TouchableHighlight onPress={() => Linking.openURL('https://www.traveloka.com')}>
+          <Image source={require('../assets/img/Traveloka_Primary_Logo-1.png')} style={{height: 20, width: 80}} />
+        </TouchableHighlight>
+        </View>
         </View>
       )
     } else if ((Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) > 50 && Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) < 75) || Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) == 50) {
       return (
-        <Text>Your Total Outcome is {Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100)} % of your Salary therefore you could save 10% of your salary's left for saving which is about IDR {(Math.round(((+this.state.salaryRestUser) * 10)/100)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        <View style={{width: 320, alignSelf: 'center', marginTop: 10}}>
+        <Text style={{fontSize: 14, textAlign: 'center'}}>Your Total Outcome is {Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100)} % of your Salary therefore you could save 10% of your salary's left for saving which is about IDR {(Math.round(((+this.state.salaryRestUser) * 10)/100)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        </View>
       )
     } else if (Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) > 75) {
       return (
+        <View style={{width: 320, alignSelf: 'center', marginTop: 10}}>
+        <Text style={{fontSize: 14, textAlign: 'center'}}>It looks like you spend {Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100)} % of your salary for food and transportation</Text>
+        <Text style={{fontSize: 14, textAlign: 'center'}}>Seriously, you should find a new job with good salary or maybe a side job that suit with your primary job. Find your job here: </Text>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
         <View>
-        <Text>It looks like you spend {Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100)} % of your salary for food and transportation</Text>
-        <Text>Seriously, you should find a new job with good salary or maybe a side job that suit with your primary job. Find your job here: </Text>
-        <Text style={{color: 'green'}}
-              onPress={() => Linking.openURL('https://www.glassdoor.com')}>
-          Glassdoor
-        </Text>
-        <Text style={{color: 'blue'}}
-              onPress={() => Linking.openURL('https://www.jobstreet.co.id')}>
-          JobStreet.com
-        </Text>
-        <Text style={{color: 'brown'}}
-              onPress={() => Linking.openURL('https://www.upwork.com')}>
-          Upwork
-        </Text>
+          <TouchableHighlight onPress={() => Linking.openURL('https://www.glassdoor.com')}>
+            <Image source={require('../assets/img/Glassdoor_logo.png')} style={{height: 20, width: 90, marginRight: 10}} />
+          </TouchableHighlight>
+        </View>
+        <TouchableHighlight onPress={() => Linking.openURL('https://www.jobstreet.com')}>
+          <Image source={require('../assets/img/jobstreet-logo.png')} style={{height: 20, width: 90}} />
+        </TouchableHighlight>
+        <TouchableHighlight onPress={() => Linking.openURL('https://www.upwork.com')}>
+          <Image source={require('../assets/img/Upwork-logo.svg.png')} style={{height: 20, width: 80}} />
+        </TouchableHighlight>
+        </View>
         <Text>You could take Cost Package for Food, only IDR {this.numberConverter(this.props.foodCostPackage)} and Recommended Package for Transportation, only IDR {this.cheapestTransportFare(this.props.firstTrafiFare)} to balance your income and outcome</Text>
         </View>
       )
@@ -165,13 +170,12 @@ class FinalResult extends Component {
       margin: {
         top: 20,
         left: 20,
-        right: 20,
-        bottom: 20
+        right: 20
       },
       width: 350,
       height: 350,
       color: '#2980B9',
-      r: 50,
+      r: 30,
       R: 150,
       legendPosition: 'topLeft',
       animate: {
@@ -189,10 +193,11 @@ class FinalResult extends Component {
 
     const {goBack} = this.props.navigation;
     return (
+    <ScrollView>
     <View>
       <View>
         <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
-          <View style={{position: 'relative', justifyContent: 'center'}}>
+          <View style={{position: 'relative', justifyContent: 'center', flex: 1}}>
           <TouchableHighlight onPress={() => goBack()}>
             <Image source={require('../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
           </TouchableHighlight>
@@ -203,11 +208,31 @@ class FinalResult extends Component {
         </View>
       </View>
       <View>
-      <Text>Your Salary: IDR {this.stringConverter(this.props.userSalary)}</Text>
-      <Text>Your Food Outcome: IDR {this.foodCostGenerator(this.props.foodOutcome)}</Text>
-      <Text>Your Transportation Outcome: IDR {this.stringConverter(this.state.transportResult)}</Text>
-      <Text>Your Final Outcome: IDR{this.numberConverter(this.state.userOutcome)}</Text>
-      <Text>Salaries left: IDR {this.numberConverter(this.state.salaryRestUser)}</Text>
+      <View style={{backgroundColor: '#1d81e5', width: 300, height: 40, alignSelf: 'center', borderRadius: 5, marginTop: 20}}>
+        <Text style={{color: 'white', fontWeight: 'bold', textAlign: 'center', padding: 3, fontSize: 24}}>Results</Text>
+      </View>
+      <View style={{width: 320, backgroundColor: '#1d81e5', alignSelf: 'center', height: 50, marginTop: 20, padding: 5}}>
+        <Text style={{textAlign: 'center', color: 'white', fontStyle: 'italic', fontSize: 12}}>Your Salary</Text>
+        <Text style={{textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18}}>IDR {this.stringConverter(this.props.userSalary)}</Text>
+      </View>
+      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        <View style={{width: 160, backgroundColor: '#325495', alignSelf: 'center', height: 50, padding: 5}}>
+          <Text style={{textAlign: 'center', color: 'white', fontStyle: 'italic', fontSize: 12}}>Food Outcome</Text>
+          <Text style={{textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18}}>IDR {this.foodCostGenerator(this.props.foodOutcome)}</Text>
+        </View>
+        <View style={{width: 160, backgroundColor: '#57A42D', alignSelf: 'center', height: 50, padding: 5}}>
+          <Text style={{textAlign: 'center', color: 'white', fontStyle: 'italic', fontSize: 12}}>Transportation Outcome</Text>
+          <Text style={{textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18}}>IDR {this.stringConverter(this.state.transportResult)}</Text>
+        </View>
+      </View>
+      <View style={{width: 320, backgroundColor: '#28A48E', alignSelf: 'center', height: 50, padding: 5}}>
+        <Text style={{textAlign: 'center', color: 'white', fontStyle: 'italic', fontSize: 12}}>Your Final Outcome</Text>
+        <Text style={{textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18}}>IDR{this.numberConverter(this.state.userOutcome)}</Text>
+      </View>
+      <View style={{width: 320, borderColor: '#1d81e5', borderWidth: 1, alignSelf: 'center', height: 50, padding: 5}}>
+        <Text style={{textAlign: 'center', color: '#1d81e5', fontStyle: 'italic', fontSize: 12}}>Salaries left</Text>
+        <Text style={{textAlign: 'center', color: '#1d81e5', fontWeight: 'bold', fontSize: 18, fontStyle: 'italic'}}>IDR {this.numberConverter(this.state.salaryRestUser)}</Text>
+      </View>
       <View>{this.adviseGenerator()}</View>
         <View>
           <Pie
@@ -215,8 +240,14 @@ class FinalResult extends Component {
             options={options}
             accessorKey="population" />
         </View>
+        <View style={{flexDirection: 'row', alignSelf: 'center', marginTop: -30, marginBottom: 10}}>
+          <View style={{backgroundColor: '#57A8F8', width: 80}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Food</Text></View>
+          <View style={{backgroundColor: '#3c89bc', width: 80, marginLeft: 2, marginRight: 2}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Transportation</Text></View>
+          <View style={{backgroundColor: '#2980B9', width: 80}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Money Left</Text></View>
+        </View>
       </View>
     </View>
+    </ScrollView>
     )
   }
 }
