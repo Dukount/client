@@ -127,7 +127,7 @@ class FinalResult extends Component {
               onPress={() => Linking.openURL('https://www.upwork.com')}>
           Upwork
         </Text>
-        <Text>Jangan Lupa Paket Hemat dengan makan paket cost seharga IDR {this.numberConverter(this.props.foodCostPackage)} dan transport paket recommended IDR {this.cheapestTransportFare(this.props.firstTrafiFare)} </Text>
+        <Text>You could take Cost Package for Food, only IDR {this.numberConverter(this.props.foodCostPackage)} and Recommended Package for Transportation, only IDR {this.cheapestTransportFare(this.props.firstTrafiFare)} to balance your income and outcome</Text>
         </View>
       )
     }
