@@ -5,7 +5,9 @@ import {
   Button,
   FlatList,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  Image,
+  TouchableHighlight
 } from 'react-native'
 import MapView from 'react-native-maps';
 import Polyline from '@mapbox/polyline'
@@ -46,8 +48,21 @@ class Uber extends Component {
   }
 
   render() {
+    const { goBack, navigate } = this.props.navigation
     return (
       <View>
+      <View>
+      <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
+      <View style={{position: 'relative', justifyContent: 'center'}}>
+      <TouchableHighlight onPress={() => goBack()}>
+        <Image source={require('../../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
+      </TouchableHighlight>
+      </View>
+      <View style={{height: 30, width: 360, alignItems: 'center', alignSelf: 'center', position: 'absolute'}}>
+        <Image source={require('../../assets/img/logo_small_white.png')} style={{height: 30, width: 130}} />
+      </View>
+      </View>
+      </View>
         <View>
           <View>
             <MapView
@@ -66,7 +81,6 @@ class Uber extends Component {
               coordinates={this.state.coords}
               strokeWidth={3}
               strokeColor="blue"
-              style={{zIndex: 99}}
             />
 
             <MapView.Marker
@@ -89,10 +103,29 @@ class Uber extends Component {
 
             </MapView>
           </View>
+          <View style={{borderColor: '#1d81e5', borderTopWidth: 1, justifyContent: 'center', flexDirection: 'row', padding: 5}}>
+            <Image source={require('../../assets/img/scooter-front-view.png')} style={{height: 22, width: 15, marginRight: 5}} />
+            <Text style={{textAlign: 'center', color: '#57A42D', fontWeight: 'bold', fontSize: 18}}>{this.props.uberType}</Text>
+          </View>
           <View style={styles.uberService}>
-            <Text style={styles.vehicleOption}>Vehicle Option: {this.props.uberType}</Text>
-            <Text style={styles.tripDuration}>Trip Duration: {this.props.uberDuration} Minutes</Text>
-            <Text style={styles.fareEstimation}>Fare Estimation: IDR {(this.props.uberFare / 2 / this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>
+          <View style={{backgroundColor: '#1d81e5', width: 180, padding: 5, alignItems: 'center', flexDirection: 'row'}}>
+          <View>
+            <Image source={require('../../assets/img/stopwatch.png')} style={{height: 28, width: 28, marginRight: 5, marginLeft: 15}} />
+          </View>
+          <View>
+            <Text style={styles.tripDuration}>Trip Duration</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontStyle: 'italic'}}>{this.props.uberDuration} Minutes</Text>
+          </View>
+          </View>
+          <View style={{backgroundColor: '#57A42D', width: 180, padding: 5, alignItems: 'center', flexDirection: 'row'}}>
+          <View>
+            <Image source={require('../../assets/img/notepad.png')} style={{height: 28, width: 23, marginRight: 5, marginLeft: 15}} />
+          </View>
+          <View>
+            <Text style={styles.fareEstimation}>Fare Estimation</Text>
+            <Text style={{color: 'white', fontWeight: 'bold', fontStyle: 'italic'}}>IDR {(this.props.uberFare / 2 / this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / trip</Text>
+          </View>
+          </View>
           </View>
         </View>
       </View>
@@ -102,29 +135,26 @@ class Uber extends Component {
 
 const styles = StyleSheet.create({
   flatListBox: {
-    height: 410
+    height: 500
   },
   flatList: {
     top: 0,
     marginBottom: 110
   },
   uberService: {
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: 'red',
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
   tripDuration: {
-    color: 'red'
+    color: 'white',
+    fontSize: 14
   },
   fareEstimation: {
-    color: 'green'
-  },
-  vehicleOption: {
-    color: 'black'
+    color: 'white'
   },
   map: {
     position: 'absolute',
-    marginTop: 60,
+    marginTop: 65,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height
   },

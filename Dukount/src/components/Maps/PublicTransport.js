@@ -104,42 +104,46 @@ class PublicTransport extends Component {
   captionForIcon(item) {
     if (item.Transport == null) {
       return (
-        <View>
+        <View style={{flexDirection: 'row'}}>
         <Image
-          style={{height: 25, width: 25}}
+          style={{height: 30, width: 25, marginRight: 1}}
           source={{uri: `${item.IconUrl}`}}
         />
-        <Text>Take a Walk</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontWeight: 'bold', fontSize: 18}}>Take a Walk</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontSize: 11, marginLeft: 90, fontWeight: 'bold', fontStyle: 'italic'}}>Duration: {item.DurationMinutes} Minutes</Text>
         </View>
       )
     } else if (item.Transport !== null && item.Transport.Name.split(' ').indexOf('TransJakarta') !== -1) {
       return (
-        <View>
-        <Text>TransJakarta Corridor</Text>
+        <View style={{flexDirection: 'row'}}>
+        <Text style={{padding: 5, color: '#1d81e5', fontWeight: 'bold', fontSize: 18}}>TransJakarta Corridor</Text>
         <Image
-          style={{height: 25, width: 25}}
+          style={{height: 25, width: 25, marginLeft: 15}}
           source={{uri: `${item.IconUrl}`}}
         />
+        <Text style={{padding: 5, color: '#1d81e5', fontSize: 11, marginLeft: 90, fontWeight: 'bold', fontStyle: 'italic'}}>Duration: {item.DurationMinutes} Minutes</Text>
         </View>
       )
     } else if (item.Transport !== null && item.Transport.Name.split(' ').indexOf('KRL') !== -1) {
       return (
-        <View>
-        <Text>Commuterline</Text>
+        <View style={{flexDirection: 'row'}}>
+        <Text style={{padding: 5, color: '#1d81e5', fontWeight: 'bold', fontSize: 18}}>Commuterline</Text>
         <Image
-          style={{height: 25, width: 25}}
+          style={{height: 25, width: 25, marginLeft: 15}}
           source={{uri: `${item.IconUrl}`}}
         />
+        <Text style={{padding: 5, color: '#1d81e5', fontSize: 11, marginLeft: 60, fontWeight: 'bold', fontStyle: 'italic'}}>Duration: {item.DurationMinutes} Minutes</Text>
         </View>
       )
     } else {
       return (
-        <View>
-        <Text>MiniBus No.</Text>
+        <View style={{flexDirection: 'row'}}>
+        <Text style={{padding: 5, color: '#1d81e5', fontWeight: 'bold', fontSize: 18}}>MiniBus No.</Text>
         <Image
-          style={{height: 25, width: 25}}
+          style={{height: 25, width: 25, marginLeft: 15}}
           source={{uri: `${item.IconUrl}`}}
         />
+        <Text style={{padding: 5, color: '#1d81e5', fontSize: 11, marginLeft: 75, fontWeight: 'bold', fontStyle: 'italic'}}>Duration: {item.DurationMinutes} Minutes</Text>
         </View>
       )
     }
@@ -168,13 +172,27 @@ class PublicTransport extends Component {
         {!this.props.suggestions ? <Text>Check your routes</Text> : (
           <View style={styles.container}>
           <Text>{this.checkPreferenceLabel(this.props.suggestions[this.props.labelIndex])}</Text>
-          <View style={{width: 200, backgroundColor: '#1d81e5', height: 50, padding: 10, alignSelf: 'center', borderRadius: 5}}>
-          <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 16}}>Transportation Detail</Text>
-          <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 12}}>{this.state.routes[0].label}</Text>
+          <View style={{width: 300, backgroundColor: '#1d81e5', height: 50, padding: 5, alignSelf: 'center', borderRadius: 5, marginTop: 20}}>
+            <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 16}}>Transportation Detail</Text>
+            <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white', fontSize: 12, fontStyle: 'italic'}}>{this.state.routes[0].label}</Text>
           </View>
-            <Text>Duration Total: {this.props.suggestions[this.props.labelIndex].DurationMinutes} Minutes</Text>
-            <Text>IDR {(this.state.routes[0].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} / TRIP </Text>
-            <Text>IDR {(this.state.routes[0].price * 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} / DAY </Text>
+            <View style={{flexDirection: 'row', marginTop: 10, alignSelf: 'center'}}>
+              <View style={{borderColor: '#1d81e5', borderWidth: 1, padding: 5, borderRadius: 1, flexDirection: 'row'}}>
+                <Image source={require('../../assets/img/clock.png')} style={{height: 20, width: 20, alignItems: 'center', marginRight: 5}}/>
+                <Text style={{color: '#1d81e5', fontWeight: 'bold'}}>Duration Total: </Text>
+              </View>
+              <View style={{backgroundColor: '#1d81e5', borderRadius: 1, padding: 5}}>
+                <Text style={{color: 'white', fontStyle: 'italic', fontWeight: 'bold'}}>{this.props.suggestions[this.props.labelIndex].DurationMinutes} Minutes</Text>
+              </View>
+            </View>
+            <View style={{flexDirection: 'row', marginTop: 5, alignSelf: 'center', marginBottom: 20}}>
+              <View style={{borderColor: '#1d81e5', borderWidth: 1, borderRadius: 1, padding: 5}}>
+                <Text style={{color: '#1d81e5', fontStyle: 'italic', fontWeight: 'bold'}}>IDR {(this.state.routes[0].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} / TRIP </Text>
+              </View>
+              <View style={{backgroundColor: '#1d81e5', borderRadius: 1, padding: 5}}>
+                <Text style={{color: 'white', fontStyle: 'italic', fontWeight: 'bold'}}>IDR {(this.state.routes[0].price * 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} / DAY </Text>
+              </View>
+            </View>
             <FlatList
               data={this.props.suggestions[this.props.labelIndex].RouteSegments}
               keyExtractor={(item, idx) => idx}
@@ -182,7 +200,6 @@ class PublicTransport extends Component {
                 return (
                   <View style={styles.preferenceLabel}>
                     {this.captionForIcon(item)}
-                    <Text>Duration: {item.DurationMinutes} Minutes</Text>
                     <Text>{this.checkSegmentFrom(item)}</Text>
                     <Text>{this.checkSegmentTo(item)}</Text>
                     <Text>{this.checkSegmentTransport(item.Transport)}</Text>
@@ -201,15 +218,20 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 0,
     top: 0,
-    marginBottom: 300
+    marginBottom: 450
   },
   flatList: {
-    marginBottom: 200
+    marginBottom: 100
   },
   preferenceLabel: {
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: 'red',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: '#1d81e5',
+    marginRight: 5,
+    marginLeft: 5,
+    marginTop: 1,
+    marginBottom: 1,
+    padding: 10
   },
   routeSegments: {
     borderRadius: 4,

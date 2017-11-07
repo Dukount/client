@@ -690,7 +690,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   transportCard: {
-    backgroundColor: '#1DE9B6',
+    backgroundColor: '#57A42D',
     alignSelf: 'center',
     height: 120,
     width: 350,
