@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
-  Image
+  Image,
+  Linking
 } from 'react-native';
 import { Pie } from 'react-native-pathjs-charts'
 
@@ -86,6 +87,52 @@ class FinalResult extends Component {
     }
   }
 
+  adviseGenerator() {
+    if (Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) < 50) {
+      return (
+        <View>
+        <Text>Your Total Outcome is {Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100)} % of your Salary therefore you could save 20% of your salary's left for saving which is about IDR {(Math.round(((+this.state.salaryRestUser) * 20)/100)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+        <Text>Consider to spend your money for shopping or traveling, check this: </Text>
+        <Text style={{color: 'green'}}
+              onPress={() => Linking.openURL('https://www.tokopedia.com')}>
+          Tokopedia
+        </Text>
+        <Text style={{color: 'red'}}
+              onPress={() => Linking.openURL('https://www.bukalapak.com')}>
+          BukaLapak
+        </Text>
+        <Text style={{color: 'blue'}}
+              onPress={() => Linking.openURL('https://www.traveloka.com')}>
+          Traveloka
+        </Text>
+        </View>
+      )
+    } else if ((Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) > 50 && Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) < 75) || Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) == 50) {
+      return (
+        <Text>Your Total Outcome is {Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100)} % of your Salary therefore you could save 10% of your salary's left for saving which is about IDR {(Math.round(((+this.state.salaryRestUser) * 10)/100)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
+      )
+    } else if (Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) > 75) {
+      return (
+        <View>
+        <Text>Seriously, you should find a new job with good salary or maybe a side job that suit with your primary job. Find your job here: </Text>
+        <Text style={{color: 'green'}}
+              onPress={() => Linking.openURL('https://www.glassdoor.com')}>
+          Glassdoor
+        </Text>
+        <Text style={{color: 'blue'}}
+              onPress={() => Linking.openURL('https://www.jobstreet.co.id')}>
+          JobStreet.com
+        </Text>
+        <Text style={{color: 'brown'}}
+              onPress={() => Linking.openURL('https://www.upwork.com')}>
+          Upwork
+        </Text>
+        <Text>Jangan Lupa Paket Hemat dengan makan paket cost seharga IDR {this.numberConverter(this.props.foodCostPackage)} dan transport paket recommended IDR {this.cheapestTransportFare(this.props.firstTrafiFare)} </Text>
+        </View>
+      )
+    }
+  }
+
   componentWillMount() {
     this.transportationResult()
   }
@@ -155,12 +202,12 @@ class FinalResult extends Component {
         </View>
       </View>
       <View>
-      <Text>Your salary: IDR {this.stringConverter(this.props.userSalary)}</Text>
+      <Text>Your Salary: IDR {this.stringConverter(this.props.userSalary)}</Text>
       <Text>Your Food Outcome: IDR {this.foodCostGenerator(this.props.foodOutcome)}</Text>
       <Text>Your Transportation Outcome: IDR {this.stringConverter(this.state.transportResult)}</Text>
       <Text>Your Final Outcome: IDR{this.numberConverter(this.state.userOutcome)}</Text>
-      <Text>The rest of Salary: IDR {this.numberConverter(this.state.salaryRestUser)}</Text>
-      <Text>Jangan Lupa Paket Hemat dengan makan paket cost seharga IDR {this.numberConverter(this.props.foodCostPackage)} dan transport paket recommended IDR {this.cheapestTransportFare(this.props.firstTrafiFare)} </Text>
+      <Text>Salaries left: IDR {this.numberConverter(this.state.salaryRestUser)}</Text>
+      <View>{this.adviseGenerator()}</View>
         <View>
           <Pie
             data={data}

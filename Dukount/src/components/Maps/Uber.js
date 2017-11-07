@@ -46,7 +46,6 @@ class Uber extends Component {
   }
 
   render() {
-    console.log(this.props.latitudeFrom)
     return (
       <View>
         <View>

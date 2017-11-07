@@ -4,7 +4,8 @@ import {
   View,
   Button,
   FlatList,
-  StyleSheet
+  StyleSheet,
+  Image
 } from 'react-native'
 import { connect } from 'react-redux'
 import { fetch_trafi_route } from '../../actions/MapAction'
@@ -31,9 +32,9 @@ class PublicTransport extends Component {
     if (transportName === null) {
       return `Just Walk`
     } else if(transportName !== null && transportName.Name.split(' ').indexOf('TransJakarta') !== -1 ) {
-      return `${transportName.Name} IDR 3500 1 kali bayar dari halte pertama`
+      return `${transportName.Name} IDR 3500 one time pay from first bus shelter`
     } else if(transportName !== null && transportName.Name.split(' ').indexOf('KRL') !== -1 ) {
-      return `${transportName.Name} IDR 4000 1 kali bayar dari stasiun pertama`
+      return `${transportName.Name} IDR 4000 one time pay from first train station`
     } else {
       return `${transportName.Name} IDR 4000`
     }
@@ -110,6 +111,7 @@ class PublicTransport extends Component {
           <View style={styles.container}>
             <Text>{this.checkPreferenceLabel(this.props.suggestions[this.props.labelIndex])}</Text>
             <Text>{this.state.routes[0].label}</Text>
+            <Text>Duration Total: {this.props.suggestions[this.props.labelIndex].DurationMinutes} Minutes</Text>
             <Text>IDR {(this.state.routes[0].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / TRIP </Text>
             <Text>IDR {(this.state.routes[0].price * 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} / DAY </Text>
             <FlatList
@@ -118,6 +120,11 @@ class PublicTransport extends Component {
               renderItem={({item}) => {
                 return (
                   <View style={styles.preferenceLabel}>
+                    <Image
+                      style={{height: 25, width: 25}}
+                      source={{uri: `${item.IconUrl}`}}
+                    />
+                    <Text>Duration: {item.DurationMinutes} Minutes</Text>
                     <Text>{this.checkSegmentFrom(item)}</Text>
                     <Text>{this.checkSegmentTo(item)}</Text>
                     <Text>{this.checkSegmentTransport(item.Transport)}</Text>
@@ -135,10 +142,11 @@ class PublicTransport extends Component {
 const styles = StyleSheet.create({
   container: {
     marginTop: 0,
-    top: 0
+    top: 0,
+    marginBottom: 150
   },
   flatList: {
-    marginBottom: 70
+    marginBottom: 200
   },
   preferenceLabel: {
     borderRadius: 4,
