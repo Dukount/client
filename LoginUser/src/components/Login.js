@@ -92,11 +92,16 @@ class Login extends Component<{}> {
 
 }
 
-
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    loginUser: (payload) => dispatch(userAction(payload)),
+    stateLoginUser: state.userReducer
   }
 }
 
-export default connect(null, mapDispatchToProps)(Login)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loginUser: (payload) => dispatch(loginThunk(payload)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
