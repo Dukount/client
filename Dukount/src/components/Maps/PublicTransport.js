@@ -116,12 +116,12 @@ class PublicTransport extends Component {
     } else if (item.Transport !== null && item.Transport.Name.split(' ').indexOf('TransJakarta') !== -1) {
       return (
         <View style={{flexDirection: 'row'}}>
-        <Text style={{padding: 5, color: '#1d81e5', fontWeight: 'bold', fontSize: 18}}>TransJakarta Corridor</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontWeight: 'bold', fontSize: 16}}>TransJakarta Corridor</Text>
         <Image
           style={{height: 25, width: 25, marginLeft: 15}}
           source={{uri: `${item.IconUrl}`}}
         />
-        <Text style={{padding: 5, color: '#1d81e5', fontSize: 11, marginLeft: 90, fontWeight: 'bold', fontStyle: 'italic'}}>Duration: {item.DurationMinutes} Minutes</Text>
+        <Text style={{padding: 5, color: '#1d81e5', fontSize: 11, marginLeft: 10, fontWeight: 'bold', fontStyle: 'italic'}}>Duration: {item.DurationMinutes} Minutes</Text>
         </View>
       )
     } else if (item.Transport !== null && item.Transport.Name.split(' ').indexOf('KRL') !== -1) {
