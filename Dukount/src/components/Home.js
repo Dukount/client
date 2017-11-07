@@ -7,6 +7,7 @@ import {
   TextInput,
   Button,
   Image,
+  Modal,
   TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux'
@@ -20,6 +21,7 @@ class Home extends Component {
     super(props);
     this.state = {
       salary: '',
+      modalVisible: false
     };
   }
 
@@ -34,6 +36,19 @@ class Home extends Component {
       return address
     } else {
       return address.join(' ')
+    }
+  }
+
+  setModalVisible(visible) {
+    this.setState({
+      modalVisible: visible
+    })
+  }
+
+  submitButton() {
+    if (this.state.salary !== '') {
+      this.setModalVisible(true)
+      this.props.postSalary(this.state.salary)
     }
   }
 
@@ -60,7 +75,29 @@ class Home extends Component {
               placeholderTextColor="white"
             />
           </View>
-          <TouchableOpacity onPress={() => this.props.postSalary(this.state.salary)}>
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {alert("Modal has been closed.")}}
+            >
+           <View style={{backgroundColor: 'white', marginTop: 170, marginRight: 50, marginLeft: 50, width: 250, height: 370, borderRadius: 13}}>
+            <View style={{paddingTop: 60, paddingRight: 30, paddingLeft: 30}}>
+              <Text style={{fontWeight: 'bold', fontSize: 18, alignSelf: 'center'}}>Your Salary Submitted</Text>
+              <Text style={{marginTop: 50, fontWeight: 'bold', fontSize: 15, alignSelf: 'center'}}>IDR {this.delimiter(this.state.salary)}</Text>
+
+              <TouchableHighlight onPress={() => {
+                this.setModalVisible(!this.state.modalVisible)
+              }}>
+                <View style={styles.buttonHideModal}>
+                <Text style={{fontWeight: 'bold', fontSize: 25, color: 'white'}}>Hide Modal</Text>
+                </View>
+              </TouchableHighlight>
+
+            </View>
+           </View>
+          </Modal>
+          <TouchableOpacity onPress={() => this.submitButton()}>
           <View style={styles.button}>
             <Text style={styles.textButton}>Submit</Text>
           </View>
@@ -132,6 +169,16 @@ const styles = {
     width: 140,
     height: 30,
     alignSelf: 'center'
+  },
+  buttonHideModal: {
+    backgroundColor:'#57A8F8',
+    padding: 5,
+    alignItems: 'center',
+    borderRadius: 3,
+    width: 140,
+    height: 40,
+    alignSelf: 'center',
+    marginTop: 70
   },
   buttonPickWork: {
     backgroundColor:'#2F273A',
