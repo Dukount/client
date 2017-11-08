@@ -11,6 +11,7 @@ import Uber from '../components/Maps/Uber'
 import FinalResult from '../components/FinalResult'
 import Login from '../components/Login'
 import Register from '../components/Register'
+import SavedList from '../components/SavedList'
 
 const Navigation = StackNavigator({
   Home: { screen: Home },
@@ -24,6 +25,7 @@ const Navigation = StackNavigator({
   FinalResult: {screen: FinalResult},
   Login: {screen: Login},
   Register: {screen: Register}
+  SavedList: {screen: SavedList}
 }, {
   initialRouteName: 'Home',
   headerMode: 'none'
