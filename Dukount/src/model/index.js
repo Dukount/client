@@ -6,21 +6,21 @@ Plan.schema = {
   name: 'Plan',
   properties: {
     id: 'int',
-    // createdAt: 'string',
-    // salary: 'string',
-    // foodCostTotal: 'string',
-    // breakfastCost: 'string',
-    // breakfastType: 'string',
-    // lunchCost: 'string',
-    // lunchType: 'string',
-    // dinnerCost: 'string',
-    // dinnerType: 'string',
-    // transportationTotal: 'string',
-    // transportationType: 'string',
-    // tripDurationTotal: 'string',
-    // salaryLeft: 'string',
-    // salaryToSave: 'string',
-    // author: 'string'
+    createdAt: 'string',
+    salary: 'string',
+    foodCostTotal: 'string',
+    breakfastCost: 'string',
+    breakfastType: 'string',
+    lunchCost: 'string',
+    lunchType: 'string',
+    dinnerCost: 'string',
+    dinnerType: 'string',
+    transportationTotal: 'string',
+    transportationType: 'string',
+    tripDurationTotal: 'string',
+    salaryLeft: 'string',
+    salaryToSave: 'string',
+    author: 'string'
   }
 }
 const realm = new Realm({

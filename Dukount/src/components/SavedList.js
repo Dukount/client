@@ -13,14 +13,51 @@ import axios from 'axios'
 import {
   listThunk
 } from '../actions/listAction'
-import realm from '../model'
+// import realm from '../model'
 
 class SavedList extends Component {
   constructor() {
     super()
     this.state = {
       token: '',
-      plans: []
+      plans: [],
+      gans: [{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      }]
     }
   }
 
@@ -112,6 +149,15 @@ class SavedList extends Component {
     return (
       <View>
       <Text>Yeaay masuk List</Text>
+      <FlatList data={this.state.gans}
+      keyExtractor={(item, idx) => idx}
+      renderItem={({item}) => {
+        return (
+          <View>
+          <Text>{item.salary}</Text>
+          </View>
+        )
+      }} />
       <Text>{JSON.stringify(this.state.plans)}</Text>
       </View>
     )
