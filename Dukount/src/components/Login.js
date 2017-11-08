@@ -40,7 +40,13 @@ class Login extends Component<{}> {
       console.log('ini data di dari response : ', data);
       AsyncStorage.setItem('token', JSON.stringify(data.token))
       this.getToken()
-      navigate('SavedList')
+      if (data.token) {
+        navigate('SavedList')
+      } else if (data.msg) {
+        this.setState({
+           loginStatus: data.msg
+        })
+      }
       this.props.daftarThunk(data.token)
     })
     .catch(err => {
@@ -53,6 +59,11 @@ class Login extends Component<{}> {
       console.log('ini harusnya token :===>', value);
       this.setState({
         token: value
+      })
+      .catch(err=> {
+        this.setState({
+          token: err
+        })
       })
       console.log('sebelum listThunk ', this.state.token)
     })

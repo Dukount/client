@@ -8,7 +8,8 @@ import {
   Button,
   Image,
   Modal,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native';
 import { connect } from 'react-redux'
 import SplashScreen from 'react-native-splash-screen'
@@ -22,13 +23,18 @@ class Home extends Component {
     super(props);
     this.state = {
       salary: '',
-      modalVisible: false
+      modalVisible: false,
+      token: ''
     };
   }
 
   componentDidMount() {
-    // do stuff while splash screen is shown
-    // After having done stuff (such as async tasks) hide the splash screen
+    AsyncStorage.getItem('token').then(value => {
+      this.setState({token: value})
+    })
+    .catch(err=>{
+      this.setState({token: err})
+    })
     SplashScreen.hide();
   }
 
@@ -82,10 +88,28 @@ class Home extends Component {
     }
   }
 
-  listItem() {
-    const { navigate } = this.props.navigation
-    navigate('Login')
-  }
+  // listItem() {
+  //   const { navigate } = this.props.navigation
+  //   navigate('Login')
+  // }
+  // validate() {
+  //   const { navigate } = this.props.navigation
+  //
+  //   if (this.state.token !== null) {
+  //     return (
+  //       <TouchableHighlight onPress={() => navigate('savedList')}>
+  //       <View style={styles.buttonList}>
+  //       <Image source={require('../assets/img/listing-option.png')} style={{height: 20, width: 20, marginRight: 10}} />
+  //       <Text style={styles.textButtonList}>
+  //         Saved List
+  //       </Text>
+  //       </View>
+  //       </TouchableHighlight>
+  //     )
+  //   } else {
+  //   }
+  //
+  // }
 
   render() {
     const { navigate } = this.props.navigation
@@ -125,7 +149,6 @@ class Home extends Component {
               }}>
                 <Image source={require('../assets/img/check.png')} style={{height: 50, width: 50, alignSelf: 'center'}} />
               </TouchableHighlight>
-
             </View>
            </View>
           </Modal>

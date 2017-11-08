@@ -13,6 +13,7 @@ import axios from 'axios'
 import {
   listThunk
 } from '../actions/listAction'
+
 import realm from '../model'
 
 class SavedList extends Component {
@@ -20,99 +21,64 @@ class SavedList extends Component {
     super()
     this.state = {
       token: '',
-      plans: []
+      plans: [],
+      response: []
     }
   }
-
+  
   componentDidMount() {
     this.getToken()
-    this.realmReadList()
-  }
-
-  realmReadList() {
     let plans = realm.objects('Plan')
     let plansToArray = Object.values(plans)
-    let filterPlans = plansToArray.filter((thing, index, self) => self.findIndex((t) => {return t._id === thing._id}) === index)
+    let filtered = plansToArray.filter((thing, index, self) => self.findIndex((t) => {return t.id === thing.id}) === index)
     this.setState({
-      plans: filterPlans
+      plans: filtered
     })
-    this.writeListToRealm()
+    setTimeout(()=> {
+      this.writeListToRealm()
+    }, 2000)
   }
 
   getToken() {
-    AsyncStorage.getItem('token').then(value => {
-      console.log('ini harusnya token :===>', value);
+    AsyncStorage.getItem('token', (value) => {
       this.setState({
         token: value
       })
     })
   }
 
+
   writeListToRealm() {
-    var url = `http://35.199.117.172:3000/`
-    axios.get(url, {
-      headers: {token: this.state.token}
-    })
-    .then(resp => {
-      resp.data.map(plan => {
-        realm.write( () => {
-          savedList = realm.create('Plan', {
-            id: plan._id,
-            // createdAt: plan.createdAt,
-            // salary: plan.salary,
-            // foodCostTotal: plan.foodCostTotal,
-            // breakfastCost: plan.breakfastCost,
-            // breakfastType: plan.breakfastType,
-            // lunchCost: plan.lunchCost,
-            // lunchType: plan.lunchType,
-            // dinnerCost: plan.dinnerCost,
-            // dinnerType: plan.dinnerType,
-            // transportationTotal: plan.transportationTotal,
-            // transportationType: plan.transportationType,
-            // tripDurationTotal: plan.tripDurationTotal,
-            // salaryLeft: plan.salaryLeft,
-            // salaryToSave: plan.salaryToSave,
-            // author: plan.author
-          })
+    this.props.savedList.map(item => {
+      realm.write( () => {
+        savedPlan = realm.create('Plan', {
+          id: item._id,
+          createdAt: item.createdAt,
+          salary: item.salary,
+          foodCostTotal: item.foodCostTotal,
+          breakfastType: item.breakfastType,
+          breakfastCost: item.breakfastCost,
+          lunchCost: item.lunchCost,
+          lunchType: item.lunchType,
+          dinnerCost: item.dinnerCost,
+          dinnerType: item.dinnerType,
+          transportationTotal: item.transportationTotal,
+          transportationType: item.transportationType,
+          tripDurationTotal: item.tripDurationTotal,
+          salaryLeft: item.salaryLeft,
+          salaryToSave: item.salaryToSave,
+          author: item.salaryToSave,
         })
       })
     })
-    // if (this.props.savedList === null) {
-    //   this.setState({
-    //     plans: ['masih null']
-    //   })
-    // } else {
-    //   this.props.savedList.map(plan => {
-    //     realm.write( () => {
-    //       savedList = realm.create('Plan', {
-    //         id: plan._id,
-    //         createdAt: plan.createdAt,
-    //         salary: plan.salary,
-    //         foodCostTotal: plan.foodCostTotal,
-    //         breakfastCost: plan.breakfastCost,
-    //         breakfastType: plan.breakfastType,
-    //         lunchCost: plan.lunchCost,
-    //         lunchType: plan.lunchType,
-    //         dinnerCost: plan.dinnerCost,
-    //         dinnerType: plan.dinnerType,
-    //         transportationTotal: plan.transportationTotal,
-    //         transportationType: plan.transportationType,
-    //         tripDurationTotal: plan.tripDurationTotal,
-    //         salaryLeft: plan.salaryLeft,
-    //         salaryToSave: plan.salaryToSave,
-    //         author: plan.author
-    //       })
-    //     })
-    //   })
-    // }
   }
-
   render() {
-    console.log('ini savedList ', this.props.savedList)
     return (
       <View>
-      <Text>Yeaay masuk List</Text>
-      <Text>{JSON.stringify(this.state.plans)}</Text>
+      <Text>jumlah : {this.state.plans.length}</Text>
+      <ScrollView>
+        <Text>{JSON.stringify(this.state.plans)}</Text>
+      </ScrollView>
       </View>
     )
   }
@@ -125,8 +91,14 @@ const mapStateToProps = (state) => {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    relog: (payload) => dispatch(listThunk(payload))
+  }
+}
+
 const ConnectedComponent = connect(
   mapStateToProps,
-  null)(SavedList)
+  mapDispatchToProps)(SavedList)
 
 export default ConnectedComponent
