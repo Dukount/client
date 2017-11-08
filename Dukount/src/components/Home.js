@@ -51,7 +51,10 @@ class Home extends Component {
       this.props.postSalary(this.state.salary)
     }
   }
-
+  listItem() {
+    const { navigate } = this.props.navigation
+    navigate('Login')
+  }
   render() {
     const { navigate } = this.props.navigation
     return (
@@ -132,6 +135,14 @@ class Home extends Component {
         <Image source={require('../assets/img/date.png')} style={{height: 20, width: 20, marginRight: 10}} />
         <Text style={styles.textButtonPickWork}>
           Pick Your Workdays
+        </Text>
+        </View>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={() => navigate('Login')}>
+        <View style={styles.buttonPickWork}>
+        <Image source={require('../assets/img/date.png')} style={{height: 20, width: 20, marginRight: 10}} />
+        <Text style={styles.textButtonPickWork}>
+          List
         </Text>
         </View>
         </TouchableHighlight>

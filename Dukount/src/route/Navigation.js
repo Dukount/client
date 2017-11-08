@@ -9,6 +9,9 @@ import ToLocation from '../components/Maps/ToLocation'
 import PublicTransport from '../components/Maps/PublicTransport'
 import Uber from '../components/Maps/Uber'
 import FinalResult from '../components/FinalResult'
+import Login from '../components/Login'
+import Register from '../components/Register'
+
 
 const Navigation = StackNavigator({
   Home: { screen: Home },
@@ -19,10 +22,13 @@ const Navigation = StackNavigator({
   ToLocation: {screen: ToLocation},
   PublicTransport: {screen: PublicTransport},
   UberTransport: {screen: Uber},
-  FinalResult: {screen: FinalResult}
+  FinalResult: {screen: FinalResult},
+  Login: {screen: Login},
+  Register: {screen: Register},
 }, {
   initialRouteName: 'Home',
   headerMode: 'none'
 })
+
 
 export default Navigation
