@@ -18,7 +18,9 @@ class Login extends Component<{}> {
     this.state = {
       username: '',
       password: '',
-      loginStatus: ''
+      loginStatus: '',
+      token: ''
+
     }
   }
 
@@ -84,6 +86,7 @@ class Login extends Component<{}> {
       return this.state.loginStatus
     }
   }
+
   render () {
     return(
       <View>
@@ -101,7 +104,6 @@ class Login extends Component<{}> {
           onPress={ ()=> this.submit() }
           title = "Submit"
         />
-
         <Text>ini Status : {this.statusLogin()}</Text>
       </View>
     )

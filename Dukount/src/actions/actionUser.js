@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 export const loginAction = (payload) => {
   return {
     type: 'USER_LOGIN',
@@ -23,9 +24,10 @@ export const loginThunk = (payload) => {
     .then(({data}) => {
       var token = JSON.stringify(data.token)
       var info = JSON.stringify(data.resp)
+      console.log(data)
       AsyncStorage.setItem('token', token)
       AsyncStorage.setItem('user', info)
-      dispatch(loginAction(data.info))
+      dispatch(loginAction(data))
     })
     .catch(err => {
       console.log(error);

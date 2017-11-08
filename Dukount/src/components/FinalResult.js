@@ -6,7 +6,8 @@ import {
   TouchableHighlight,
   Image,
   Linking,
-  ScrollView
+  ScrollView,
+  Button
 } from 'react-native';
 import { Pie } from 'react-native-pathjs-charts'
 
@@ -139,6 +140,19 @@ class FinalResult extends Component {
     }
   }
 
+  workDayCounter(workCalendar) {
+    if (this.props.calendarWorkDay.length === 1) {
+      return (
+        <Text>Workdays: {this.props.calendarWorkDay.length} day / month</Text>
+      )
+    } else if (this.props.calendarWorkDay.length > 1) {
+      return (
+        <Text>Workdays: {this.props.calendarWorkDay.length} days / month</Text>
+      )
+    }
+
+  }
+
   componentWillMount() {
     this.transportationResult()
   }
@@ -191,7 +205,7 @@ class FinalResult extends Component {
       }
     }
 
-    const {goBack} = this.props.navigation;
+    const {goBack, navigate} = this.props.navigation;
     return (
     <ScrollView>
     <View>
@@ -233,6 +247,7 @@ class FinalResult extends Component {
         <Text style={{textAlign: 'center', color: '#1d81e5', fontStyle: 'italic', fontSize: 12}}>Salaries left</Text>
         <Text style={{textAlign: 'center', color: '#1d81e5', fontWeight: 'bold', fontSize: 18, fontStyle: 'italic'}}>IDR {this.numberConverter(this.state.salaryRestUser)}</Text>
       </View>
+      <View>{this.workDayCounter()}</View>
       <View>{this.adviseGenerator()}</View>
         <View>
           <Pie
@@ -244,6 +259,12 @@ class FinalResult extends Component {
           <View style={{backgroundColor: '#57A8F8', width: 80}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Food</Text></View>
           <View style={{backgroundColor: '#3c89bc', width: 80, marginLeft: 2, marginRight: 2}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Transportation</Text></View>
           <View style={{backgroundColor: '#2980B9', width: 80}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Money Left</Text></View>
+        </View>
+        <View>
+        <Button
+        title="Save"
+        onPress={() => navigate('SavedList')}
+        />
         </View>
       </View>
     </View>

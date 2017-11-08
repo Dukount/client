@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import { View, TouchableHighlight, Text } from 'react-native';
 import { connect } from 'react-redux'
-import SplashScreen from 'react-native-smart-splash-screen'
+import SplashScreen from 'react-native-splash-screen'
 
 class Home extends Component {
-
-  componentDidMount () {
-     //SplashScreen.close(SplashScreen.animationType.scale, 850, 500)
-       SplashScreen.close({
-          animationType: SplashScreen.animationType.scale,
-          duration: 850,
-          delay: 500,
-       })
-  }
+  componentDidMount() {
+      // do stuff while splash screen is shown
+        // After having done stuff (such as async tasks) hide the splash screen
+        SplashScreen.hide();
+    }
 
   render() {
     const { navigate } = this.props.navigation
