@@ -13,7 +13,6 @@ import axios from 'axios'
 import {
   listThunk
 } from '../actions/listAction'
-
 import realm from '../model'
 
 class SavedList extends Component {
@@ -112,12 +111,10 @@ class SavedList extends Component {
   render() {
     return (
       <View>
-<<<<<<< HEAD
       <Text>jumlah : {this.state.plans.length}</Text>
       <ScrollView>
         <Text>{JSON.stringify(this.state.plans)}</Text>
       </ScrollView>
-=======
       <Text>Yeaay masuk List</Text>
       <FlatList data={this.state.gans}
       keyExtractor={(item, idx) => idx}
@@ -129,7 +126,6 @@ class SavedList extends Component {
         )
       }} />
       <Text>{JSON.stringify(this.state.plans)}</Text>
->>>>>>> advise
       </View>
     )
   }
