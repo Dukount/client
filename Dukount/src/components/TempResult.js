@@ -107,7 +107,7 @@ class TempResult extends Component {
     const sumFoodOutcomeResultHome =  sumFoodOutcomeHome * dayHome
 
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
-    const resultFoodFinal = parseFloat(`${sumPrice}`)
+    const resultFoodFinal = Math.round(Number(`${sumPrice}`))
 
     if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
       this.props.foodCost(resultFoodFinal)

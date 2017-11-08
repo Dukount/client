@@ -22,10 +22,47 @@ class SavedList extends Component {
     this.state = {
       token: '',
       plans: [],
-      response: []
+      response: [],
+      gans: [{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      },{
+        id: 1,
+        createdAt: 'selasa-17 Agustus 2017',
+        salary: 600000,
+        foodCostTotal: 200000,
+        breakfastCost: 488888
+      }]
     }
   }
-  
+
   componentDidMount() {
     this.getToken()
     let plans = realm.objects('Plan')
@@ -75,10 +112,24 @@ class SavedList extends Component {
   render() {
     return (
       <View>
+<<<<<<< HEAD
       <Text>jumlah : {this.state.plans.length}</Text>
       <ScrollView>
         <Text>{JSON.stringify(this.state.plans)}</Text>
       </ScrollView>
+=======
+      <Text>Yeaay masuk List</Text>
+      <FlatList data={this.state.gans}
+      keyExtractor={(item, idx) => idx}
+      renderItem={({item}) => {
+        return (
+          <View>
+          <Text>{item.salary}</Text>
+          </View>
+        )
+      }} />
+      <Text>{JSON.stringify(this.state.plans)}</Text>
+>>>>>>> advise
       </View>
     )
   }

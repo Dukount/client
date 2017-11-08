@@ -12,6 +12,7 @@ import {
 import { Pie } from 'react-native-pathjs-charts'
 
 import { connect } from 'react-redux'
+import { post_data_to_database } from "../actions/listAction";
 
 class FinalResult extends Component {
   static navigationOptions = {
@@ -86,6 +87,33 @@ class FinalResult extends Component {
       return foodCost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     } else {
       return 'Zomato API Request exceeded the maximum limit'
+    }
+  }
+
+  saveData () {
+    var data = {
+      salary: this.props.userSalary,
+      foodCostTotal: this.props.foodOutcome,
+      transportationTotal: this.state.transportResult,
+      salaryLeft: this.state.salaryRestUser,
+      salaryToSave: this.calculateSaveMoney()
+    }
+    this.props.postData(data)
+  }
+
+  calculateSaveMoney () {
+    if (Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) < 50) {
+      return (
+        (Math.round(((+this.state.salaryRestUser) * 20)/100))
+      )
+    } else if ((Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) > 50 && Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) < 75) || Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) == 50) {
+      return (
+        (Math.round(((+this.state.salaryRestUser) * 10)/100))
+      )
+    } else if (Math.round(((this.props.foodOutcome + (+this.state.transportResult))/this.props.userSalary) * 100) > 75) {
+      return (
+        'IDR 0'
+      )
     }
   }
 
@@ -267,7 +295,7 @@ class FinalResult extends Component {
         <View>
         <Button
         title="Save"
-        onPress={() => navigate('SavedList')}
+        onPress={() => this.saveData()}
         />
         </View>
       </View>
@@ -286,8 +314,15 @@ const mapStateToProps = (state) => {
     trafiTransportPrice: state.MapReducer.trafiFare,
     foodCostPackage: state.salaryReducer.foodCostPackage,
     firstTrafiFare: state.MapReducer.firstTrafiFare,
-    calendarWorkDay: state.price.workCalendar
+    calendarWorkDay: state.price.workCalendar,
+
   }
 }
 
-export default connect(mapStateToProps, null)(FinalResult)
+const mapDispatchToProps = (dispatch) => {
+  return {
+    postData: (payload) => dispatch(post_data_to_database(payload))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FinalResult)

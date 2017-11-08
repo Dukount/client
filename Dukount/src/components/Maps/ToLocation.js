@@ -196,6 +196,7 @@ class ToLocation extends Component<{}> {
           <MapView.Marker
             coordinate={ this.state.region }
             onPress={() => this.moveDrag()}
+            image={require('../../assets/pin-05.png')}
           />
           </MapView>
         </View>
