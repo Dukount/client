@@ -11,7 +11,7 @@ import {
   Text,
   View
 } from 'react-native';
-import Login from './src/components/Register'
+import Login from './src/components/Login'
 import { Provider } from 'react-redux'
 import store from './src/store'
 
