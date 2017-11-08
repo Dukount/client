@@ -25,7 +25,6 @@ class Login extends Component<{}> {
   }
 
   validateEmpty () {
-    const { navigate } = this.props.navigation
     var user = {
       username : this.state.username,
       password : this.state.password
@@ -43,15 +42,11 @@ class Login extends Component<{}> {
     .catch(err => {
       console.log(error);
     })
-    navigate('SavedList')
   }
 
   getToken() {
     AsyncStorage.getItem('token').then(value => {
       console.log('ini harusnya token :===>', value);
-      this.setState({
-        token: value
-      })
     })
   }
 
@@ -110,7 +105,6 @@ class Login extends Component<{}> {
           title = "Submit"
         />
         <Text>ini Status : {this.statusLogin()}</Text>
-        <Text>{this.state.token}</Text>
       </View>
     )
   }
