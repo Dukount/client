@@ -8,8 +8,12 @@ import {
   AsyncStorage,
   FlatList
 } from 'react-native';
+import { connect } from 'react-redux'
+import {
+  listThunk
+} from '../actions/listAction'
 
-export default class SavedList extends Component {
+class SavedList extends Component {
   constructor() {
     super()
     this.state = {
@@ -30,14 +34,25 @@ export default class SavedList extends Component {
     })
   }
 
-
   render() {
-    console.log('ini state token ', this.state.token)
+    console.log('ini savedList ', this.props.savedList)
     return (
       <View>
-      <Text style={{color: 'black'}}>Yeaay masuk List</Text>
-      <Text>{this.state.token}</Text>
+      <Text>Yeaay masuk List</Text>
       </View>
     )
   }
 }
+
+
+const mapStateToProps = (state) => {
+  return {
+    savedList: state.listReducer.list
+  }
+}
+
+const ConnectedComponent = connect(
+  mapStateToProps,
+  null)(SavedList)
+
+export default ConnectedComponent

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios'
 import { loginThunk } from '../actions/actionUser'
+import { listThunk } from '../actions/listAction'
 import { connect } from 'react-redux'
 
 class Login extends Component<{}> {
@@ -25,6 +26,7 @@ class Login extends Component<{}> {
   }
 
   validateEmpty () {
+    const { navigate } = this.props.navigation
     var user = {
       username : this.state.username,
       password : this.state.password
@@ -38,6 +40,8 @@ class Login extends Component<{}> {
       console.log('ini data di dari response : ', data);
       AsyncStorage.setItem('token', JSON.stringify(data.token))
       this.getToken()
+      navigate('SavedList')
+      this.props.daftarThunk(data.token)
     })
     .catch(err => {
       console.log(error);
@@ -47,6 +51,10 @@ class Login extends Component<{}> {
   getToken() {
     AsyncStorage.getItem('token').then(value => {
       console.log('ini harusnya token :===>', value);
+      this.setState({
+        token: value
+      })
+      console.log('sebelum listThunk ', this.state.token)
     })
   }
 
@@ -120,6 +128,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loginUser: (payload) => dispatch(loginThunk(payload)),
+    daftarThunk: (payload) => dispatch(listThunk(payload))
   }
 }
 
