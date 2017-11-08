@@ -5,7 +5,8 @@ import {
   Text,
   TouchableHighlight,
   ScrollView,
-  AsyncStorage
+  AsyncStorage,
+  FlatList
 } from 'react-native';
 
 export default class SavedList extends Component {
@@ -17,10 +18,15 @@ export default class SavedList extends Component {
   }
 
   componentDidMount() {
-    AsyncStorage.getItem('token',
-    (value) => {
-      console.log('ini value token ', value)
-      this.setState({ token: value })
+    this.getToken()
+  }
+
+  getToken() {
+    AsyncStorage.getItem('token').then(value => {
+      console.log('ini harusnya token :===>', value);
+      this.setState({
+        token: value
+      })
     })
   }
 
@@ -29,7 +35,7 @@ export default class SavedList extends Component {
     console.log('ini state token ', this.state.token)
     return (
       <View>
-      <Text>Yeaay masuk List</Text>
+      <Text style={{color: 'black'}}>Yeaay masuk List</Text>
       <Text>{this.state.token}</Text>
       </View>
     )

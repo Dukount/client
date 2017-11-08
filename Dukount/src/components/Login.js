@@ -49,6 +49,9 @@ class Login extends Component<{}> {
   getToken() {
     AsyncStorage.getItem('token').then(value => {
       console.log('ini harusnya token :===>', value);
+      this.setState({
+        token: value
+      })
     })
   }
 
@@ -107,6 +110,7 @@ class Login extends Component<{}> {
           title = "Submit"
         />
         <Text>ini Status : {this.statusLogin()}</Text>
+        <Text>{this.state.token}</Text>
       </View>
     )
   }
