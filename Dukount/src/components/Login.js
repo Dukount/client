@@ -5,9 +5,11 @@ import {
   Text,
   View,
   TextInput,
-  Button
+  Button,
+  AsyncStorage
 } from 'react-native';
-import { postGetUser } from '../actions/actionUser'
+import axios from 'axios'
+import { loginThunk } from '../actions/actionUser'
 import { connect } from 'react-redux'
 
 class Login extends Component<{}> {
@@ -16,17 +18,20 @@ class Login extends Component<{}> {
     this.state = {
       username: '',
       password: '',
-      loginStatus: ''
+      loginStatus: '',
+      token: ''
     }
   }
 
   validateEmpty () {
+    const { navigate } = this.props.navigation
     console.log('Berhasil');
     var user = {
-      username : this.state.login,
-      password : this.state.username
+      username : this.state.username,
+      password : this.state.password
     }
-    this.props.loginUser(user)
+    this.loginPostRequest()
+    navigate('SavedList')
   }
 
   setStateUsername (text) {
@@ -68,6 +73,37 @@ class Login extends Component<{}> {
       return this.state.loginStatus
     }
   }
+
+  async loginPostRequest() {
+    // var url = `http://35.199.117.172:3000/users/login`
+    // axios.post(url, {
+    //   username: this.state.username,
+    //   password: this.state.password
+    // })
+    // .then(({data}) => {
+    //   var token = JSON.stringify(data.token)
+    //   var info = JSON.stringify(data.resp)
+    //   console.log(data)
+    //   AsyncStorage.setItem('token', token)
+    //   AsyncStorage.setItem('user', info)
+    //   this.checkAsyncStorage()
+    // })
+    // .catch(err => {
+    //   console.log(error);
+    // })
+    await AsyncStorage.setItem('token', 'apa aja')
+    this.checkAsyncStorage()
+  }
+
+  checkAsyncStorage() {
+    AsyncStorage.getItem('token',
+    (value) => {
+      console.log('ini value token ', value)
+      this.setState({ token: value })
+    })
+  }
+
+
   render () {
     return(
       <View>
@@ -92,16 +128,5 @@ class Login extends Component<{}> {
 
 }
 
-const mapStateToProps = (state) => {
-  return {
-    stateLoginUser: state.userReducer
-  }
-}
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loginUser: (payload) => dispatch(loginThunk(payload)),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default Login

@@ -24,7 +24,7 @@ const Navigation = StackNavigator({
   UberTransport: {screen: Uber},
   FinalResult: {screen: FinalResult},
   Login: {screen: Login},
-  Register: {screen: Register}
+  Register: {screen: Register},
   SavedList: {screen: SavedList}
 }, {
   initialRouteName: 'Home',

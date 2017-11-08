@@ -11,6 +11,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux'
+import SplashScreen from 'react-native-splash-screen'
 
 import {
   post_salary
@@ -23,6 +24,12 @@ class Home extends Component {
       salary: '',
       modalVisible: false
     };
+  }
+
+  componentDidMount() {
+    // do stuff while splash screen is shown
+    // After having done stuff (such as async tasks) hide the splash screen
+    SplashScreen.hide();
   }
 
   delimiter(num) {
@@ -51,6 +58,7 @@ class Home extends Component {
       this.props.postSalary(this.state.salary)
     }
   }
+
 
   render() {
     const { navigate } = this.props.navigation
@@ -135,7 +143,7 @@ class Home extends Component {
         </Text>
         </View>
         </TouchableHighlight>
-        <TouchableHighlight onPress={() => navigate('SavedList')}>
+        <TouchableHighlight onPress={() => navigate('Login')}>
         <View style={styles.buttonPickWork}>
         <Image source={require('../assets/img/date.png')} style={{height: 20, width: 20, marginRight: 10}} />
         <Text style={styles.textButtonPickWork}>
