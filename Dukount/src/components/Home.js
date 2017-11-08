@@ -135,6 +135,14 @@ class Home extends Component {
         </Text>
         </View>
         </TouchableHighlight>
+        <TouchableHighlight onPress={() => navigate('SavedList')}>
+        <View style={styles.buttonPickWork}>
+        <Image source={require('../assets/img/date.png')} style={{height: 20, width: 20, marginRight: 10}} />
+        <Text style={styles.textButtonPickWork}>
+          Saved List
+        </Text>
+        </View>
+        </TouchableHighlight>
       </View>
     );
   }

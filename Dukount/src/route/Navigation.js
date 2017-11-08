@@ -9,6 +9,7 @@ import ToLocation from '../components/Maps/ToLocation'
 import PublicTransport from '../components/Maps/PublicTransport'
 import Uber from '../components/Maps/Uber'
 import FinalResult from '../components/FinalResult'
+import SavedList from '../components/SavedList'
 
 const Navigation = StackNavigator({
   Home: { screen: Home },
@@ -19,7 +20,8 @@ const Navigation = StackNavigator({
   ToLocation: {screen: ToLocation},
   PublicTransport: {screen: PublicTransport},
   UberTransport: {screen: Uber},
-  FinalResult: {screen: FinalResult}
+  FinalResult: {screen: FinalResult},
+  SavedList: {screen: SavedList}
 }, {
   initialRouteName: 'Home',
   headerMode: 'none'
