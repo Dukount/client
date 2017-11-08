@@ -5,7 +5,8 @@ import {
   Text,
   View,
   TextInput,
-  Button
+  Button,
+  AsyncStorage
 } from 'react-native';
 import { postGetUser } from '../actions/actionUser'
 import { connect } from 'react-redux'
@@ -16,7 +17,8 @@ class Login extends Component<{}> {
     this.state = {
       username: '',
       password: '',
-      loginStatus: ''
+      loginStatus: '',
+      iniToken:''
     }
   }
 
@@ -68,7 +70,23 @@ class Login extends Component<{}> {
       return this.state.loginStatus
     }
   }
+  componentDidmount() {
+    this.setToken()
+    this.getToken()
+  }
+  getToken () {
+    AsyncStorage.getItem('token').then(value => {
+      console.log('ini value get : ', value);
+      this.setState({
+        iniToken: value
+      })
+    })
+  }
+  setToken () {
+    AsyncStorage.setItem('token', 'token')
+  }
   render () {
+    console.log('ini state token :',this.state.iniToken);
     return(
       <View>
         <TextInput
@@ -85,7 +103,10 @@ class Login extends Component<{}> {
           onPress={ ()=> this.submit() }
           title = "Submit"
         />
+
         <Text>ini Status : {this.statusLogin()}</Text>
+        <Text>ini Token : {this.state.iniToken}</Text>
+
       </View>
     )
   }
