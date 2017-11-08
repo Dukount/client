@@ -9,6 +9,7 @@ import {
   FlatList,
 } from 'react-native';
 import { connect } from 'react-redux'
+import axios from 'axios'
 import {
   listThunk
 } from '../actions/listAction'
@@ -48,30 +49,62 @@ class SavedList extends Component {
   }
 
   writeListToRealm() {
-    if (this.props.savedList !== null) {
-      this.props.savedList.map(plan => {
+    var url = `http://35.199.117.172:3000/`
+    axios.get(url, {
+      headers: {token: this.state.token}
+    })
+    .then(resp => {
+      resp.data.map(plan => {
         realm.write( () => {
           savedList = realm.create('Plan', {
             id: plan._id,
-            createdAt: plan.createdAt,
-            salary: plan.salary,
-            foodCostTotal: plan.foodCostTotal,
-            breakfastCost: plan.breakfastCost,
-            breakfastType: plan.breakfastType,
-            lunchCost: plan.lunchCost,
-            lunchType: plan.lunchType,
-            dinnerCost: plan.dinnerCost,
-            dinnerType: plan.dinnerType,
-            transportationTotal: plan.transportationTotal,
-            transportationType: plan.transportationType,
-            tripDurationTotal: plan.tripDurationTotal,
-            salaryLeft: plan.salaryLeft,
-            salaryToSave: plan.salaryToSave,
-            author: plan.author
+            // createdAt: plan.createdAt,
+            // salary: plan.salary,
+            // foodCostTotal: plan.foodCostTotal,
+            // breakfastCost: plan.breakfastCost,
+            // breakfastType: plan.breakfastType,
+            // lunchCost: plan.lunchCost,
+            // lunchType: plan.lunchType,
+            // dinnerCost: plan.dinnerCost,
+            // dinnerType: plan.dinnerType,
+            // transportationTotal: plan.transportationTotal,
+            // transportationType: plan.transportationType,
+            // tripDurationTotal: plan.tripDurationTotal,
+            // salaryLeft: plan.salaryLeft,
+            // salaryToSave: plan.salaryToSave,
+            // author: plan.author
           })
         })
       })
-    }
+    })
+    // if (this.props.savedList === null) {
+    //   this.setState({
+    //     plans: ['masih null']
+    //   })
+    // } else {
+    //   this.props.savedList.map(plan => {
+    //     realm.write( () => {
+    //       savedList = realm.create('Plan', {
+    //         id: plan._id,
+    //         createdAt: plan.createdAt,
+    //         salary: plan.salary,
+    //         foodCostTotal: plan.foodCostTotal,
+    //         breakfastCost: plan.breakfastCost,
+    //         breakfastType: plan.breakfastType,
+    //         lunchCost: plan.lunchCost,
+    //         lunchType: plan.lunchType,
+    //         dinnerCost: plan.dinnerCost,
+    //         dinnerType: plan.dinnerType,
+    //         transportationTotal: plan.transportationTotal,
+    //         transportationType: plan.transportationType,
+    //         tripDurationTotal: plan.tripDurationTotal,
+    //         salaryLeft: plan.salaryLeft,
+    //         salaryToSave: plan.salaryToSave,
+    //         author: plan.author
+    //       })
+    //     })
+    //   })
+    // }
   }
 
   render() {

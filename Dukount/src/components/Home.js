@@ -160,7 +160,7 @@ class Home extends Component {
           <Text style={styles.textToBox}>{this.addressJoiner(this.props.addressTo)}</Text>
         </View>
         {this.showNext()}
-        <TouchableHighlight onPress={() => navigate('SavedList')}>
+        <TouchableHighlight onPress={() => navigate('Login')}>
         <View style={styles.buttonList}>
         <Image source={require('../assets/img/listing-option.png')} style={{height: 20, width: 20, marginRight: 10}} />
         <Text style={styles.textButtonList}>
