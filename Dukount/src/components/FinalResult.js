@@ -143,11 +143,15 @@ class FinalResult extends Component {
   workDayCounter(workCalendar) {
     if (this.props.calendarWorkDay.length === 1) {
       return (
-        <Text>Workdays: {this.props.calendarWorkDay.length} day / month</Text>
+        <View style={{width: 320, alignSelf: 'center', marginTop: 10}}>
+          <Text style={{fontSize: 14, textAlign: 'center'}}>Workdays: {this.props.calendarWorkDay.length} day / month</Text>
+        </View>
       )
     } else if (this.props.calendarWorkDay.length > 1) {
       return (
-        <Text>Workdays: {this.props.calendarWorkDay.length} days / month</Text>
+        <View style={{width: 320, alignSelf: 'center', marginTop: 10}}>
+          <Text style={{fontSize: 14, textAlign: 'center', fontWeight: 'bold'}}>Workdays: {this.props.calendarWorkDay.length} day / month</Text>
+        </View>
       )
     }
 

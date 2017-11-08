@@ -10,6 +10,7 @@ import {
   Image,
   Item,
   StyleSheet,
+  Modal,
   ScrollView
 } from "react-native"
 import { connect } from "react-redux"
@@ -66,7 +67,8 @@ class TempResult extends Component {
       selectedUberLabel: '',
       uberSuggestionPrice: '-',
       foodCostPrice: null,
-      showResultButton: false
+      showResultButton: false,
+      modalVisible: false
     }
   }
 
@@ -465,6 +467,12 @@ class TempResult extends Component {
     navigate('FinalResult')
   }
 
+  setModalVisible (visible) {
+    this.setState({
+      modalVisible: visible
+    })
+  }
+
   render () {
     console.log('ini uberSuggestionsFare ', this.state.uberSuggestionsFare);
     const { goBack, navigate } = this.props.navigation
@@ -483,57 +491,86 @@ class TempResult extends Component {
       </View>
       </View>
       <View style={styles.container}>
-      <View style={{width: 240, alignSelf: 'center', marginTop: 7}}>
+      <View style={{width: 240, alignSelf: 'center', marginTop: 20}}>
         <Text style={styles.pickerLabelTransportMode}>Food Mode:</Text>
       </View>
-        <View style={styles.picker}>
-          <View style={{width: 240, flexDirection: 'row'}}>
-            <Image source={require('../assets/img/two-bread-toasts.png')} style={{height: 30, width: 30, marginRight: 1}} />
-            <Text style={styles.pickerLabel}>Breakfast:</Text>
-          </View>
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {alert("Modal has been closed.")}}
+          >
+         <View style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', marginTop: 80, marginRight: 50, marginLeft: 50, width: 300, height: 300, alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 15}}>
           <View>
-            <Picker
-            style={{width: 100}}
-            selectedValue={this.state.breakfast}
-            onValueChange={(itemValue, itemIndex) => this.setState({breakfast:
-            itemValue})}>
-            <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
-            <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
-            </Picker>
+          <View style={styles.picker}>
+            <View style={{width: 240, flexDirection: 'row', justifyContent: 'center'}}>
+              <Image source={require('../assets/img/two-bread-toasts.png')} style={{height: 30, width: 30, marginRight: 1}} />
+              <Text style={styles.pickerLabel}>Breakfast:</Text>
+            </View>
+            <View>
+              <Picker
+              style={{width: 100}}
+              selectedValue={this.state.breakfast}
+              onValueChange={(itemValue, itemIndex) => this.setState({breakfast:
+              itemValue})}>
+              <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
+              <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
+              </Picker>
+            </View>
           </View>
+          <View style={styles.picker}>
+            <View style={{width: 240, flexDirection: 'row', justifyContent: 'center'}}>
+            <Image source={require('../assets/img/roast-turkey.png')} style={{height: 30, width: 30, marginRight: 2}} />
+              <Text style={styles.pickerLabel}>Lunch:</Text>
+            </View>
+            <View>
+              <Picker
+              style={{width: 100}}
+              selectedValue={this.state.lunch}
+              onValueChange={(itemValue, itemIndex) => this.setState({lunch:
+              itemValue})}>
+              <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
+              <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
+              </Picker>
+            </View>
+          </View>
+          <View style={styles.picker}>
+            <View style={{width: 240, flexDirection: 'row', justifyContent: 'center'}}>
+            <Image source={require('../assets/img/dinner.png')} style={{height: 30, width: 30, marginRight: 2}} />
+              <Text style={styles.pickerLabel}>Dinner:</Text>
+            </View>
+            <View>
+              <Picker
+              style={{width: 100}}
+              selectedValue={this.state.dinner}
+              onValueChange={(itemValue, itemIndex) => this.setState({dinner:
+              itemValue})}>
+              <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
+              <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
+              </Picker>
+            </View>
+          </View>
+
+            <TouchableHighlight onPress={() => {
+              this.setModalVisible(!this.state.modalVisible)
+            }}>
+            <View style={{width: 150, backgroundColor: '#1d81e5', padding: 5, alignSelf: 'center', marginTop: 20, marginBottom: 20, borderRadius: 5}}>
+              <Text style={{color: 'white', fontSize: 14, fontWeight: 'bold', textAlign: 'center'}}>Submit</Text>
+            </View>
+            </TouchableHighlight>
+
+          </View>
+         </View>
+        </Modal>
+        <TouchableHighlight onPress={() => {
+          this.setModalVisible(true)
+        }}>
+        <View style={{width: 200, borderColor: '#1d81e5', padding: 5, alignSelf: 'center', borderRadius: 5, height: 35, borderWidth: 3, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 17}}>
+          <Image source={require('../assets/img/two-bread-toasts.png')} style={{height: 30, width: 30, marginRight: 20}} />
+          <Image source={require('../assets/img/roast-turkey.png')} style={{height: 30, width: 30, marginRight: 20}} />
+          <Image source={require('../assets/img/dinner.png')} style={{height: 30, width: 30}} />
         </View>
-        <View style={styles.picker}>
-          <View style={{width: 240, flexDirection: 'row'}}>
-          <Image source={require('../assets/img/roast-turkey.png')} style={{height: 30, width: 30, marginRight: 2}} />
-            <Text style={styles.pickerLabel}>Lunch:</Text>
-          </View>
-          <View>
-            <Picker
-            style={{width: 100}}
-            selectedValue={this.state.lunch}
-            onValueChange={(itemValue, itemIndex) => this.setState({lunch:
-            itemValue})}>
-            <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
-            <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
-            </Picker>
-          </View>
-        </View>
-        <View style={styles.picker}>
-          <View style={{width: 240, flexDirection: 'row'}}>
-          <Image source={require('../assets/img/dinner.png')} style={{height: 30, width: 30, marginRight: 2}} />
-            <Text style={styles.pickerLabel}>Dinner:</Text>
-          </View>
-          <View>
-            <Picker
-            style={{width: 100}}
-            selectedValue={this.state.dinner}
-            onValueChange={(itemValue, itemIndex) => this.setState({dinner:
-            itemValue})}>
-            <Picker.Item label='Cost' value='cost' color='#1d81e5'/>
-            <Picker.Item label='Rating' value='rating' color='#1d81e5'/>
-            </Picker>
-          </View>
-        </View>
+        </TouchableHighlight>
         <View>
         <View style={{width: 240, alignSelf: 'center', marginTop: 7}}>
           <Text style={styles.pickerLabelTransportMode}>Transport Mode:</Text>
@@ -546,7 +583,7 @@ class TempResult extends Component {
           {this.validatePicker()}
         </View>
         </View>
-        <View style={{marginBottom: 3, marginTop: 10}}>
+        <View style={{marginBottom: 13, marginTop: 15}}>
           <TouchableOpacity onPress={() => this.validateCheckPrice()}>
           <View style={styles.button}>
             <Text style={styles.textButton}>Check Price</Text>
@@ -681,7 +718,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   foodCard: {
-    backgroundColor: '#57A8F8',
+    backgroundColor: '#1d81e5',
     alignSelf: 'center',
     height: 120,
     width: 350,
