@@ -50,6 +50,29 @@ class Home extends Component {
       this.setModalVisible(true)
       this.props.postSalary(this.state.salary)
     }
+    this.setVisibleModal()
+  }
+
+  setVisibleModal () {
+    setTimeout( () => {
+      this.setModalVisible(!this.state.modalVisible)
+    }, 2000)
+  }
+
+  showNext () {
+    const { navigate } = this.props.navigation
+    if (this.props.addressTo !== null && this.props.addressFrom !== null) {
+      return (
+        <TouchableHighlight onPress={() => navigate('CalendarScreen')}>
+          <View style={styles.buttonPickWork}>
+            <Image source={require('../assets/img/date.png')} style={{height: 20, width: 20, marginRight: 10}} />
+            <Text style={styles.textButtonPickWork}>
+              Pick Your Workdays
+            </Text>
+          </View>
+        </TouchableHighlight>
+      )
+    }
   }
 
   render() {
@@ -81,17 +104,14 @@ class Home extends Component {
             visible={this.state.modalVisible}
             onRequestClose={() => {alert("Modal has been closed.")}}
             >
-           <View style={{backgroundColor: 'white', marginTop: 170, marginRight: 50, marginLeft: 50, width: 250, height: 370, borderRadius: 13}}>
-            <View style={{paddingTop: 60, paddingRight: 30, paddingLeft: 30}}>
-              <Text style={{fontWeight: 'bold', fontSize: 18, alignSelf: 'center'}}>Your Salary Submitted</Text>
-              <Text style={{marginTop: 50, fontWeight: 'bold', fontSize: 15, alignSelf: 'center'}}>IDR {this.delimiter(this.state.salary)}</Text>
-
+           <View style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', marginTop: 170, marginRight: 50, marginLeft: 50, width: 300, height: 200, borderRadius: 13, alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View>
+              <Text style={{ fontSize: 18, alignSelf: 'center', padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Your salary has been submitted</Text>
+              <Text style={{fontWeight: 'bold', fontSize: 25, alignSelf: 'center', color: '#1d81e5'}}>IDR {this.delimiter(this.state.salary)}</Text>
               <TouchableHighlight onPress={() => {
                 this.setModalVisible(!this.state.modalVisible)
               }}>
-                <View style={styles.buttonHideModal}>
-                <Text style={{fontWeight: 'bold', fontSize: 25, color: 'white'}}>Hide Modal</Text>
-                </View>
+                <Image source={require('../assets/img/check.png')} style={{height: 50, width: 50, alignSelf: 'center'}} />
               </TouchableHighlight>
 
             </View>
@@ -107,7 +127,7 @@ class Home extends Component {
         <View style={styles.buttonPickTo}>
         <Image source={require('../assets/img/maps-and-flags.png')} style={{height: 20, width: 20, marginRight: 10}} />
         <Text style={styles.textButtonPickTo}>
-          From Location
+          Home Location
         </Text>
         </View>
         </TouchableHighlight>
@@ -120,25 +140,18 @@ class Home extends Component {
         <View style={styles.buttonPickTo}>
         <Image source={require('../assets/img/location-arrow.png')} style={{height: 20, width: 20, marginRight: 10}} />
         <Text style={styles.textButtonPickTo}>
-          To Location
+          Office Location
         </Text>
         </View>
         </TouchableHighlight>
         <View style={styles.toBox}>
           <Text style={styles.textToBox}>{this.addressJoiner(this.props.addressTo)}</Text>
         </View>
-        <TouchableHighlight onPress={() => navigate('CalendarScreen')}>
-        <View style={styles.buttonPickWork}>
-        <Image source={require('../assets/img/date.png')} style={{height: 20, width: 20, marginRight: 10}} />
-        <Text style={styles.textButtonPickWork}>
-          Pick Your Workdays
-        </Text>
-        </View>
-        </TouchableHighlight>
+        {this.showNext()}
         <TouchableHighlight onPress={() => navigate('SavedList')}>
-        <View style={styles.buttonPickWork}>
-        <Image source={require('../assets/img/date.png')} style={{height: 20, width: 20, marginRight: 10}} />
-        <Text style={styles.textButtonPickWork}>
+        <View style={styles.buttonList}>
+        <Image source={require('../assets/img/listing-option.png')} style={{height: 20, width: 20, marginRight: 10}} />
+        <Text style={styles.textButtonList}>
           Saved List
         </Text>
         </View>
@@ -179,14 +192,14 @@ const styles = {
     alignSelf: 'center'
   },
   buttonHideModal: {
-    backgroundColor:'#57A8F8',
+    backgroundColor:'#1d81e5',
     padding: 5,
     alignItems: 'center',
     borderRadius: 3,
-    width: 140,
-    height: 40,
+    width: 120,
+    height: 30,
     alignSelf: 'center',
-    marginTop: 70
+    marginTop: 20
   },
   buttonPickWork: {
     backgroundColor:'#2F273A',
@@ -194,6 +207,18 @@ const styles = {
     alignItems: 'center',
     borderRadius: 3,
     width: 240,
+    height: 40,
+    alignSelf: 'center',
+    marginTop: 40,
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  buttonList: {
+    backgroundColor:'white',
+    padding: 5,
+    alignItems: 'center',
+    borderRadius: 5,
+    width: 150,
     height: 40,
     alignSelf: 'center',
     marginTop: 40,
@@ -208,6 +233,12 @@ const styles = {
     color:'white',
     fontWeight: 'bold',
     fontSize: 18,
+    textAlign: 'center'
+  },
+  textButtonList: {
+    color:'#1d81e5',
+    fontWeight: 'bold',
+    fontSize: 16,
     textAlign: 'center'
   },
   buttonPickTo: {
