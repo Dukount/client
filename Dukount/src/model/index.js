@@ -5,11 +5,11 @@ class Plan {}
 Plan.schema = {
   name: 'Plan',
   properties: {
+    id: 'int',
     salary: 'string',
     foodCostTotal: 'string',
     breakfastCost: 'string',
     breakfastType: 'string',
-    lunchType: 'string',
     lunchCost: 'string',
     lunchType: 'string',
     dinnerCost: 'string',
@@ -19,10 +19,7 @@ Plan.schema = {
     tripDurationTotal: 'string',
     salaryLeft: 'string',
     salaryToSave: 'string',
-    author: {
-     type: mongoose.Schema.Types.ObjectId,
-     ref: 'User'
-    }
+    author: 'string'
   }
 }
 const realm = new Realm({
