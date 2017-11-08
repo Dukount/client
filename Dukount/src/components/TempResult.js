@@ -13,6 +13,7 @@ import {
   Modal,
   ScrollView
 } from "react-native"
+import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from "react-redux"
 import { StackNavigator } from 'react-navigation'
 
@@ -68,7 +69,8 @@ class TempResult extends Component {
       uberSuggestionPrice: '-',
       foodCostPrice: null,
       showResultButton: false,
-      modalVisible: false
+      modalVisible: false,
+      visible: false
     }
   }
 
@@ -111,7 +113,9 @@ class TempResult extends Component {
       this.props.foodCost(resultFoodFinal)
        return (<Text style={styles.resultFont}>IDR {resultFoodFinal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>)
     }else {
-      return (<Text style={styles.resultFont}>-</Text>)
+      return (
+        <Spinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
+      )
     }
   }
 
@@ -190,6 +194,11 @@ class TempResult extends Component {
   }
 
   validateCheckPrice() {
+    setInterval(() => {
+      this.setState({
+        visible: !this.state.visible
+      })
+    }, 3000)
     if (this.state.TransportMode === true) {
       this.checkFoodTransportation()
     } else if (this.state.TransportMode === false){
