@@ -599,7 +599,7 @@ class TempResult extends Component {
         <View style={{marginBottom: 13, marginTop: 15}}>
           <TouchableOpacity onPress={() => this.validateCheckPrice()}>
           <View style={styles.button}>
-            <Text style={styles.textButton}>Check Price</Text>
+            <Text style={styles.textButton}>Calculate Cost</Text>
           </View>
           </TouchableOpacity>
         </View>

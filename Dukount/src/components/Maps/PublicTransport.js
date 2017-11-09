@@ -182,7 +182,7 @@ class PublicTransport extends Component {
                 <Text style={{color: '#1d81e5', fontWeight: 'bold'}}>Duration Total: </Text>
               </View>
               <View style={{backgroundColor: '#1d81e5', borderRadius: 1, padding: 5}}>
-                <Text style={{color: 'white', fontStyle: 'italic', fontWeight: 'bold'}}>{this.props.suggestions[this.props.labelIndex].DurationMinutes} Minutes</Text>
+                <Text style={{color: 'white', fontStyle: 'italic', fontWeight: 'bold'}}>± {this.props.suggestions[this.props.labelIndex].DurationMinutes} Minutes</Text>
               </View>
             </View>
             <View style={{flexDirection: 'row', marginTop: 5, alignSelf: 'center', marginBottom: 20}}>

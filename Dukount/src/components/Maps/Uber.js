@@ -88,7 +88,8 @@ class Uber extends Component {
                 longitude: this.props.longitudeFrom
               }}
               pinColor="#0071ce"
-              title={this.props.addressFrom.toString().join(' ')}
+              title={this.props.addressFrom.join(' ')}
+              image={require('../../assets/pin-04.png')}
             />
 
             <MapView.Marker
@@ -97,7 +98,8 @@ class Uber extends Component {
                 longitude: this.props.longitudeTo
               }}
               pinColor="#ff9400"
-              title={this.props.addressTo.toString().join(' ')}
+              title={this.props.addressTo.join(' ')}
+              image={require('../../assets/pin-05.png')}
             />
 
             </MapView>
