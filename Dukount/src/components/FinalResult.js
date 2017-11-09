@@ -8,7 +8,8 @@ import {
   Linking,
   ScrollView,
   Button,
-  AsyncStorage
+  AsyncStorage,
+  Modal
 } from 'react-native';
 import { Pie } from 'react-native-pathjs-charts'
 import { connect } from 'react-redux'
@@ -26,7 +27,8 @@ class FinalResult extends Component {
       resultFinal: null,
       userOutcome: '-',
       salaryRestUser: '-',
-      token:''
+      token:'',
+      modalVisible: false
     }
   }
 
@@ -239,12 +241,22 @@ class FinalResult extends Component {
         <View>
         <Button
           title="Save"
-          onPress={() => this.saveData()}
+          onPress={() => this.saveButton()}
         />
         </View>
       )
     }
   }
+
+  setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
+  saveButton() {
+    this.saveData()
+    this.setModalVisible(true)
+  }
+
   render () {
     var dataPrice = this.props.foodOutcome
     var resultFood = parseFloat(dataPrice / 1000000).toFixed(3)
@@ -345,6 +357,23 @@ class FinalResult extends Component {
           <View style={{backgroundColor: '#2980B9', width: 80}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Money Left</Text></View>
         </View>
         {this.validasiButton()}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {alert("Modal has been closed.")}}
+          >
+         <View style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', marginTop: 170, marginRight: 50, marginLeft: 50, width: 310, height: 200, borderRadius: 13, alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+          <View>
+            <Text style={{ fontSize: 15, alignSelf: 'center', padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Results Saved</Text>
+            <TouchableHighlight onPress={() => {
+              this.setModalVisible(!this.state.modalVisible)
+            }}>
+              <Image source={require('../assets/img/check.png')} style={{height: 50, width: 50, alignSelf: 'center'}} />
+            </TouchableHighlight>
+          </View>
+         </View>
+        </Modal>
         <Button
           title="Home"
           onPress = {() => this.toHome()}
