@@ -15,7 +15,6 @@ import {
 } from '../actions/listAction'
 import realm from '../model'
 
-
 class SavedList extends Component {
   constructor() {
     super()
@@ -105,7 +104,6 @@ class SavedList extends Component {
   render() {
     return (
       <View>
-
       <Text>jumlah : {this.state.plans.length}</Text>
       <ScrollView>
         <Text>{JSON.stringify(this.state.plans)}</Text>
@@ -121,7 +119,6 @@ class SavedList extends Component {
         )
       }} />
       <Text>{JSON.stringify(this.state.plans)}</Text>
-
       </View>
     )
   }
