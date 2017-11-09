@@ -492,7 +492,7 @@ class TempResult extends Component {
     return (
       <ScrollView>
       <View>
-      <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
+      <View style={{height: 50, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
       <View style={{position: 'relative', justifyContent: 'center'}}>
       <TouchableHighlight onPress={() => goBack()}>
         <Image source={require('../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
@@ -513,7 +513,7 @@ class TempResult extends Component {
           visible={this.state.modalVisible}
           onRequestClose={() => {alert("Modal has been closed.")}}
           >
-         <View style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', marginTop: 80, marginRight: 50, marginLeft: 50, width: 300, height: 300, alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 15}}>
+         <View style={{backgroundColor: 'rgba(220, 255, 255, 0.9)', marginTop: 80, marginRight: 50, marginLeft: 50, width: 300, height: 300, alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 15}}>
           <View>
           <View style={styles.picker}>
             <View style={{width: 240, flexDirection: 'row', justifyContent: 'center'}}>

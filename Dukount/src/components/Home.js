@@ -126,7 +126,7 @@ class Home extends Component {
               multiline = {true}
               numberOfLines = {4}
               maxLength = {20}
-              style={{color: 'white'}}
+              style={{color: 'white', fontSize: 18, fontStyle: 'italic'}}
               onChangeText={(salary) => this.setState({salary: salary.split('.').join('')})}
               value={this.delimiter(this.state.salary)}
               keyboardType = {'numeric'}
@@ -213,7 +213,7 @@ const styles = {
     marginBottom: 80
   },
   salaryInput: {
-    width: 250,
+    width: 300,
     height: 35,
     alignSelf: 'center'
   },

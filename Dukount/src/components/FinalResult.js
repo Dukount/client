@@ -264,7 +264,7 @@ class FinalResult extends Component {
     <ScrollView>
     <View>
       <View>
-        <View style={{height: 40, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
+        <View style={{height: 50, backgroundColor: '#1d81e5', flexDirection: 'row'}}>
           <View style={{position: 'relative', justifyContent: 'center', flex: 1}}>
           <TouchableHighlight onPress={() => goBack()}>
             <Image source={require('../assets/img/arrow-point-to-right.png')} style={{height: 30, width: 30, alignItems: 'center'}}/>
