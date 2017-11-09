@@ -63,10 +63,10 @@ class TempResult extends Component {
       trafiLabel: [],
       trafiLabelTotalFare: [],
       selectedTrafiLabel: '',
-      trafiSuggestionPrice: '-',
+      trafiSuggestionPrice: '',
       uberLabel: ['uberMotor','uberPOOL','uberX','uberXL','uberBLACK'],
       selectedUberLabel: '',
-      uberSuggestionPrice: '-',
+      uberSuggestionPrice: '',
       foodCostPrice: null,
       showResultButton: false,
       modalVisible: false,
@@ -109,10 +109,12 @@ class TempResult extends Component {
     const sumPrice = sumFoodOutcomeResult + sumFoodOutcomeResultHome
     const resultFoodFinal = Math.round(Number(`${sumPrice}`))
 
-    if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
+    if (!resultFoodFinal) {
+      return <Text style={{padding: 7}}></Text>
+    } else if(resultFoodFinal && isNaN(resultFoodFinal) === false) {
       this.props.foodCost(resultFoodFinal)
        return (<Text style={styles.resultFont}>IDR {resultFoodFinal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>)
-    }else {
+    } else {
       return (
         <Spinner visible={this.state.visible} textContent={"Loading..."} textStyle={{color: '#FFF'}} />
       )
@@ -258,7 +260,7 @@ class TempResult extends Component {
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Transport Outcome</Text>
-              <Text style={styles.resultFont}>IDR {this.checkerTrafiSuggestionsPrice()}</Text>
+              <Text style={styles.resultFont}>{this.checkerTrafiSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
@@ -272,7 +274,7 @@ class TempResult extends Component {
             <Image source={require('../assets/img/transport.png')} style={styles.transportIcon}/>
             <View style={styles.transportCardContent}>
               <Text style={styles.cardHeader}>Uber Outcome</Text>
-              <Text style={styles.resultFont}>IDR {this.checkerUberSuggestionsPrice()}</Text>
+              <Text style={styles.resultFont}>{this.checkerUberSuggestionsPrice()}</Text>
               <Text style={styles.perMonthFont}>(per month)</Text>
             </View>
           </View>
@@ -341,31 +343,33 @@ class TempResult extends Component {
   }
 
   checkerTrafiSuggestionsPrice() {
-    if (this.state.trafiSuggestionPrice === '-' && this.props.trafiFare !== null) {
+    if (this.state.trafiSuggestionPrice === '' && this.props.trafiFare === null) {
+      return null
+    } else if (this.state.trafiSuggestionPrice === '' && this.props.trafiFare !== null) {
       this.props.postTrafiFare(`${this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length}`)
-      return `${(this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
+      return `IDR ${(this.props.firstTrafiFare * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     } else if (this.state.trafiSuggestionPrice === '-') {
       return '-'
     } else if (isNaN(this.state.trafiSuggestionPrice) === true) {
       this.props.fetchFirstTrafiFare(this.state.trafiLabelTotalFare[0])
       this.props.postTrafiFare(`${this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length}`)
-      return `${(this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
+      return `IDR ${(this.state.trafiLabelTotalFare[0] * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     } else if (isNaN(this.state.trafiSuggestionPrice) === false) {
       this.props.postTrafiFare(this.state.trafiSuggestionPrice)
-      return (this.state.trafiSuggestionPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      return  `IDR ${(this.state.trafiSuggestionPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     }
   }
 
   checkerUberSuggestionsPrice() {
     if(this.state.uberSuggestionsFare === undefined && this.props.uberFare === null) {
-      return '-'
-    } else if (this.state.uberSuggestionsFare !== '-' && this.props.uberFare !== null && this.props.uberType === 'uberMotor') {
+      return null
+    } else if (this.state.uberSuggestionsFare !== '' && this.props.uberFare !== null && this.props.uberType === 'uberMotor') {
       this.props.postUberFare(`${Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length}`)
       this.props.postUberType(`${this.props.uberSuggestions[0].display_name}`)
       this.props.postUberDuration(`${Math.round(this.props.uberSuggestions[0].duration/60)}`)
-      return (Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      return  `IDR ${(Math.round((this.props.uberSuggestions[0].high_estimate + this.props.uberSuggestions[0].low_estimate)/2) * 2 * this.props.calendarWorkDay.length).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     } else {
-      return (this.state.uberSuggestionsFare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+      return `IDR ${(this.state.uberSuggestionsFare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`
     }
   }
 
@@ -609,7 +613,7 @@ class TempResult extends Component {
             {
               this.resultOutcome()
             }
-            <Text style={styles.perMonthFont}>(per month)</Text>
+            <Text style={styles.perMonthFoodFont}>(per month)</Text>
           </View>
         </View>
         </TouchableHighlight>
@@ -779,6 +783,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontStyle: 'italic',
     fontSize: 11
+  },
+  perMonthFoodFont: {
+    color: 'white',
+    fontStyle: 'italic',
+    fontSize: 11,
   },
   resultFont: {
     marginTop: 15,

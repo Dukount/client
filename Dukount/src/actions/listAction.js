@@ -47,8 +47,8 @@ export const post_data_to_database = (payload) => {
         token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTAxMTQ5YWI2ZWQ4ZTJkNGE2ZGUwNDEiLCJuYW1lIjoiR2FuYW5nIFdhaHl1IFdpY2Frc29ubyIsInVzZXJuYW1lIjoiZ2FuYW5nIiwicGFzc3dvcmQiOiJnYW5hbmciLCJpYXQiOjE1MTAxNTIxMDJ9.JvbM3FTIpoztmMrNeKLzV3SQLO35E2s5aa9IdOBl408'
       }
     })
-    .then(data => {
-      dispatch(getPostedData)
+    .then(resp => {
+      dispatch(getPostedData(resp.data))
     })
     .catch(err => {
       console.log(err);

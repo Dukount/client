@@ -10,9 +10,9 @@ import {
   Button
 } from 'react-native';
 import { Pie } from 'react-native-pathjs-charts'
-
 import { connect } from 'react-redux'
 import { post_data_to_database } from "../actions/listAction";
+import realm from '../model'
 
 class FinalResult extends Component {
   static navigationOptions = {
@@ -99,7 +99,7 @@ class FinalResult extends Component {
       salaryToSave: this.calculateSaveMoney()
     }
     this.props.postData(data)
-    this.postRealm()
+    setTimeout(() => {this.postRealm()}, 1000)
   }
 
   postRealm() {
@@ -332,7 +332,7 @@ const mapStateToProps = (state) => {
     foodCostPackage: state.salaryReducer.foodCostPackage,
     firstTrafiFare: state.MapReducer.firstTrafiFare,
     calendarWorkDay: state.price.workCalendar,
-    postedData: state.listAction.postedData
+    postedData: state.listReducer.postedData
   }
 }
 
