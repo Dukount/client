@@ -292,12 +292,6 @@ class FinalResult extends Component {
           <View style={{backgroundColor: '#3c89bc', width: 80, marginLeft: 2, marginRight: 2}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Transportation</Text></View>
           <View style={{backgroundColor: '#2980B9', width: 80}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Money Left</Text></View>
         </View>
-        <View>
-        <Button
-        title="Save"
-        onPress={() => this.saveData()}
-        />
-        </View>
       </View>
     </View>
     </ScrollView>
