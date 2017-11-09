@@ -121,8 +121,12 @@ class FinalResult extends Component {
 
   toHome() {
     const {navigate} = this.props.navigation;
-    this.postRealm()
-    navigate('Home')
+    if (this.props.postedData !== null) {
+      this.postRealm()
+      navigate('Home')
+    } else {
+      navigate('Home')
+    }
   }
 
   calculateSaveMoney () {
