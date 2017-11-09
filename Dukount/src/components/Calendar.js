@@ -253,7 +253,7 @@ class CalenderClass extends Component<{}>{
             </View>
           </View>
         </View>
-        <Text>{date.toString()}</Text>
+        <Text>{date.toString().slice(0, 25)}</Text>
         <Calendar
           marks={this.state.marks}
           markStyle= {`2017-11-11`}

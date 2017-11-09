@@ -140,7 +140,7 @@ class SavedList extends Component {
           <View style={{width: 350, height: 80, borderColor:'white', padding: 25, borderWidth: 1, flexDirection: 'row', alignSelf: 'center', borderWidth: 1, margin: 3, marginLeft: 15, marginRight: 15, backgroundColor: 'white'}}>
           <View style={{alignSelf: 'center'}}>
           <Text style={{color: '#1d81e5', fontSize: 22, marginBottom: 5, fontWeight: 'bold'}}>Total Cost: IDR {((+item.foodCostTotal) + (+item.transportationTotal)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</Text>
-          <Text style={{color: '#1d81e5', fontStyle:'italic'}}>{item.createdAt}</Text>
+          <Text style={{color: '#1d81e5', fontStyle:'italic'}}>{item.createdAt.slice(0, 19).split('T').join(' ')}</Text>
           </View>
           </View>
           </TouchableOpacity>
