@@ -33,7 +33,7 @@ class Home extends Component {
       this.setState({token: value})
     })
     .catch(err=>{
-      this.setState({token: err})
+      console.log(err)
     })
     SplashScreen.hide();
   }
@@ -110,6 +110,21 @@ class Home extends Component {
   //   }
   //
   // }
+  showList() {
+    const {navigate} = this.props.navigation
+    if (this.state.token !== '') {
+      return (
+        <TouchableHighlight onPress={() => navigate('SavedList')}>
+        <View style={styles.buttonList}>
+        <Image source={require('../assets/img/listing-option.png')} style={{height: 20, width: 20, marginRight: 10}} />
+        <Text style={styles.textButtonList}>
+          Saved List
+        </Text>
+        </View>
+        </TouchableHighlight>
+      )
+    }
+  }
 
   render() {
     const { navigate } = this.props.navigation
@@ -183,14 +198,7 @@ class Home extends Component {
           <Text style={styles.textToBox}>{this.addressJoiner(this.props.addressTo)}</Text>
         </View>
         {this.showNext()}
-        <TouchableHighlight onPress={() => navigate('Login')}>
-        <View style={styles.buttonList}>
-        <Image source={require('../assets/img/listing-option.png')} style={{height: 20, width: 20, marginRight: 10}} />
-        <Text style={styles.textButtonList}>
-          Saved List
-        </Text>
-        </View>
-        </TouchableHighlight>
+        {this.showList()}
       </View>
     );
   }

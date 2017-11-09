@@ -21,7 +21,28 @@ class Login extends Component<{}> {
       password: '',
       loginStatus: '',
       token: ''
+    }
+  }
+  componentDidMount() {
+    AsyncStorage.getItem('token').then(value => {
+      this.setState({
+        token: value
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+    setTimeout(()=> {
+      this.navigateLogined()
+    }, 0.1)
 
+  }
+
+  navigateLogined() {
+    const {navigate} = this.props.navigation
+    var token = this.state.token
+    if (token !== '') {
+      navigate('Home')
     }
   }
 
@@ -37,11 +58,10 @@ class Login extends Component<{}> {
       password: user.password
     })
     .then(({data}) => {
-      console.log('ini data di dari response : ', data);
-      AsyncStorage.setItem('token', JSON.stringify(data.token))
-      this.getToken()
       if (data.token) {
-        navigate('SavedList')
+        AsyncStorage.setItem('token', JSON.stringify(data.token))
+        this.getToken()
+        navigate('Home')
       } else if (data.msg) {
         this.setState({
            loginStatus: data.msg
@@ -53,19 +73,14 @@ class Login extends Component<{}> {
       console.log(error);
     })
   }
-
   getToken() {
     AsyncStorage.getItem('token').then(value => {
-      console.log('ini harusnya token :===>', value);
       this.setState({
         token: value
       })
       .catch(err=> {
-        this.setState({
-          token: err
-        })
+        console.log(err)
       })
-      console.log('sebelum listThunk ', this.state.token)
     })
   }
 
@@ -107,6 +122,7 @@ class Login extends Component<{}> {
   }
 
   render () {
+    const {navigate} = this.props.navigation
     return(
       <View>
         <TextInput
@@ -123,11 +139,19 @@ class Login extends Component<{}> {
           onPress={ ()=> this.submit() }
           title = "Submit"
         />
+        <Button
+          onPress={ ()=> navigate('Register') }
+          title = "Register"
+        />
+        <Button
+          onPress={ ()=> navigate('Home') }
+          title = "Stranger"
+        />
         <Text>ini Status : {this.statusLogin()}</Text>
+        <Text>ini Token : {this.state.token}</Text>
       </View>
     )
   }
-
 }
 
 const mapStateToProps = (state) => {

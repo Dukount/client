@@ -7,7 +7,8 @@ import {
   Image,
   Linking,
   ScrollView,
-  Button
+  Button,
+  AsyncStorage
 } from 'react-native';
 import { Pie } from 'react-native-pathjs-charts'
 import { connect } from 'react-redux'
@@ -24,7 +25,8 @@ class FinalResult extends Component {
       transportResult: null,
       resultFinal: null,
       userOutcome: '-',
-      salaryRestUser: '-'
+      salaryRestUser: '-',
+      token:''
     }
   }
 
@@ -212,9 +214,33 @@ class FinalResult extends Component {
   }
 
   componentDidMount() {
+    AsyncStorage.getItem('token').then(value => {
+      this.setState({
+        token: value
+      })
+    })
+    .catch(err=> {
+      console.log(err);
+    })
     this.finalAllResult()
   }
 
+  validasiButton () {
+    if (this.state.token === '' || this.state.token === undefined || this.state.token === null) {
+      return (
+        <Text>Kalo mau save login dulu gan</Text>
+      )
+    } else {
+      return(
+        <View>
+        <Button
+          title="Save"
+          onPress={() => this.saveData()}
+        />
+        </View>
+      )
+    }
+  }
   render () {
     var dataPrice = this.props.foodOutcome
     var resultFood = parseFloat(dataPrice / 1000000).toFixed(3)
@@ -314,17 +340,12 @@ class FinalResult extends Component {
           <View style={{backgroundColor: '#3c89bc', width: 80, marginLeft: 2, marginRight: 2}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Transportation</Text></View>
           <View style={{backgroundColor: '#2980B9', width: 80}}><Text style={{textAlign: 'center', color: 'white', padding: 5, fontWeight: 'bold', fontSize: 9}}>Money Left</Text></View>
         </View>
-        <View>
+        {this.validasiButton()}
         <Button
-        title="Save"
-        onPress={() => this.saveData()}
+          title="Home"
+          onPress = {() => this.toHome()}
         />
-        </View>
       </View>
-      <Button
-      title="Home"
-      onPress = {() => this.toHome()}
-      />
     </View>
     </ScrollView>
     )

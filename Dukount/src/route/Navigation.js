@@ -28,7 +28,7 @@ const Navigation = StackNavigator({
   Register: {screen: Register},
   SavedList: {screen: SavedList}
 }, {
-  initialRouteName: 'Home',
+  initialRouteName: 'Login',
   headerMode: 'none'
 })
 

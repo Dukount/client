@@ -64,11 +64,15 @@ class SavedList extends Component {
 
   componentDidMount() {
     this.getToken()
+    this.token()
+  }
+
+  token () {
     let plans = realm.objects('Plan')
     let plansToArray = Object.values(plans)
     let filtered = plansToArray.filter((thing, index, self) => self.findIndex((t) => {return t.id === thing.id}) === index)
     this.setState({
-      plans: filtered
+      plans: filtered.reverse()
     })
     setTimeout(()=> {
       this.writeListToRealm()
