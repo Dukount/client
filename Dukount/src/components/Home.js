@@ -88,28 +88,6 @@ class Home extends Component {
     }
   }
 
-  // listItem() {
-  //   const { navigate } = this.props.navigation
-  //   navigate('Login')
-  // }
-  // validate() {
-  //   const { navigate } = this.props.navigation
-  //
-  //   if (this.state.token !== null) {
-  //     return (
-  //       <TouchableHighlight onPress={() => navigate('savedList')}>
-  //       <View style={styles.buttonList}>
-  //       <Image source={require('../assets/img/listing-option.png')} style={{height: 20, width: 20, marginRight: 10}} />
-  //       <Text style={styles.textButtonList}>
-  //         Saved List
-  //       </Text>
-  //       </View>
-  //       </TouchableHighlight>
-  //     )
-  //   } else {
-  //   }
-  //
-  // }
   showList() {
     const {navigate} = this.props.navigation
     if (this.state.token !== '') {
@@ -141,7 +119,7 @@ class Home extends Component {
               multiline = {true}
               numberOfLines = {4}
               maxLength = {20}
-              style={{color: 'white', fontSize: 18, fontStyle: 'italic'}}
+              style={{color: 'white'}}
               onChangeText={(salary) => this.setState({salary: salary.split('.').join('')})}
               value={this.delimiter(this.state.salary)}
               keyboardType = {'numeric'}
@@ -221,7 +199,7 @@ const styles = {
     marginBottom: 80
   },
   salaryInput: {
-    width: 300,
+    width: 250,
     height: 35,
     alignSelf: 'center'
   },

@@ -5,7 +5,9 @@ import {
   Text,
   View,
   TextInput,
-  Button
+  Button,
+  TouchableHighlight,
+  Image
 } from 'react-native';
 import { registerThunk } from '../actions/actionUser'
 import { connect } from 'react-redux'
@@ -97,41 +99,70 @@ class Register extends Component<{}> {
     }
   }
   render () {
+    const {navigate} = this.props.navigation
     return(
+      <View style={styles.container}>
       <View>
+        <Image source={require('../assets/img/logo_small_white.png')} style={{height: 50, width: 210, marginBottom: 30}} />
+      </View>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 260, borderWidth: 1, borderColor: 'white', textAlign: 'center', color: 'white'}}
           onChangeText={(text) => this.setStateName(text)}
+          placeholder={'Name'}
+          placeholderTextColor="white"
         />
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 260, borderWidth: 1, borderColor: 'white', textAlign: 'center', color: 'white', marginTop: 15}}
           onChangeText={(text) => this.setStateUsername(text)}
+          placeholder={'Username'}
+          placeholderTextColor="white"
         />
-        <Text>ini username : {this.state.username}</Text>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 260, borderWidth: 1, borderColor: 'white', textAlign: 'center', color: 'white', marginTop: 15}}
           onChangeText={(text) => this.setStatePassword(text)}
+          placeholder={'Password'}
+          secureTextEntry={true}
+          placeholderTextColor="white"
         />
-        <Text>ini password : {this.state.password}</Text>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 260, borderWidth: 1, borderColor: 'white', textAlign: 'center', color: 'white', marginTop: 15}}
           onChangeText={(text) => this.setStateEmail(text)}
+          placeholder={'Email'}
+          placeholderTextColor="white"
         />
-        <Text>ini password : {this.state.email}</Text>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 260, borderWidth: 1, borderColor: 'white', textAlign: 'center', color: 'white', marginTop: 15}}
           onChangeText={(text) => this.setStateTelp(text)}
+          placeholder={'Phone Number'}
+          placeholderTextColor="white"
+          keyboardType = {'numeric'}
         />
-        <Text>ini password : {this.state.telp}</Text>
-        <Button
-          onPress={ ()=> this.submit() }
-          title = "Submit"
-        />
-        <Text>ini Status : {this.statusLogin()}</Text>
+        <TouchableHighlight onPress={ ()=> navigate('Login') } title = "Submit">
+          <View style={{
+          backgroundColor:'#57A8F8',
+          padding: 5,
+          alignItems: 'center',
+          borderRadius: 3,
+          width: 260,
+          height: 40,
+          alignSelf: 'center',
+          marginTop: 30}}>
+            <Text style={{color: 'white', fontWeight: 'bold', fontSize: 20}}>Register</Text>
+          </View>
+        </TouchableHighlight>
       </View>
     )
   }
 
+}
+
+const styles = {
+  container: {
+    flex: 1,
+    backgroundColor: '#1d81e5',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 }
 
 const mapStateToProps = (state) => {

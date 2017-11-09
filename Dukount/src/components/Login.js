@@ -3,10 +3,12 @@ import {
   Platform,
   StyleSheet,
   Text,
+  Image,
   View,
   TextInput,
   Button,
-  AsyncStorage
+  AsyncStorage,
+  TouchableHighlight
 } from 'react-native';
 import axios from 'axios'
 import { loginThunk } from '../actions/actionUser'
@@ -32,9 +34,9 @@ class Login extends Component<{}> {
     .catch(err=>{
       console.log(err);
     })
-    setTimeout(()=> {
-      this.navigateLogined()
-    }, 0.1)
+    // setTimeout(()=> {
+    //   this.navigateLogined()
+    // }, 0.1)
 
   }
 
@@ -124,33 +126,60 @@ class Login extends Component<{}> {
   render () {
     const {navigate} = this.props.navigation
     return(
+      <View style={styles.container}>
       <View>
+        <Image source={require('../assets/img/logo_small_white.png')} style={{height: 50, width: 210, marginBottom: 30}} />
+      </View>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 260, borderWidth: 1, borderColor: 'white', textAlign: 'center', color: 'white'}}
           onChangeText={(text) => this.setStateUsername(text)}
+          placeholder={'Username'}
+          placeholderTextColor="white"
         />
-        <Text>ini username : {this.state.username}</Text>
         <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          style={{height: 40, width: 260, borderWidth: 1, borderColor: 'white', marginTop: 15, color: 'white', textAlign:'center'}}
           onChangeText={(text) => this.setState({password: text})}
+          placeholder={'Password'}
+          secureTextEntry={true}
+          placeholderTextColor="white"
         />
-        <Text>ini password : {this.state.password}</Text>
-        <Button
-          onPress={ ()=> this.submit() }
-          title = "Submit"
-        />
-        <Button
-          onPress={ ()=> navigate('Register') }
-          title = "Register"
-        />
-        <Button
-          onPress={ ()=> navigate('Home') }
-          title = "Stranger"
-        />
-        <Text>ini Status : {this.statusLogin()}</Text>
-        <Text>ini Token : {this.state.token}</Text>
+        <TouchableHighlight onPress={ ()=> this.submit() } title = "Submit">
+          <View style={{
+          backgroundColor:'#57A8F8',
+          padding: 5,
+          alignItems: 'center',
+          borderRadius: 3,
+          width: 260,
+          height: 30,
+          alignSelf: 'center',
+          marginTop: 20}}>
+            <Text style={{color: 'white', fontWeight: 'bold'}}>Login</Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={ ()=> navigate('Register') } title = "Submit">
+          <View style={{
+          backgroundColor:'white',
+          padding: 5,
+          alignItems: 'center',
+          borderRadius: 3,
+          width: 260,
+          height: 30,
+          alignSelf: 'center',
+          marginTop: 40}}>
+            <Text style={{color: '#57A8F8', fontWeight: 'bold'}}>Register</Text>
+          </View>
+        </TouchableHighlight>
       </View>
     )
+  }
+}
+
+const styles = {
+  container: {
+    flex: 1,
+    backgroundColor: '#1d81e5',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 }
 

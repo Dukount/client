@@ -321,7 +321,7 @@ class FinalResult extends Component {
       </View>
       <View style={{width: 320, backgroundColor: '#28A48E', alignSelf: 'center', height: 50, padding: 5}}>
         <Text style={{textAlign: 'center', color: 'white', fontStyle: 'italic', fontSize: 12}}>Your Final Outcome</Text>
-        <Text style={{textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18}}>IDR{this.numberConverter(this.state.userOutcome)}</Text>
+        <Text style={{textAlign: 'center', color: 'white', fontWeight: 'bold', fontSize: 18}}>IDR {this.numberConverter(this.state.userOutcome)}</Text>
       </View>
       <View style={{width: 320, borderColor: '#1d81e5', borderWidth: 1, alignSelf: 'center', height: 50, padding: 5}}>
         <Text style={{textAlign: 'center', color: '#1d81e5', fontStyle: 'italic', fontSize: 12}}>Salaries left</Text>
