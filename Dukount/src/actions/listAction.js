@@ -26,3 +26,26 @@ export const listThunk = (payload) => {
     })
   }
 }
+
+export const post_data_to_database = (payload) => {
+  return (dispatch, getState) => {
+    var url = `http://35.199.117.172:3000/`
+    axios.post(url, {
+      salary: payload.salary,
+      foodCostTotal: payload.foodCostTotal,
+      transportationTotal: payload.transportationTotal,
+      salaryLeft: payload.salaryLeft,
+      salaryToSave: payload.salaryToSave
+    },{
+      headers: {
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YTAxMTQ5YWI2ZWQ4ZTJkNGE2ZGUwNDEiLCJuYW1lIjoiR2FuYW5nIFdhaHl1IFdpY2Frc29ubyIsInVzZXJuYW1lIjoiZ2FuYW5nIiwicGFzc3dvcmQiOiJnYW5hbmciLCJpYXQiOjE1MTAxNTIxMDJ9.JvbM3FTIpoztmMrNeKLzV3SQLO35E2s5aa9IdOBl408'
+      }
+    })
+    .then(data => {
+      console.log('ini', data.data);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+}

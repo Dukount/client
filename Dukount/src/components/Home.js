@@ -140,9 +140,9 @@ class Home extends Component {
             visible={this.state.modalVisible}
             onRequestClose={() => {alert("Modal has been closed.")}}
             >
-           <View style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', marginTop: 170, marginRight: 50, marginLeft: 50, width: 300, height: 200, borderRadius: 13, alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+           <View style={{backgroundColor: 'rgba(255, 255, 255, 0.9)', marginTop: 170, marginRight: 50, marginLeft: 50, width: 310, height: 200, borderRadius: 13, alignSelf: 'center', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             <View>
-              <Text style={{ fontSize: 18, alignSelf: 'center', padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Your salary has been submitted</Text>
+              <Text style={{ fontSize: 15, alignSelf: 'center', padding: 5, color: '#1d81e5', fontStyle: 'italic'}}>Salary Submitted</Text>
               <Text style={{fontWeight: 'bold', fontSize: 25, alignSelf: 'center', color: '#1d81e5'}}>IDR {this.delimiter(this.state.salary)}</Text>
               <TouchableHighlight onPress={() => {
                 this.setModalVisible(!this.state.modalVisible)

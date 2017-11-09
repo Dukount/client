@@ -197,6 +197,7 @@ class FromLocation extends Component<{}> {
           <MapView.Marker
             coordinate={ this.state.region }
             onPress={() => this.moveDrag()}
+            image={require('../../assets/pin-04.png')}
           />
           </MapView>
         </View>

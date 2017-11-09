@@ -5,7 +5,11 @@ class Plan {}
 Plan.schema = {
   name: 'Plan',
   properties: {
+<<<<<<< HEAD
     id: 'string',
+=======
+    id: 'int',
+>>>>>>> advise
     createdAt: 'string',
     salary: 'string',
     foodCostTotal: 'string',
