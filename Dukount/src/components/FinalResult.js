@@ -99,6 +99,23 @@ class FinalResult extends Component {
       salaryToSave: this.calculateSaveMoney()
     }
     this.props.postData(data)
+    this.postRealm()
+  }
+
+  postRealm() {
+    realm.write( () => {
+      let item = this.props.postedData
+      savedPlan = realm.create('Plan', {
+        id: item._id,
+        createdAt: item.createdAt,
+        salary: item.salary,
+        foodCostTotal: item.foodCostTotal,
+        transportationTotal: item.transportationTotal,
+        salaryLeft: item.salaryLeft,
+        salaryToSave: item.salaryToSave,
+        author: item.salaryToSave,
+      })
+    })
   }
 
   calculateSaveMoney () {
@@ -315,7 +332,7 @@ const mapStateToProps = (state) => {
     foodCostPackage: state.salaryReducer.foodCostPackage,
     firstTrafiFare: state.MapReducer.firstTrafiFare,
     calendarWorkDay: state.price.workCalendar,
-
+    postedData: state.listAction.postedData
   }
 }
 

@@ -8,6 +8,12 @@ export const getList = (payload) => {
   }
 }
 
+export const getPostedData = (payload) => {
+  return {
+    type: 'FETCH_POSTED_DATA',
+    payload
+  }
+}
 
 export const listThunk = (payload) => {
   return (dispatch, getState) => {
@@ -42,7 +48,7 @@ export const post_data_to_database = (payload) => {
       }
     })
     .then(data => {
-      console.log('ini', data.data);
+      dispatch(getPostedData)
     })
     .catch(err => {
       console.log(err);

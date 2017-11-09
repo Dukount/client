@@ -13,12 +13,8 @@ import axios from 'axios'
 import {
   listThunk
 } from '../actions/listAction'
-<<<<<<< HEAD
-
 import realm from '../model'
-=======
-// import realm from '../model'
->>>>>>> advise
+
 
 class SavedList extends Component {
   constructor() {
@@ -97,15 +93,7 @@ class SavedList extends Component {
           createdAt: item.createdAt,
           salary: item.salary,
           foodCostTotal: item.foodCostTotal,
-          breakfastType: item.breakfastType,
-          breakfastCost: item.breakfastCost,
-          lunchCost: item.lunchCost,
-          lunchType: item.lunchType,
-          dinnerCost: item.dinnerCost,
-          dinnerType: item.dinnerType,
           transportationTotal: item.transportationTotal,
-          transportationType: item.transportationType,
-          tripDurationTotal: item.tripDurationTotal,
           salaryLeft: item.salaryLeft,
           salaryToSave: item.salaryToSave,
           author: item.salaryToSave,
@@ -113,6 +101,7 @@ class SavedList extends Component {
       })
     })
   }
+
   render() {
     return (
       <View>
