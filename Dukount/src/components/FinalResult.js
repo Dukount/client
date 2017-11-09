@@ -99,7 +99,6 @@ class FinalResult extends Component {
       salaryToSave: this.calculateSaveMoney()
     }
     this.props.postData(data)
-    setTimeout(() => {this.postRealm()}, 1000)
   }
 
   postRealm() {
@@ -116,6 +115,12 @@ class FinalResult extends Component {
         author: item.salaryToSave,
       })
     })
+  }
+
+  toHome() {
+    const {navigate} = this.props.navigation;
+    this.postRealm()
+    navigate('Home')
   }
 
   calculateSaveMoney () {
@@ -316,6 +321,10 @@ class FinalResult extends Component {
         />
         </View>
       </View>
+      <Button
+      title="Home"
+      onPress = {() => this.toHome()}
+      />
     </View>
     </ScrollView>
     )
